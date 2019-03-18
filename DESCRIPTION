@@ -1,11 +1,22 @@
 Package: flowSpy
 Type: Package
-Title: What the Package Does (Title Case)
+Title: An Analysis Toolkit for Flow Cytometry Data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Date: 2018-12-11
+Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
+            email = "forlynna@sjtu.edu.cn"))
+Author: Yuting Dai
+Maintainer: Yuting Dai <forlynna@sjtu.edu.cn>
+Suggests: BiocStyle
+Description: flowSpy offers visualization options for flow cytometry data.
+    PCA, tSNE, diffusion map and SOM were included in base function section, 
+    and pseudotime, differentiation tree, differentiation trajectory, sankey 
+    diagrams and network were included in improved function section.
+Depends: R (>= 3.4), igraph
+Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
+        flowUtils, Biobase, Matrix, flowCore, ggthemes, 
+        matrixStats, methods
+License: GPL-3.0 + file LICENSE
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 6.1.1
