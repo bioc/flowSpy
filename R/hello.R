@@ -52,28 +52,71 @@ object <- createFSPY(raw.data = raw.data, markers = markers,
                      verbose = T)
 
 plotGATE(object, plot.markers = c("CD45RA", "CD49f"), color.by = "stage",
-         plot.type = "dot", alpha = 0.2,
+         plot.type = "mesh", alpha = 0.2,
          color.theme = c("#f2de00", "#8bd129", "#33CCFF", "#0066CC", "#CC66FF", "#FF3300"))
 
 #ggsave("1.plotGATE.dotmesh.pdf", p, width = 6, height = 5)
+
+########## KNN cluster
+library(RANN)
+
+mat <- t(object@gate.data)
+
+knn.info <- RANN::nn2(object@gate.data, k=25)
+
+knn <- knn.info$nn.idx
+adj <- matrix(0, ncol(mat), ncol(mat))
+rownames(adj) <- colnames(adj) <- colnames(mat)
+for(i in seq_len(ncol(mat))) {
+  adj[i,colnames(mat)[knn[i,]]] <- 1
+}
+
+library(igraph)
+g <- igraph::graph.adjacency(adj, mode="undirected")
+g <- simplify(g)
+## identify communities
+km <- igraph::cluster_walktrap(g)
+com <- km$membership
+names(com) <- km$names
+
+## compare to annotations
+object@meta.data$knn.id <- com
 
 
 object <- runFastPCA(object)
 
 object <- runTSNE(object)
 
+# fast tsne
+
+source('../FIt-SNE-master/fast_tsne.R', chdir=T)
+fltsne <- fftRtsne(object@gate.data, fast_tsne_path = "/Users/daiyuting/Documents/projects/bioVis/flowSpy/v1/FIt-SNE-master/bin/fast_tsne")
+
+
 object <- runDiffusionMap(object)
 
-p <- plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage", alpha = 0.6, main = "PCA", size = 0.8)
-p <- plot2D(object, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage", alpha = 1, main = "tSNE", size = 0.8)
+a <- umap(object@gate.data, config = umap.defaults)
+
+object@pca.load <- cbind(object@pca.load, a$layout)
+colnames(object@pca.load) <- c(colnames(object@pca.load)[1:9], "PC01", "PC02")
+
+object@pca.load[, 10] <- a$layout[, 1]
+object@pca.load[, 11] <- a$layout[, 2]
+
+kmeams.cluster <- kmeans(object@gate.data, 25, nstart = 20)
+
+table(kmeams.cluster$cluster)
+
+object@meta.data$som.node.id <- kmeams.cluster$cluster
+
+plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage", alpha = 0.6, main = "PCA", size = 0.8)
+plot2D(object, item.use = c("PC01", "PC02"), color.by = "knn.id", alpha = 0.3, main = "PCA", size = 0.8)
+plot2D(object, item.use = c("PC01", "PC02"), color.by = "stage", alpha = 0.3, main = "PCA", size = 0.8)
+plot2D(object, item.use = c("tSNE_1", "tSNE_2"), color.by = "knn.id", alpha = 1, main = "tSNE", size = 0.8)
 plot2D(object, item.use = c("DC1", "DC2"), color.by = "stage", alpha = 0.6, main = "Diffusion Map", size = 0.8)
 plot3D(object, item.use = c("DC1", "DC2","DC3"), color.by = "stage", size = 0.5, angle = 45, main = "Diffusion Map")
 plot3D(object, item.use = c("PC1", "PC2","PC3"), color.by = "stage", size = 0.5, angle = 45, main = "PCA")
 
-
-p
-
-ggsave("1.tsne.pdf", p, width = 6, height = 5)
 
 # paramter of som
 xdim = 10
@@ -114,23 +157,22 @@ root.cell <- root.cell[grep("D0", root.cell)]
 object <- defRootCells(object, root.cell = root.cell)
 object <- pseudotimeProcess(object)
 
-plot2D(object, item.use = c("tSNE_1", "tSNE_2"), color.by = "pseudotime", alpha = 0.9,
+plot2D(object, item.use = c("DC1", "DC2"), color.by = "knn.id", alpha = 0.9,
        main = "pseudotime", size = 0.5,
-       color.theme = c("#f2de00", "#f2de00", "#f2de00", "#f2de00",
-                       "#8bd129", "#33CCFF", "#0066CC", "#CC66FF", "#FF3300"))
+       color.theme = c("#f2de00", "#8bd129", "#33CCFF", "#0066CC", "#CC66FF", "#FF3300"))
 
-plot2D(object, item.use = c("tSNE_1", "tSNE_2"), color.by = "pseudotime", alpha = 0.9, main = "pseudotime", size = 0.5, color.theme = c("#0000CC", "#0000CC", "#0000CC", "#0000CC", "#0099FF", "#339900", "#FFFF00", "#FF6600", "#FF0000"))
+plot2D(object, item.use = c("PC01", "PC02"), color.by = "CD43", alpha = 0.9, main = "pseudotime", size = 0.5, color.theme = c("#0000CC", "#0000CC", "#0000CC", "#0000CC", "#0099FF", "#339900", "#FFFF00", "#FF6600", "#FF0000"))
 
-plot3D(object, item.use = c("pseudotime", "DC1", "DC2"), color.by = "pseudotime", size = 0.5,
-       angle = 60, main = "pseudotime", color.theme = c("#0000CC", "#0000CC", "#0000CC", "#0000CC", "#0099FF", "#339900", "#FFFF00", "#FF6600", "#FF0000"))
+plot3D(object, item.use = c("PC01", "PC02", "pseudotime"), color.by = "knn.id", size = 0.5,
+       angle = 45, main = "pseudotime", color.theme = c("#0000CC", "#0099FF", "#339900", "#FFFF00", "#FF6600", "#FF0000"))
 
-plot2D(object, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage", alpha = 0.9, main = "stage", size = 0.5)
+plot2D(object, item.use = c("tSNE_1", "tSNE_2"), color.by = "knn.id", alpha = 0.9, main = "stage", size = 0.5)
 
 plot3D(object, item.use = c("pseudotime", "DC1", "DC2"), color.by = "stage", size = 0.5,
        angle = 60, main = "stage")
 
 
-plotPseudotimeDensity(object, color.by = "stage")
+plotPseudotimeDensity(object, color.by = "knn.id")
 
 
 #D10.som.percent
@@ -145,7 +187,7 @@ plotSOMtree(object, color.by = "pseudotime",
 plotSOMtree(object, color.by = "CD90", show.node.name = T, cex.size = 1.5)
 
 object@meta.data$som.target = 0
-som.id =  c(5,25,17,6)
+som.id =  c(2,16)
 for (i in som.id) {
   object@meta.data$som.target[which(object@meta.data$som.node.id == i)] = i
 }
@@ -174,7 +216,7 @@ plot.sub <- data.frame(
 ggscatter(plot.sub, x = "pseudotime", y = "CD34", size = 1)
 
 
-som.id <- c(28,4,16,10,17,7,22,20,30,18)
+som.id <- c(16, 2)
 mat <- object@som$node.attr
 som.sub.mat <- mat[rownames(mat) %in% som.id, ]
 id.mat <- object@meta.data[object@meta.data$som.node.id %in% id.som, ]
@@ -216,6 +258,16 @@ load("0105.fspy.Robj")
 
 
 
+library(dbscan)
+
+data(iris)
+iris <- as.matrix(iris[,1:4])
+kNNdistplot(iris, k = 5)
+abline(h=.5, col = "red", lty=2)
+
+res <- dbscan(iris, eps = .5, minPts = 5)
+res
+pairs(iris, col = res$cluster + 1L)
 
 
 }
