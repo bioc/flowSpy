@@ -4,12 +4,12 @@
 \alias{defRootCells}
 \title{definition of root cells}
 \usage{
-defRootCells(object, root.cell = NULL)
+defRootCells(object, root.cells = NULL)
 }
 \arguments{
 \item{object}{an FSPY object}
 
-\item{root.cell}{vector, cell name of the root cells}
+\item{root.cells}{vector, cell name of the root cells}
 }
 \description{
 definition of root cells

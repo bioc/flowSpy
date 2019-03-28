@@ -28,10 +28,8 @@
 #'
 runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
                    knn.replace = F,
-                   kmeans.centers = 100,
                    iter.max = 10,
                    knn.cluster = T,
-                   kmeans.cluster = T,
                    verbose = T) {
 
   if (isTRUE(object@knn > 0) & !(knn.replace)) {
@@ -46,8 +44,8 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
   if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
   fout <- findKNN(object@log.data, k = object@knn, BNPARAM = BNPARAM)
 
-  kmeans.out <- kmeans(object@log.data, centers = kmeans.centers, iter.max = iter.max)
-  object@meta.data$kmeans.id <- kmeans.out$cluster
+  #kmeans.out <- kmeans(object@log.data, centers = kmeans.centers, iter.max = iter.max)
+  #object@meta.data$kmeans.id <- kmeans.out$cluster
 
   rownames(fout$index) <- object@meta.data$cell
   rownames(fout$distance) <- object@meta.data$cell
@@ -62,16 +60,26 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
     adj <- matrix(0, ncol(mat), ncol(mat))
     rownames(adj) <- colnames(adj) <- colnames(mat)
     for(i in seq_len(ncol(mat))) {
-      adj[i,colnames(mat)[object@knn.index[i,]]] <- 1
+      adj[i, colnames(mat)[object@knn.index[i,]]] <- 1
     }
     g <- igraph::graph.adjacency(adj, mode="undirected")
+    # remove self loops
     g <- simplify(g)
     ## identify communities
     km <- igraph::cluster_walktrap(g)
-    object@meta.data$cluster.id <- km$membership
+    # generation of trunk network
+    object@network <- list(knn.G = g, knn.walktrap = km)
+    object@meta.data$trunk.id <- km$membership
+
+    if (verbose) message(Sys.time(), " [INFO] Add trunk ")
+    object <- addTrunk(object)
+    if (verbose) message(Sys.time(), " [INFO] Add branch ")
+    object <- addBranch(object)
+
+
   } else {
     if (!"cluster.id" %in% colnames(object@meta.data)) {
-      object@meta.data$cluster.id <- 0
+      object@meta.data$trunk.id <- 0
     }
   }
 
@@ -79,5 +87,48 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
   return(object)
 }
 
+
+#
+# root.cells
+#
+addTrunk <- function(object) {
+  trunk.network <- list()
+  trunk.network$trunk.marker <- aggregate(object@log.data, list(cluster = object@meta.data$trunk.id), mean)
+  rownames(trunk.network$trunk.marker) <- trunk.network$trunk.marker$cluster
+  trunk.network$trunk.marker <- trunk.network$trunk.marker[, -1]
+  trunk.network$trunk.dist <- stats::dist(trunk.network$trunk.marker, method = "euclidean")
+  trunk.network$trunk.graph <- igraph::graph.adjacency(as.matrix(trunk.network$trunk.dist),
+                                         mode = "undirected",
+                                         weighted = TRUE)
+  trunk.network$trunk.spanning.tree <- igraph::minimum.spanning.tree(trunk.network$trunk.graph)
+  object@trunk.network <- trunk.network
+  return(object)
+}
+
+
+#
+# root.cells
+#
+addBranch <- function(object) {
+  trunk.id <- table(object@meta.data$trunk.id)
+  object@meta.data$branch.id <- 0
+  for (trunk.id.sub in names(trunk.id)) {
+    cells.sub.idx <- which(object@meta.data$trunk.id == trunk.id.sub)
+    sub.i <- igraph::graph.adjacency(object@network$knn.G[cells.sub.idx, cells.sub.idx], mode="undirected")
+    sub.i <- simplify(sub.i)
+    km.sub <- igraph::cluster_walktrap(sub.i)
+    object@meta.data$branch.id[cells.sub.idx] <- paste0(trunk.id.sub, "-" , km.sub$membership)
+  }
+  branch.network <- list()
+  branch.network$branch.marker <- aggregate(object@log.data, list(cluster = object@meta.data$branch.id), mean)
+  rownames(branch.network$branch.marker) <- branch.network$branch.marker$cluster
+  branch.network$branch.marker <- branch.network$branch.marker[, -1]
+  branch.network$branch.dist <- stats::dist(branch.network$branch.marker, method = "euclidean")
+  branch.network$branch.graph <- igraph::graph.adjacency(as.matrix(branch.network$branch.dist),
+                                          mode = "undirected",
+                                          weighted = TRUE)
+  object@branch.network <- branch.network
+  return(object)
+}
 
 

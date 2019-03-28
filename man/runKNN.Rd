@@ -5,8 +5,7 @@
 \title{Calculate k-nearest neighbors of FSPY}
 \usage{
 runKNN(object, knn = 30, BNPARAM = KmknnParam(), knn.replace = F,
-  kmeans.centers = 100, iter.max = 10, knn.cluster = T,
-  kmeans.cluster = T, verbose = T)
+  iter.max = 10, knn.cluster = T, verbose = T)
 }
 \arguments{
 \item{object}{an FSPY object}

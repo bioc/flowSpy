@@ -55,3 +55,7 @@ runDiffusionMap <- function(object, sigma.use = NULL,
   return(object)
 }
 
+
+
+
+

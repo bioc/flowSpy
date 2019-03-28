@@ -42,11 +42,13 @@ NULL
 #' @slot walk list. Random forward and backward walk between \code{root.cells} and \code{leaf.cells}.
 #' @slot diff.tree list. Differentiation tree of all cells.
 #' @slot diff.traj list. Differentiation trajectory all cells.
-#' @slot network list. Network.
+#' @slot trunk.network list. Network of trunk.
+#' @slot branch.network list. Network of branch.
+#' @slot network list. Network generated from knn.
 #' @slot plot.meta data.frame. Plot meta information for \code{plot2D} or \code{plot3D}.
 #' @slot add.meta list. Additional meta information of FSPY object.
 #'
-#' @importClassesFrom destiny DiffusionMap
+#' @importClassesFrom destiny DiffusionMap DPT
 #'
 #' @exportClass FSPY
 #'
@@ -85,6 +87,11 @@ FSPY <- methods::setClass("FSPY", slots = c(
   # umap information
   umap.layout = "matrix",
 
+  # trunk and branch
+  trunk.network = "list",
+  branch.network = "list",
+  network = "list",
+
   # run for improved function
   root.cells = "vector",
   leaf.cells = "vector",
@@ -92,7 +99,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
   walk = "list",
   diff.tree = "list",
   diff.traj = "list",
-  network = "list",
+
   plot.meta = "data.frame",
   add.meta = "list"
   )

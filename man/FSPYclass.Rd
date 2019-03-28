@@ -57,7 +57,11 @@ And each row of the \code{knn.distance} contains the distance of its nearest nei
 
 \item{\code{diff.traj}}{list. Differentiation trajectory all cells.}
 
-\item{\code{network}}{list. Network.}
+\item{\code{trunk.network}}{list. Network of trunk.}
+
+\item{\code{branch.network}}{list. Network of branch.}
+
+\item{\code{network}}{list. Network generated from knn.}
 
 \item{\code{plot.meta}}{data.frame. Plot meta information for \code{plot2D} or \code{plot3D}.}
 

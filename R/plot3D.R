@@ -15,8 +15,7 @@
 #' @param plot.theme themes from \code{\link[ggthemes]{ggthemes}}
 #' @param color.theme character. Library of color theme
 #'
-#' @import ggplot2
-#' @import ggthemes
+#' @import scatterplot3d
 #'
 #' @export
 #'

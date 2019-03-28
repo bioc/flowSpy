@@ -2,7 +2,7 @@
 #' definition of root cells
 #'
 #' @param object an FSPY object
-#' @param root.cell vector, cell name of the root cells
+#' @param root.cells vector, cell name of the root cells
 #'
 #' @export
 #'
@@ -10,16 +10,16 @@
 #'
 #'
 #'
-defRootCells <- function(object, root.cell = NULL) {
-  if (length(object@root.cell) != 0) message(Sys.time(), " [WARNING] root cells in FSPY object exist, they will be replaced.")
+defRootCells <- function(object, root.cells = NULL) {
+  if (length(object@root.cell) != 0) warning(Sys.time(), " [WARNING] root cells in FSPY object exist, they will be replaced.")
 
-  if (!is.vector(root.cell)) stop(Sys.time(), " [ERROR] root.cell must be a vector")
+  if (!is.vector(root.cells)) stop(Sys.time(), " [ERROR] root.cell must be a vector")
 
-  root.cell <- root.cell[root.cell %in% object@meta.data$cell]
-  if ( length(root.cell) == 0 ) {
+  root.cells <- root.cells[root.cells %in% object@meta.data$cell]
+  if ( length(root.cells) == 0 ) {
     stop(Sys.time(), " [ERROR] root.cell not in meta.data")
   } else {
-    object@root.cell <- root.cell
+    object@root.cells <- root.cells
   }
 
   return(object)
