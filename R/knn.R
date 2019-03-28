@@ -20,7 +20,7 @@
 #' @return An FSPY object
 #'
 #' @import BiocNeighbors
-#' @importFrom igraph graph.adjacency cluster_walktrap
+#' @importFrom igraph graph.adjacency cluster_walktrap minimum.spanning.tree
 #' @export
 #'
 #' @examples
