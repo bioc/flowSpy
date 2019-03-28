@@ -5,7 +5,8 @@
 \title{Calculate k-nearest neighbors of FSPY}
 \usage{
 runKNN(object, knn = 30, BNPARAM = KmknnParam(), knn.replace = F,
-  knn.cluster = T, verbose = T)
+  kmeans.centers = 100, iter.max = 10, knn.cluster = T,
+  kmeans.cluster = T, verbose = T)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -16,6 +17,8 @@ runKNN(object, knn = 30, BNPARAM = KmknnParam(), knn.replace = F,
 See \code{\link[BiocNeighbors]{findKNN}}.}
 
 \item{knn.replace}{logic. Whether to replace knn in FSPY object}
+
+\item{iter.max}{numeric. The maximum number of iterations allowed.}
 
 \item{knn.cluster}{logic. Whether to run knn cluster.}
 

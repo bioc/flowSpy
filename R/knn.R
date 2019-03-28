@@ -11,6 +11,7 @@
 #' @param knn numeric, number of k-nearest neighbors
 #' @param BNPARAM A BiocNeighborParam object, or NULL if BININDEX is supplied.
 #'    See \code{\link[BiocNeighbors]{findKNN}}.
+#' @param iter.max numeric. The maximum number of iterations allowed.
 #' @param knn.replace logic. Whether to replace knn in FSPY object
 #' @param knn.cluster logic. Whether to run knn cluster.
 #' @param verbose logic. Whether to print calculation progress.
@@ -27,7 +28,10 @@
 #'
 runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
                    knn.replace = F,
+                   kmeans.centers = 100,
+                   iter.max = 10,
                    knn.cluster = T,
+                   kmeans.cluster = T,
                    verbose = T) {
 
   if (isTRUE(object@knn > 0) & !(knn.replace)) {
@@ -41,6 +45,9 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
 
   if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
   fout <- findKNN(object@log.data, k = object@knn, BNPARAM = BNPARAM)
+
+  kmeans.out <- kmeans(object@log.data, centers = kmeans.centers, iter.max = iter.max)
+  object@meta.data$kmeans.id <- kmeans.out$cluster
 
   rownames(fout$index) <- object@meta.data$cell
   rownames(fout$distance) <- object@meta.data$cell
@@ -67,6 +74,7 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
       object@meta.data$cluster.id <- 0
     }
   }
+
   if (verbose) message(Sys.time(), " [INFO] Calculating KNN completed. ")
   return(object)
 }

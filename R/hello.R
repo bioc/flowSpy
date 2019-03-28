@@ -61,7 +61,8 @@ object <- updatePlotMeta(object)
 
 ############ test of plot
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "cluster.id", alpha = 0.6, main = "PCA", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "cluster.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.node.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.node.id", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("DC1", "DC2", "DC3"), color.by = "CD34", size = 0.5,
        angle = 45, main = "pseudotime")
 plotSOM(object, color.by = "CD19")
@@ -70,8 +71,8 @@ plotSOMtree(object, color.by = "aa",
             color.theme = "#FFCC66")
 
 
-
-
+idx <- match( c("som.node.id", "cluster.id"), colnames(object@plot.meta) )
+a <- table(object@plot.meta[, idx])
 
 
 
