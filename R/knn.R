@@ -31,9 +31,9 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
                    verbose = T) {
 
   if (isTRUE(object@knn > 0) & !(knn.replace)) {
-    if (verbose) message(paste0(Sys.time(), " [INFO] using knn in FSPY object: ", object@knn ) )
+    if (verbose) message(Sys.time(), " [INFO] using knn in FSPY object: ", object@knn )
   } else if ( isTRUE(object@knn > 0) & (knn.replace) ) {
-    if (verbose) message(paste0(Sys.time(), " [INFO] using knn provided in this function: ", knn ) )
+    if (verbose) message(Sys.time(), " [INFO] using knn provided in this function: ", knn )
     object@knn <- knn
   } else {
     object@knn <- knn
@@ -50,7 +50,7 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
   object@knn.distance = fout$distance
 
   if (knn.cluster) {
-    if (verbose) message(paste0(Sys.time(), " [INFO] start running knn.cluster. It will take some minutes if the dataset is too large. " ) )
+    if (verbose) message(Sys.time(), " [INFO] start running knn.cluster. It will take some minutes if the dataset is too large. " )
     mat <- t(object@log.data)
     adj <- matrix(0, ncol(mat), ncol(mat))
     rownames(adj) <- colnames(adj) <- colnames(mat)
@@ -67,7 +67,7 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
       object@meta.data$cluster.id <- 0
     }
   }
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN completed. "))
+  if (verbose) message(Sys.time(), " [INFO] Calculating KNN completed. ")
   return(object)
 }
 

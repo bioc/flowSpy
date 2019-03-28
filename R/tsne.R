@@ -35,7 +35,7 @@ runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     pca_center = TRUE, pca_scale = FALSE) {
 
   # tSNE calculation
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating tSNE."))
+  if (verbose) message(Sys.time(), " [INFO] Calculating tSNE.")
   tsne.obj <- Rtsne(as.matrix(object@log.data),
                     dims = dims, initial_dims = initial_dims, perplexity = perplexity,
                     theta = theta, check_duplicates = check_duplicates, pca = pca, max_iter = max_iter,
@@ -46,7 +46,7 @@ runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
   colnames(object@tsne.value) <- paste0("tSNE", 1:ncol(tsne.obj$Y))
   rownames(object@tsne.value) <- rownames(object@log.data)
 
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating tSNE completed. "))
+  if (verbose) message(Sys.time(), " [INFO] Calculating tSNE completed. ")
 
   return(object)
 }

@@ -1,5 +1,7 @@
 #'
-#' @name runUmap
+#' Calculating UMAP
+#'
+#' @name runUMAP
 #'
 #' @description
 #' Calculate Uniform Manifold Approximation and Projection in FSPY
@@ -14,8 +16,8 @@
 #'
 #' @export
 #'
-runUmap <- function(object, umap.config = umap.defaults, verbose = T) {
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating Umap."))
+runUMAP <- function(object, umap.config = umap.defaults, verbose = T) {
+  if (verbose) message(Sys.time(), " [INFO] Calculating Umap.")
 
   umap.config$n_neighbors <- object@knn
   umap.out <- umap(object@log.data, config = umap.config)
@@ -23,6 +25,6 @@ runUmap <- function(object, umap.config = umap.defaults, verbose = T) {
   colnames(object@umap.layout) <- paste0("UMAP", 1:ncol(umap.out$layout))
   rownames(object@umap.layout) <- rownames(object@log.data)
 
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating Umap."))
+  if (verbose) message(Sys.time(), " [INFO] Calculating Umap.")
   return(object)
 }

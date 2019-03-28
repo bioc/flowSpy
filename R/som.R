@@ -29,7 +29,7 @@
 #'             Which is developed by Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2018).
 #'
 #' @import FlowSOM
-#' @import igraph
+#' @importFrom igraph graph.adjacency minimum.spanning.tree layout.kamada.kawai
 #'
 #' @export
 #'
@@ -40,8 +40,9 @@ runSOM <- function(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
                    distf = 2, codes = NULL, importance = NULL,
                    method = "euclidean", verbose= T) {
 
+  if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM.")
   # flowSOM
-  flowset <- as.matrix(object@gate.data)
+  flowset <- as.matrix(object@log.data)
   flowsom <- FlowSOM::SOM(flowset,
                           xdim = xdim, ydim = ydim, rlen = rlen, mst = mst,
                           alpha = alpha[1], radius = radius,
@@ -79,7 +80,7 @@ runSOM <- function(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
   som.net$edge.attr$to.y <- som.net$layout$pos.y[match(som.net$edge.attr$to, rownames(som.net$layout))]
 
   object@som <- som.net
-
+  if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM completed.")
   return(object)
 }
 

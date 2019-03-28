@@ -53,12 +53,21 @@ object <- runTSNE(object)
 
 object <- runDiffusionMap(object)
 
-object <- runUmap(object)
+object <- runUMAP(object)
 
+object <- runSOM(object)
 
+object <- updatePlotMeta(object)
 
-
-
+############ test of plot
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "cluster.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "cluster.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot3D(object, item.use = c("DC1", "DC2", "DC3"), color.by = "CD34", size = 0.5,
+       angle = 45, main = "pseudotime")
+plotSOM(object, color.by = "CD19")
+plotSOMtree(object, color.by = "aa",
+            show.node.name = T, cex.size = 1.5,
+            color.theme = "#FFCC66")
 
 
 

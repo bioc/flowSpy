@@ -26,19 +26,19 @@ runDiffusionMap <- function(object, sigma.use = NULL,
 
   dm.data <- as.matrix(object@log.data)
 
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating Diffusion Map."))
+  if (verbose) message(Sys.time(), " [INFO] Calculating Diffusion Map.")
   # Figure out sigma
   # this function refered to URD calcDM function.
   if (is.null(sigma.use)) {
     sigma.use <- find_sigmas(dm.data, verbose=F)@optimal_sigma
-    if (verbose) message(paste0(Sys.time(), " [INFO] Destiny determined an optimal global sigma: ", round(sigma.use, digits=3)))
+    if (verbose) message(Sys.time(), " [INFO] Destiny determined an optimal global sigma: ", round(sigma.use, digits=3))
   } else if (is.numeric(sigma.use)) {
-    if (verbose) message(paste0(Sys.time(), " [INFO] Using provided global sigma: ", round(sigma.use, digits=3)))
+    if (verbose) message(Sys.time(), " [INFO] Using provided global sigma: ", round(sigma.use, digits=3))
   } else if (sigma.use == "local") {
-    if (verbose) message(paste0(Sys.time(), " [INFO] Using local sigma "))
+    if (verbose) message(Sys.time(), " [INFO] Using local sigma ")
   } else {
     sigma.use <- find_sigmas(dm.data, verbose=F)@optimal_sigma
-    warning(paste0(Sys.time(), " [WARNING] Invalid sigma value. Using an optimal global sigma instead."))
+    warning(Sys.time(), " [WARNING] Invalid sigma value. Using an optimal global sigma instead.")
   }
   # Calculate the Diffusion Map
   dm.obj <- DiffusionMap(dm.data, sigma=sigma.use, k=object@knn, density_norm = density.norm, distance=distance[1], ...)
@@ -50,7 +50,7 @@ runDiffusionMap <- function(object, sigma.use = NULL,
   # Load diffusion map into the Dropseq object
   object@dm <- dm.obj
 
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating Diffusion Map completed"))
+  if (verbose) message(Sys.time(), " [INFO] Calculating Diffusion Map completed")
 
   return(object)
 }

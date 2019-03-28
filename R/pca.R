@@ -22,14 +22,14 @@
 #'
 runFastPCA <- function(object, center = FALSE, scale. = TRUE,  verbose = T) {
   # PCA calculation
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating PCA."))
+  if (verbose) message(Sys.time(), " [INFO] Calculating PCA.")
   pca.obj <- fast.prcomp( t(object@log.data), retx = TRUE, center = center, scale. = scale.)
 
   object@pca.sdev <- pca.obj$sdev
   object@pca.load <- pca.obj$rotation
   object@pca.scores <- pca.obj$x
 
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating PCA completed. "))
+  if (verbose) message(Sys.time(), " [INFO] Calculating PCA completed. ")
 
   return(object)
 }

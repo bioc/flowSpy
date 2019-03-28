@@ -122,67 +122,65 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 createFSPY <- function(raw.data, markers, meta.data, log.transformed = T, verbose = T) {
   # QC of cells
-  if (missing(raw.data)) stop(paste0(Sys.time(), " [ERROR] raw.data is required"))
+  if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {
-    warning(paste0(Sys.time(), " [WARNING] raw.data must be a matrix"))
+    warning(Sys.time(), " [WARNING] raw.data must be a matrix")
     raw.data <- as.matrix(raw.data)
   }
-  if (verbose) message(paste0(Sys.time(), " [INFO] Number of cells in processing: ", dim(raw.data)[1]))
+  if (verbose) message(Sys.time(), " [INFO] Number of cells in processing: ", dim(raw.data)[1])
 
   # QC of metadata
-  if (missing(meta.data)) stop(paste0(Sys.time(), " [ERROR] meta.data must be a data.frame"))
+  if (missing(meta.data)) stop(Sys.time(), " [ERROR] meta.data must be a data.frame")
   if (!is.data.frame(meta.data)) {
-    warning(paste0(Sys.time(), " [WARNING] meta.data must be a data.frame"))
+    warning(Sys.time(), " [WARNING] meta.data must be a data.frame")
     meta.data <- as.matrix(meta.data)
   }
 
   if (!all(c("cell", "stage") %in% colnames(meta.data))) {
-    stop(paste0(Sys.time(), " [ERROR] cell and stage information must be provided in meta.data"))
+    stop(Sys.time(), " [ERROR] cell and stage information must be provided in meta.data")
   }
 
   if (nrow(raw.data) != nrow(meta.data)) {
-    stop(paste0(Sys.time(), " [ERROR] cell number in raw.data is not equal to that in meta.data"))
+    stop(Sys.time(), " [ERROR] cell number in raw.data is not equal to that in meta.data")
   } else {
-    if (verbose) message(paste0(Sys.time(), " [INFO] rownames of meta.data and raw.data will be named using column cell"))
+    if (verbose) message(Sys.time(), " [INFO] rownames of meta.data and raw.data will be named using column cell")
     rownames(raw.data) = meta.data$cell
     rownames(meta.data) = meta.data$cell
   }
 
   # load index of markers of FCS
-  if (missing(markers)) stop(paste0(Sys.time(), " [ERROR] markers is missing"))
+  if (missing(markers)) stop(Sys.time(), " [ERROR] markers is missing")
   if (!is.vector(markers)) {
-    warning(paste0(Sys.time(), " [WARNING] markers must be a vector"))
+    warning(Sys.time(), " [WARNING] markers must be a vector")
     markers <- as.vector(markers)
   }
   markers.idx <- match(markers, colnames(raw.data))
-  if (verbose) message(paste0(Sys.time(), " [INFO] Index of markers in processing"))
+  if (verbose) message(Sys.time(), " [INFO] Index of markers in processing")
   if (any(is.na(markers.idx))) {
     sub.markers <- markers[which(is.na(markers.idx))]
-    warning(paste0(Sys.time(), " [WARNING] ", sub.markers, " not existes in colnames of raw.data. It will be removed. "))
+    warning(Sys.time(), " [WARNING] ", sub.markers, " not existes in colnames of raw.data. It will be removed. ")
 
     markers <- markers[which(!is.na(markers.idx))]
     markers.idx <- markers.idx[which(!is.na(markers.idx))]
   }
 
   # Create an FSPY object
-  if (verbose) message(paste0(Sys.time(), " [INFO] Creating FSPY object."))
+  if (verbose) message(Sys.time(), " [INFO] Creating FSPY object.")
   object <- new("FSPY", raw.data = raw.data, meta.data = meta.data,
                 markers = markers, markers.idx = markers.idx)
 
   # log transfromed using base 10
   if (log.transformed) {
-    tag <- unlist(lapply(1:nrow(raw.data), function(x) sum(raw.data[x, markers.idx] < 1)  ))
-    if (sum(tag) > 0) message(paste0(Sys.time(), " [WARNING] Fluorescence intensity lower than 1 will be filted"))
-    if (verbose) message(paste0(Sys.time(), " [INFO] Log transformed "))
-    object@log.data <- log10(raw.data[which(tag == 0), markers.idx])
+    if (verbose) message(Sys.time(), " [INFO] Log transformed ")
+    object@log.data <- log10(abs(raw.data[, markers.idx]) + 1)
   } else {
-    if (verbose) message(paste0(Sys.time(), " [INFO] No log transformed "))
+    if (verbose) message(Sys.time(), " [INFO] No log transformed ")
     object@log.data <- raw.data[, markers.idx]
   }
 
   object@plot.meta <- data.frame(row.names = object@meta.data$cell)
 
-  if (verbose) message(paste0(Sys.time(), " [INFO] Build FSPY object succeed "))
+  if (verbose) message(Sys.time(), " [INFO] Build FSPY object succeed ")
   return(object)
 }
 
