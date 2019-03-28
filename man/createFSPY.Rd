@@ -4,19 +4,15 @@
 \alias{createFSPY}
 \title{create an FSPY object}
 \usage{
-createFSPY(raw.data, markers, raw.meta.data, gating = NULL,
-  log.transformed = T, verbose = T)
+createFSPY(raw.data, markers, meta.data, log.transformed = T,
+  verbose = T)
 }
 \arguments{
-\item{raw.data}{matrix. raw data read from FCS file.}
+\item{raw.data}{matrix. Raw data read from FCS file.}
 
-\item{markers}{vector. detailed marker information in the gate of flow cytometer}
+\item{markers}{vector. Detailed marker information in the gate of flow cytometer}
 
-\item{raw.meta.data}{data.frame. raw metadata of each cell. column "cell" and "stage" are required}
-
-\item{gating}{data.frame. gating paramete, the first column in gating is the marker name,
-the second column is the start paramter of gating cutoff, and the third column
-is the end paramter of gating cutoff.}
+\item{meta.data}{data.frame. Raw metadata of each cell. column "cell" and "stage" are required}
 
 \item{log.transformed}{logical. Whether to log transformed the raw data. If not, it's better
 to set the print parameter as logical.}

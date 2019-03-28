@@ -29,22 +29,25 @@
 #' @examples
 #'
 #'
-runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 10,
+runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     theta = 0.5, check_duplicates = TRUE, pca = TRUE, max_iter = 1000,
                     verbose = TRUE, is_distance = FALSE, Y_init = NULL,
                     pca_center = TRUE, pca_scale = FALSE) {
 
   # tSNE calculation
-  if (verbose) print(paste0(Sys.time(), " [INFO] Calculating tSNE."))
-  tsne.obj <- Rtsne(as.matrix(object@gate.data),
+  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating tSNE."))
+  tsne.obj <- Rtsne(as.matrix(object@log.data),
                     dims = dims, initial_dims = initial_dims, perplexity = perplexity,
                     theta = theta, check_duplicates = check_duplicates, pca = pca, max_iter = max_iter,
                     verbose = FALSE, is_distance = is_distance, Y_init = Y_init,
                     pca_center = pca_center, pca_scale = pca_scale)
 
-  object@tsne.value <- as.data.frame(tsne.obj$Y)
-  colnames(object@tsne.value) <- paste0("tSNE_", 1:ncol(tsne.obj$Y))
-  rownames(object@tsne.value) <- rownames(object@gate.data)
+  object@tsne.value <- tsne.obj$Y
+  colnames(object@tsne.value) <- paste0("tSNE", 1:ncol(tsne.obj$Y))
+  rownames(object@tsne.value) <- rownames(object@log.data)
+
+  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating tSNE completed. "))
+
   return(object)
 }
 

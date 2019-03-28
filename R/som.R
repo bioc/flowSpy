@@ -1,6 +1,7 @@
 #'
 #' calculation SOM in FSPY object
 #'
+#' @description
 #' Build a self-organizing map
 #'
 #' @param object  an FSPY object

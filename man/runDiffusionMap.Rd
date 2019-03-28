@@ -5,13 +5,12 @@
 \title{Calculate diffusion map in FSPY}
 \usage{
 runDiffusionMap(object, sigma.use = NULL, distance = c("euclidean",
-  "cosine", "rankcor"), density.norm = TRUE, knn = NULL, verbose = T,
-  ...)
+  "cosine", "rankcor"), density.norm = TRUE, verbose = T, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
 
-\item{sigma.use}{Diffusion scale parameter of the Gaussian kernel. One of '\code{local}',
+\item{sigma.use}{numeric. Diffusion scale parameter of the Gaussian kernel. One of '\code{local}',
  '\code{global}', a \code{\link[base]{numeric}} global sigma or a Sigmas object.
  When choosing '\code{global}', a global sigma will be calculated using find_sigmas
  (See \code{\link[destiny]{find_sigmas}}). A larger sigma might be necessary if the eigenvalues can not
@@ -21,9 +20,6 @@ be found because of a singularity in the matrix. See \code{\link[destiny]{Diffus
 For the allowed values, see \code{\link[destiny]{find_knn}}}
 
 \item{density.norm}{logical. If TRUE, use density normalisation. See \code{\link[destiny]{DiffusionMap}}}
-
-\item{knn}{Number of nearest neighbors to consider (default: a guess betweeen 100 and n - 1.
-See \code{\link[destiny]{find_dm_k}}).}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 

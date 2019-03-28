@@ -16,7 +16,7 @@
 
 if (F) {
 
-
+rm(list = ls())
 library(roxygen2)
 roxygenize()
 
@@ -37,19 +37,34 @@ length(markers)
 
 raw.data <- as.matrix(raw[, 1:(dim(raw)[2]-1) ])
 rownames(raw.data) <- paste0(raw$sample, "_", 1:length(raw$sample))
-raw.meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
-                            stage = raw$sample)
-
-gating <- NULL
-gating <- data.frame(marker = c("CD43", "CD34", "CD38", "CD90"),
-                     gs = c(0, 0, 0, 0),
-                     ge = c(5, 5, 5, 5))
+meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
+                        stage = raw$sample)
 
 object <- createFSPY(raw.data = raw.data, markers = markers,
-                     raw.meta.data = raw.meta.data,
-                     gating = gating,
+                     meta.data = meta.data,
                      log.transformed = F,
                      verbose = T)
+
+object <- runKNN(object, knn = 30)
+
+object <- runFastPCA(object)
+
+object <- runTSNE(object)
+
+object <- runDiffusionMap(object)
+
+object <- runUmap(object)
+
+
+
+
+
+
+
+
+
+
+
 
 plotGATE(object, plot.markers = c("CD45RA", "CD49f"), color.by = "stage",
          plot.type = "mesh", alpha = 0.2,

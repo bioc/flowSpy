@@ -21,8 +21,7 @@ setMethod(
     cat(
       "FSPY Information:\n",
       "FSPY object:", nrow(object@raw.data), " cells \n",
-      "Gating:", nrow(object@gating), " parameters \n",
-      "FSPY object:", nrow(object@gate.data), " cells after gating \n"
+      "FSPY object:", ncol(object@gate.data), " markers \n"
     )
     invisible(NULL)
   }
