@@ -71,8 +71,19 @@ plotSOMtree(object, color.by = "aa",
             color.theme = "#FFCC66")
 
 
+
+net <- object@branch.network$branch.spanning.tree
+plot(net, layout=layout_with_fr, vertex.size=3, vertex.label.cex=1)
+
+
+
+
+
+
+
 save(object, file = "0328.fspy.Robj")
 load("0328.fspy.Robj")
+
 
 
 
