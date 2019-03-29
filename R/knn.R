@@ -68,7 +68,7 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
     ## identify communities
     km <- igraph::cluster_walktrap(g)
     # generation of trunk network
-    object@network <- list(knn.G = g, knn.walktrap = km)
+    object@network <- list(knn.G = g, knn.walktrap = km, adj = adj)
     object@meta.data$trunk.id <- km$membership
 
     if (verbose) message(Sys.time(), " [INFO] Add trunk ")

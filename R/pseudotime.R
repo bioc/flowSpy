@@ -86,7 +86,7 @@ floodPseudotimeCalc <- function(object, minimum.cells.flooded, tm.flood) {
   i <- 0
 
   # Initialize with starting cells
-  cells.visited <- object@root.cell
+  cells.visited <- object@root.cells
   cells.not.visited <- setdiff(names(pseudotime), cells.visited)
   pseudotime[root.cell] <- 0
 

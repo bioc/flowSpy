@@ -32,17 +32,19 @@ plot2D <- function(object,
                    plot.theme = theme_base(),
                    color.theme = NULL) {
 
+  object <- updatePlotMeta(object)
+
   if ( !all(item.use %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   if ( !all(color.by %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   if (length(item.use) < 2) stop(Sys.time(), " [ERROR] item.use is less than two characters.")
   if (length(item.use) > 2) {
-    warning(Sys.time(), " [ERROR] item.use is more than two characters. Only the first two will be used")
+    warning(Sys.time(), " [WARNING] item.use is more than two characters. Only the first two will be used")
     item.use <- item.use[1:2]
   }
   if (length(color.by) > 1) {
-    warning(Sys.time(), " [ERROR] color.by is more than one characters. Only the first one will be used")
+    warning(Sys.time(), " [WARNING] color.by is more than one characters. Only the first one will be used")
     color.by <- color.by[1]
   }
 

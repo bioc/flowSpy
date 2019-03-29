@@ -33,6 +33,8 @@ plot3D <- function(object,
                    plot.theme = theme_base(),
                    color.theme = NULL) {
 
+  object <- updatePlotMeta(object)
+
   if ( !all(item.use %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   if ( !all(color.by %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")

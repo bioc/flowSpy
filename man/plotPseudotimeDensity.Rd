@@ -5,9 +5,7 @@
 \title{plot heatmap of FSPY}
 \usage{
 plotPseudotimeDensity(object, color.by = "stage",
-  main = "Density of pseudotime", adjust = 0.5,
-  color.theme = c("#f2de00", "#8bd129", "#33CCFF", "#0066CC", "#CC66FF",
-  "#FF3300"))
+  main = "Density of pseudotime", adjust = 0.5, color.theme = NULL)
 }
 \arguments{
 \item{object}{an FSPY object}
