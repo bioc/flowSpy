@@ -8,6 +8,11 @@
 #'
 #'
 updatePlotMeta <- function(object, verbose = T) {
+  plot.meta <- NULL
+  if (dim(object@meta.data)[1] > 0) {
+    
+  }
+
   plot.meta <- cbind(object@meta.data, object@log.data, object@pca.load,
                      object@tsne.value, object@dm@eigenvectors, object@umap.layout)
   plot.meta <- as.data.frame(plot.meta)

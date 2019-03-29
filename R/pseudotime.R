@@ -11,7 +11,7 @@
 #'
 #'
 defRootCells <- function(object, root.cells = NULL) {
-  if (length(object@root.cell) != 0) warning(Sys.time(), " [WARNING] root cells in FSPY object exist, they will be replaced.")
+  if (length(object@root.cells) != 0) warning(Sys.time(), " [WARNING] root cells in FSPY object exist, they will be replaced.")
 
   if (!is.vector(root.cells)) stop(Sys.time(), " [ERROR] root.cell must be a vector")
 
@@ -34,8 +34,6 @@ defRootCells <- function(object, root.cells = NULL) {
 #' \code{\link{floodPseudotimeProcess}} to convert them into pseudotime.
 #'
 #' @keywords internal
-#'
-#'
 #'
 #' @references
 #'   This code is strongly based on the \code{\link[URD]{floodPseudotime}} function,

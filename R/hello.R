@@ -60,8 +60,8 @@ object <- runSOM(object)
 object <- updatePlotMeta(object)
 
 ############ test of plot
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "trunk.id", alpha = 0.6, main = "PCA", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "branch.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "branch.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "trunk.id", alpha = 0.6, main = "PCA", category = "categorical")
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.node.id", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("DC1", "DC2", "DC3"), color.by = "cluster.id", size = 0.5,
        angle = 45, main = "pseudotime")
@@ -73,25 +73,49 @@ plotSOMtree(object, color.by = "aa",
 
 
 net <- object@branch.network$branch.spanning.tree
+net <- mst(object@branch.network$branch.graph)
 plot(net, layout=layout_with_fr, vertex.size=3, vertex.label.cex=1)
 
 
+root.cells <- object@meta.data$cell[which(object@meta.data$branch.id == "3-3")]
+object <- defRootCells(object, root.cells = as.character(root.cells))
 
 
 
+############ DDRtree
+library(DDRTree)
+a.idx <- sample(1:12000, 500)
+a <- DDRTree(t(object@log.data[a.idx, ]), dimensions = 2)
+
+Z <- a$Z
+Y <- a$Y
+stree <- a$stree
+
+plot(Z[1, ], Z[2, ])
+plot(Y[1, ], Y[2, ])
 
 
 save(object, file = "0328.fspy.Robj")
 load("0328.fspy.Robj")
 
 
+mat <- t(object@log.data)
+adj <- matrix(0, ncol(mat), ncol(mat))
+rownames(adj) <- colnames(adj) <- colnames(mat)
+for(i in seq_len(ncol(mat))) {
+  adj[i, colnames(mat)[object@knn.index[i,]]] <- 1
+}
+g <- igraph::graph.adjacency(adj, mode="undirected")
+# remove self loops
+g <- simplify(g)
+## identify communities
+km <- igraph::cluster_fast_greedy(g)
+km <- igraph::cluster_spinglass(g)
+sizes(km)
 
-
-
-
-
-
-
+root.cells <- which(object@meta.data$branch.id == "2-4")
+walk <- random_walk(object@network$knn.G, start = root.cells, step = 12000)
+walk
 
 
 plotGATE(object, plot.markers = c("CD45RA", "CD49f"), color.by = "stage",
