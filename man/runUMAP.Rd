@@ -4,12 +4,14 @@
 \alias{runUMAP}
 \title{Calculating UMAP}
 \usage{
-runUMAP(object, umap.config = umap.defaults, verbose = T)
+runUMAP(object, umap.config = umap.defaults, dim = 3, verbose = T)
 }
 \arguments{
 \item{object}{an FSPY object}
 
 \item{umap.config}{object of class umap.config. See \code{\link[umap]{umap}}.}
+
+\item{dim}{numeric. Dim of umap, you can also change it in umap.config.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }

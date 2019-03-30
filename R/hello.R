@@ -40,6 +40,8 @@ rownames(raw.data) <- paste0(raw$sample, "_", 1:length(raw$sample))
 meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
                         stage = raw$sample)
 
+
+
 object <- createFSPY(raw.data = raw.data, markers = markers,
                      meta.data = meta.data,
                      log.transformed = F,
@@ -60,15 +62,20 @@ object <- runSOM(object)
 object <- updatePlotMeta(object)
 
 ############ test of plot
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "trunk.id", alpha = 0.6, main = "PCA", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "trunk.id", alpha = 1, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("PC1", "PC2"), color.by = "trunk.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "trunk.id", alpha = 0.6, main = "tSNE", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "UMAP", category = "categorical")
+
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA")
-plot3D(object, item.use = c("UMAP1", "UMAP2", "UMAP3"), color.by = "trunk.id", size = 0.5,
+plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD34", size = 0.5,
        angle = 45, main = "pseudotime")
 plotSOM(object, color.by = "CD19")
 plotSOMtree(object, color.by = "aa",
             show.node.name = T, cex.size = 1.5,
             color.theme = "#FFCC66")
+
+
+
 
 net <- mst(object@trunk.network$trunk.graph)
 plot(net, layout=layout_with_fr, vertex.size=3, vertex.label.cex=1)
@@ -161,12 +168,6 @@ walk <- random_walk(object@network$knn.G, start = root.cells, step = 12000)
 walk
 
 
-
-
-
-plotGATE(object, plot.markers = c("CD45RA", "CD49f"), color.by = "stage",
-         plot.type = "mesh", alpha = 0.2,
-         color.theme = c("#f2de00", "#8bd129", "#33CCFF", "#0066CC", "#CC66FF", "#FF3300"))
 
 #ggsave("1.plotGATE.dotmesh.pdf", p, width = 6, height = 5)
 
