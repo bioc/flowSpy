@@ -8,7 +8,7 @@
 \description{
 All information stored in FSPY object, and you can use creatFSPY to
 create this object. In this package, most of the function will use
-FSPY object as input, and return a modified SPTY obejct as well.
+FSPY object as input, and return a modified FSPY obejct as well.
 }
 \section{Slots}{
 

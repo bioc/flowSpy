@@ -73,9 +73,8 @@ runKNN <- function(object, knn = 30, BNPARAM = KmknnParam(),
 
     if (verbose) message(Sys.time(), " [INFO] Add trunk ")
     object <- addTrunk(object)
-    if (verbose) message(Sys.time(), " [INFO] Add branch ")
-    object <- addBranch(object)
-
+    #if (verbose) message(Sys.time(), " [INFO] Add branch ")
+    #object <- addBranch(object)
 
   } else {
     if (!"cluster.id" %in% colnames(object@meta.data)) {

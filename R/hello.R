@@ -22,7 +22,7 @@ roxygenize()
 
 verbose = T
 
-sample.list <- paste0("D", c(0,2, 4, 6,8, 10))
+sample.list <- paste0("D", c(0, 2, 4, 6,8, 10))
 raw <- NULL
 for (i in 1:length(sample.list)) {
   sub <- read.table(paste0("inst/extdata/dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
@@ -57,6 +57,20 @@ object <- runDiffusionMap(object)
 
 object <- runUMAP(object)
 
+
+xdim = 5
+ydim = 5
+rlen = 8
+mst = 1
+alpha = c(0.05, 0.01)
+radius = 1
+init = FALSE
+distf = 2
+codes = NULL
+importance = NULL
+method = "euclidean"
+verbose= T
+
 object <- runSOM(object)
 
 object <- updatePlotMeta(object)
@@ -64,24 +78,24 @@ object <- updatePlotMeta(object)
 ############ test of plot
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "trunk.id", alpha = 0.6, main = "PCA", category = "categorical")
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "trunk.id", alpha = 0.6, main = "tSNE", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "UMAP", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.node.id", alpha = 1, main = "UMAP", category = "categorical")
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD34", size = 0.5,
        angle = 45, main = "pseudotime")
-plotSOM(object, color.by = "CD19")
-plotSOMtree(object, color.by = "aa",
+plotSOM(object, color.by = "trunk.id")
+plotSOMtree(object, color.by = "trunk.id",
+            show.node.name = T, cex.size = 1.5,
+            color.theme = "#FFCC66")
+plotKNNtree(object, color.by = "aa",
             show.node.name = T, cex.size = 1.5,
             color.theme = "#FFCC66")
 
 
 
-
-net <- mst(object@trunk.network$trunk.graph)
-plot(net, layout=layout_with_fr, vertex.size=3, vertex.label.cex=1)
+plot(object@trunk.network$trunk.spanning.tree, layout=layout_with_fr, vertex.size=3, vertex.label.cex=1)
 
 net <- object@branch.network$branch.spanning.tree
-net <- mst(object@branch.network$branch.graph)
 l <- layout_with_fr(net)
 plot(net, layout=l, vertex.size=3, vertex.label.cex=1)
 

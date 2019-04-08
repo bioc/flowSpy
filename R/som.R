@@ -35,7 +35,7 @@
 #'
 #' @examples
 #'
-runSOM <- function(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
+runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
                    alpha = c(0.05,  0.01), radius = 1, init = FALSE,
                    distf = 2, codes = NULL, importance = NULL,
                    method = "euclidean", verbose= T) {
@@ -58,9 +58,11 @@ runSOM <- function(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
   fullGraph <- igraph::graph.adjacency(as.matrix(adjacency),
                                        mode = "undirected",
                                        weighted = TRUE)
+  fullGraph <- simplify(fullGraph)
   som.net$graph <- igraph::minimum.spanning.tree(fullGraph)
   som.net$layout <- as.data.frame(igraph::layout.kamada.kawai(som.net$graph))
-  colnames(som.net$layout) <- c("pos.x", "pos.y")
+  colnames(som.net$layout) <- c("Pos1", "Pos2")
+
   som.net$node.attr <- data.frame(cell.num = as.vector(table(flowsom$mapping[, 1])),
                                   cell.percent = as.vector(table(flowsom$mapping[, 1])/dim(flowsom$mapping)[1]),
                                   flowsom$code)
@@ -73,11 +75,11 @@ runSOM <- function(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
 
   som.net$node.attr <- cbind(som.net$node.attr, cell.percent, cell.percent.stage)
 
-  som.net$edge.attr <- as_data_frame(som.net$graph, what="edges")
-  som.net$edge.attr$from.x <- som.net$layout$pos.x[match(som.net$edge.attr$from, rownames(som.net$layout))]
-  som.net$edge.attr$from.y <- som.net$layout$pos.y[match(som.net$edge.attr$from, rownames(som.net$layout))]
-  som.net$edge.attr$to.x <- som.net$layout$pos.x[match(som.net$edge.attr$to, rownames(som.net$layout))]
-  som.net$edge.attr$to.y <- som.net$layout$pos.y[match(som.net$edge.attr$to, rownames(som.net$layout))]
+  som.net$edge.attr <- igraph::as_data_frame(som.net$graph, what="edges")
+  som.net$edge.attr$from1 <- som.net$layout$Pos1[match(som.net$edge.attr$from, rownames(som.net$layout))]
+  som.net$edge.attr$from2 <- som.net$layout$Pos2[match(som.net$edge.attr$from, rownames(som.net$layout))]
+  som.net$edge.attr$to1 <- som.net$layout$Pos1[match(som.net$edge.attr$to, rownames(som.net$layout))]
+  som.net$edge.attr$to2 <- som.net$layout$Pos2[match(som.net$edge.attr$to, rownames(som.net$layout))]
 
   object@som <- som.net
   if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM completed.")

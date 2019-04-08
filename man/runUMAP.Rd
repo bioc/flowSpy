@@ -4,7 +4,7 @@
 \alias{runUMAP}
 \title{Calculating UMAP}
 \usage{
-runUMAP(object, umap.config = umap.defaults, dim = 3, verbose = T)
+runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = T)
 }
 \arguments{
 \item{object}{an FSPY object}
