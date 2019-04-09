@@ -59,7 +59,7 @@ plotSOM <- function(object,
 
   gg <- gg + scale_size(range = c(0, 6) * cex.size)
 
-  if (show.node.name) gg <- gg + geom_text(aes(layout.attr$pos.x, y = layout.attr$pos.y, label = rownames(node.attr) ), check_overlap = TRUE, size = 3 * cex.size)
+  if (show.node.name) gg <- gg + geom_text(aes(x = layout.attr$pos.x, y = layout.attr$pos.y, label = rownames(node.attr) ), check_overlap = TRUE, size = 3 * cex.size)
   gg <- gg + theme_void()
   gg <- gg + labs(x = "", y = "", title = paste0("SOM plot, color.by: ", color.by, ", size.by: ", size.by))
 

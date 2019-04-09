@@ -32,6 +32,8 @@ plot2D <- function(object,
                    main = "2D plot of FSPY",
                    plot.theme = theme_base(),
                    trajectory = "som",
+                   show.node.name = T,
+                   node.lab.szie = 4,
                    color.theme = NULL) {
 
   object <- updatePlotMeta(object, verbose = F)
@@ -103,7 +105,7 @@ plot2D <- function(object,
 
       gg <- gg + geom_segment(aes(x = traj.layout.edge$from.x, y = traj.layout.edge$from.y, xend = traj.layout.edge$to.x, yend = traj.layout.edge$to.y))
       gg <- gg + geom_point(mapping = aes(x = traj.layout.node$plot.x, y = traj.layout.node$plot.y))
-
+      if (show.node.name) gg <- gg + geom_text(aes(x = traj.layout.node$plot.x, y = traj.layout.node$plot.y, label = traj.layout.node$som.id ), check_overlap = TRUE, size =  node.lab.szie )
     }
   }
 

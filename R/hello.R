@@ -77,10 +77,22 @@ object <- runSOM(object, xdim = xdim, ydim = ydim)
 
 object <- updatePlotMeta(object)
 
+item.use = c("tSNE1", "tSNE2")
+color.by = "stage"
+order.by = NULL
+size = 1
+alpha = 1
+category = NULL
+main = "2D plot of FSPY"
+plot.theme = theme_base()
+trajectory = "som"
+show.node.name = T
+color.theme = NULL
+
 ############ test of plot
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "som.id", alpha = 0.6, main = "PCA", category = "categorical")
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", alpha = 0.6, main = "tSNE", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "UMAP", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "UMAP", category = "categorical")
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD34", size = 0.5,

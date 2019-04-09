@@ -7,7 +7,8 @@
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage",
   order.by = NULL, size = 1, alpha = 1, category = NULL,
   main = "2D plot of FSPY", plot.theme = theme_base(),
-  trajectory = "som", color.theme = NULL)
+  trajectory = "som", show.node.name = T, node.lab.szie = 4,
+  color.theme = NULL)
 }
 \arguments{
 \item{object}{An FSPY object}

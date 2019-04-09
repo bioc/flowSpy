@@ -50,6 +50,7 @@ runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
                           distf = distf, silent = verbose,
                           codes = codes, importance = importance)
 
+
   # generating som network
   object@meta.data$som.id <- flowsom$mapping[, 1]
   object@meta.data$som.value <- flowsom$mapping[, 2]
@@ -79,7 +80,7 @@ buildSOMnet <- function(flowsom, object, method = "euclidean") {
 
   som.net$node.attr <- data.frame(cell.num = as.vector(table(flowsom$mapping[, 1])),
                                   cell.percent = as.vector(table(flowsom$mapping[, 1])/dim(flowsom$mapping)[1]),
-                                  flowsom$code)
+                                  aggregate(object@log.data, list(som.id = object@meta.data$som.id), mean))
 
   idx <- match(c("som.id", "stage"), colnames(object@meta.data))
 
