@@ -57,9 +57,11 @@ object <- runDiffusionMap(object)
 
 object <- runUMAP(object)
 
+object <- runSOM(object)
 
-xdim = 5
-ydim = 5
+
+xdim = 4
+ydim = 3
 rlen = 8
 mst = 1
 alpha = c(0.05, 0.01)
@@ -71,14 +73,14 @@ importance = NULL
 method = "euclidean"
 verbose= T
 
-object <- runSOM(object)
+object <- runSOM(object, xdim = xdim, ydim = ydim)
 
 object <- updatePlotMeta(object)
 
 ############ test of plot
-plot2D(object, item.use = c("PC1", "PC2"), color.by = "trunk.id", alpha = 0.6, main = "PCA", category = "categorical")
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "trunk.id", alpha = 0.6, main = "tSNE", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.node.id", alpha = 1, main = "UMAP", category = "categorical")
+plot2D(object, item.use = c("PC1", "PC2"), color.by = "som.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", alpha = 0.6, main = "tSNE", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "UMAP", category = "categorical")
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD34", size = 0.5,

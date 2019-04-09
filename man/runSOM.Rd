@@ -4,7 +4,7 @@
 \alias{runSOM}
 \title{calculation SOM in FSPY object}
 \usage{
-runSOM(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
+runSOM(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
   alpha = c(0.05, 0.01), radius = 1, init = FALSE, distf = 2,
   codes = NULL, importance = NULL, method = "euclidean",
   verbose = T)
@@ -12,9 +12,9 @@ runSOM(object, xdim = 10, ydim = 10, rlen = 10, mst = 1,
 \arguments{
 \item{object}{an FSPY object}
 
-\item{xdim}{Width of the grid}
+\item{xdim}{Width of the grid.}
 
-\item{ydim}{Hight of the grid}
+\item{ydim}{Hight of the grid.}
 
 \item{rlen}{Number of times to loop over the training data for each MST}
 

@@ -43,6 +43,8 @@ And each row of the \code{knn.distance} contains the distance of its nearest nei
 
 \item{\code{som}}{list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.}
 
+\item{\code{som.network}}{list. SOM network including edge and node attributes.}
+
 \item{\code{umap.layout}}{matrix umap coordinates information calculated using \code{\link[umap]{umap}}.}
 
 \item{\code{root.cells}}{vector, Names of root cells.}

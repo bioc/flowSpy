@@ -7,7 +7,7 @@
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage",
   order.by = NULL, size = 1, alpha = 1, category = NULL,
   main = "2D plot of FSPY", plot.theme = theme_base(),
-  color.theme = NULL)
+  trajectory = "som", color.theme = NULL)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -16,6 +16,8 @@ plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage",
 
 \item{color.by}{character. Dot or mesh color by which character. It can be one of the column
 of plot.meta, or it can be just "density" (the default value).}
+
+\item{order.by}{vector. Order of color theme.}
 
 \item{size}{numeric. size of the dot}
 

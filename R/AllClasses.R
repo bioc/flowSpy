@@ -35,6 +35,7 @@ NULL
 #' @slot dm.parameter list. Diffusion map parameters in calculation of the \code{dm}.
 #' @slot dm data.frame. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}
 #' @slot som list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.
+#' @slot som.network list. SOM network including edge and node attributes.
 #' @slot umap.layout matrix umap coordinates information calculated using \code{\link[umap]{umap}}.
 #' @slot root.cells vector, Names of root cells.
 #' @slot leaf.cells vector. Names of leaf cells.
@@ -73,6 +74,10 @@ FSPY <- methods::setClass("FSPY", slots = c(
   knn.index = "matrix",
   knn.distance = "matrix",
 
+  # som information
+  som = "list",
+  som.network = "list",
+
   # tsne information
   tsne.parameter = "list",
   tsne.value = "matrix",
@@ -80,9 +85,6 @@ FSPY <- methods::setClass("FSPY", slots = c(
   # diffusion map information
   dm.parameter = "list",
   dm = c("DiffusionMap", NULL),
-
-  # som information
-  som = "list",
 
   # umap information
   umap.layout = "matrix",

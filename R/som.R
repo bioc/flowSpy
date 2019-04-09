@@ -5,8 +5,8 @@
 #' Build a self-organizing map
 #'
 #' @param object  an FSPY object
-#' @param xdim  Width of the grid
-#' @param ydim  Hight of the grid
+#' @param xdim  Width of the grid.
+#' @param ydim  Hight of the grid.
 #' @param rlen  Number of times to loop over the training data for each MST
 #' @param mst   Number of times to build an MST
 #' @param alpha Start and end learning rate
@@ -47,11 +47,25 @@ runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
                           xdim = xdim, ydim = ydim, rlen = rlen, mst = mst,
                           alpha = alpha[1], radius = radius,
                           init = init,
-                          distf = distf, silent = verbose, codes = codes, importance = importance)
+                          distf = distf, silent = verbose,
+                          codes = codes, importance = importance)
 
   # generating som network
-  object@meta.data$som.node.id <- flowsom$mapping[, 1]
-  object@meta.data$som.node.value <- flowsom$mapping[, 2]
+  object@meta.data$som.id <- flowsom$mapping[, 1]
+  object@meta.data$som.value <- flowsom$mapping[, 2]
+  object@som <- flowsom
+
+  object@som.network <- buildSOMnet(flowsom, object, method = method)
+
+  if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM completed.")
+  return(object)
+}
+
+
+#
+# build SOM network
+#
+buildSOMnet <- function(flowsom, object, method = "euclidean") {
 
   som.net <- list()
   adjacency <- stats::dist(flowsom$codes, method = method)
@@ -61,14 +75,15 @@ runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
   fullGraph <- simplify(fullGraph)
   som.net$graph <- igraph::minimum.spanning.tree(fullGraph)
   som.net$layout <- as.data.frame(igraph::layout.kamada.kawai(som.net$graph))
-  colnames(som.net$layout) <- c("Pos1", "Pos2")
+  colnames(som.net$layout) <- c("Pos.x", "Pos.y")
 
   som.net$node.attr <- data.frame(cell.num = as.vector(table(flowsom$mapping[, 1])),
                                   cell.percent = as.vector(table(flowsom$mapping[, 1])/dim(flowsom$mapping)[1]),
                                   flowsom$code)
 
-  idx <- match(c("som.node.id", "stage"), colnames(object@meta.data))
-  cell.percent <- matrix(table(object@meta.data[, idx]), nrow = xdim * ydim)
+  idx <- match(c("som.id", "stage"), colnames(object@meta.data))
+
+  cell.percent <- matrix(table(object@meta.data[, idx]), nrow = max(object@meta.data$som.id))
   colnames(cell.percent) <- levels(object@meta.data$stage)
   cell.percent.stage <- cell.percent / som.net$node.attr$cell.num
   colnames(cell.percent.stage) <- paste0(levels(object@meta.data$stage), ".som.percent")
@@ -76,18 +91,13 @@ runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
   som.net$node.attr <- cbind(som.net$node.attr, cell.percent, cell.percent.stage)
 
   som.net$edge.attr <- igraph::as_data_frame(som.net$graph, what="edges")
-  som.net$edge.attr$from1 <- som.net$layout$Pos1[match(som.net$edge.attr$from, rownames(som.net$layout))]
-  som.net$edge.attr$from2 <- som.net$layout$Pos2[match(som.net$edge.attr$from, rownames(som.net$layout))]
-  som.net$edge.attr$to1 <- som.net$layout$Pos1[match(som.net$edge.attr$to, rownames(som.net$layout))]
-  som.net$edge.attr$to2 <- som.net$layout$Pos2[match(som.net$edge.attr$to, rownames(som.net$layout))]
+  som.net$edge.attr$from.x <- som.net$layout$Pos.x[match(som.net$edge.attr$from, rownames(som.net$layout))]
+  som.net$edge.attr$from.y <- som.net$layout$Pos.y[match(som.net$edge.attr$from, rownames(som.net$layout))]
+  som.net$edge.attr$to.x <- som.net$layout$Pos.x[match(som.net$edge.attr$to, rownames(som.net$layout))]
+  som.net$edge.attr$to.y <- som.net$layout$Pos.y[match(som.net$edge.attr$to, rownames(som.net$layout))]
 
-  object@som <- som.net
-  if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM completed.")
-  return(object)
+  return(som.net)
 }
-
-
-
 
 
 

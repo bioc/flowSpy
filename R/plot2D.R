@@ -7,6 +7,7 @@
 #' @param item.use character. Items use to 2D plot, axes x and y must be numeric.
 #' @param color.by character. Dot or mesh color by which character. It can be one of the column
 #'     of plot.meta, or it can be just "density" (the default value).
+#' @param order.by vector. Order of color theme.
 #' @param size numeric. size of the dot
 #' @param alpha numberic. transparency (0-1) of the dot, default is 0.2.
 #' @param category character. numeric or categorical
@@ -30,6 +31,7 @@ plot2D <- function(object,
                    category = NULL,
                    main = "2D plot of FSPY",
                    plot.theme = theme_base(),
+                   trajectory = "som",
                    color.theme = NULL) {
 
   object <- updatePlotMeta(object, verbose = F)
@@ -71,7 +73,7 @@ plot2D <- function(object,
   }
 
   # plot
-  gg <- ggplot(plot.data, aes(x=plot.x, y=plot.y, color = color.by)) + geom_point(size = size, alpha = alpha)
+  gg <- ggplot() + geom_point(aes(x=plot.data$plot.x, y=plot.data$plot.y, color = plot.data$color.by), size = size, alpha = alpha)
 
   if (!is.null(color.theme)) {
     if (category == "categorical") {
@@ -83,6 +85,27 @@ plot2D <- function(object,
 
   gg <- gg + theme_base()
   gg <- gg + labs(x = item.use[1], y = item.use[2], title = paste0(main))
+
+
+
+  if (trajectory == "som") {
+    if ("som.id" %in% colnames(object@meta.data)) {
+      plot.data$som.id <- object@meta.data$som.id
+      traj.layout.node <- aggregate(plot.data[, 1:2], list(som.id = plot.data$som.id), mean)
+
+
+      som.net <- object@som.network
+      traj.layout.edge <- igraph::as_data_frame(som.net$graph, what="edges")
+      traj.layout.edge$from.x <- traj.layout.node$plot.x[match(traj.layout.edge$from, traj.layout.node$som.id)]
+      traj.layout.edge$from.y <- traj.layout.node$plot.y[match(traj.layout.edge$from, traj.layout.node$som.id)]
+      traj.layout.edge$to.x <- traj.layout.node$plot.x[match(traj.layout.edge$to, traj.layout.node$som.id)]
+      traj.layout.edge$to.y <- traj.layout.node$plot.y[match(traj.layout.edge$to, traj.layout.node$som.id)]
+
+      gg <- gg + geom_segment(aes(x = traj.layout.edge$from.x, y = traj.layout.edge$from.y, xend = traj.layout.edge$to.x, yend = traj.layout.edge$to.y))
+      gg <- gg + geom_point(mapping = aes(x = traj.layout.node$plot.x, y = traj.layout.node$plot.y))
+
+    }
+  }
 
   return(gg)
 
