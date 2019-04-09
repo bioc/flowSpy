@@ -97,62 +97,11 @@ plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, ma
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD34", size = 0.5,
        angle = 45, main = "pseudotime")
-plotSOM(object, color.by = "trunk.id")
+plotSOM(object, color.by = "CD34", show.node.name = T)
 plotSOMtree(object, color.by = "trunk.id",
             show.node.name = T, cex.size = 1.5,
             color.theme = "#FFCC66")
-plotKNNtree(object, color.by = "aa",
-            show.node.name = T, cex.size = 1.5,
-            color.theme = "#FFCC66")
 
-
-
-plot(object@trunk.network$trunk.spanning.tree, layout=layout_with_fr, vertex.size=3, vertex.label.cex=1)
-
-net <- object@branch.network$branch.spanning.tree
-l <- layout_with_fr(net)
-plot(net, layout=l, vertex.size=3, vertex.label.cex=1)
-
-dist = as.matrix(dist(object@branch.network$branch.marker))
-
-
-
-root.cells <- object@meta.data$cell[which(object@meta.data$trunk.id == "3")]
-object <- defRootCells(object, root.cells = as.character(root.cells))
-
-plotPseudotimeDensity(object, color.by = "trunk.id")
-
-########## test for pseudotime
-tm.flood <- object@network$adj
-root.cells.idx <- which(object@meta.data$branch.id == "3-5")
-total.walk <- sapply(root.cells.idx, function(x) random_walk(object@network$knn.G, x, step = 12000, mode = "out") )
-
-a <- as.numeric(unlist(total.walk))
-head(total.walk)
-
-summary(a)
-length(unique(a))
-
-
-sub.time <- rep(0, dim(tm.flood)[1])
-total.walk.time <- sapply(1:ncol(total.walk), function(x) {
-  sub.time <- rep(NA, dim(tm.flood)[1])
-  sub.time[total.walk[, x]]<-1:dim(tm.flood)[1]
-  sub.time
-  })
-pseudotime <- rowMeans(total.walk.time, na.rm = T)
-pseudotime[which( is.na(pseudotime) )] = 0
-pseudotime <- pseudotime - min(pseudotime)
-pseudotime <- pseudotime / max(pseudotime)
-plot(pseudotime[order(pseudotime)])
-object@meta.data$pseudotime <- pseudotime
-
-
-
-sub.time <- rep(0, dim(tm.flood)[1])
-names(sub.time) <- rownames(tm.flood)
-aa <- total.walk[, 1]
-sub.time[aa] <- 1:dim(tm.flood)[1]
 
 
 
@@ -162,16 +111,23 @@ sub.time[aa] <- 1:dim(tm.flood)[1]
 
 ############ DDRtree
 library(DDRTree)
-a.idx <- sample(1:12000, 500)
-a <- DDRTree(t(object@log.data[a.idx, ]), dimensions = 2)
+idx <- match(markers, colnames(object@som.network$node.attr))
+a <- DDRTree(t(object@som.network$node.attr), dimensions = 2)
 
 Z <- a$Z
 Y <- a$Y
+W <- a$W
 stree <- a$stree
 
 plot(Z[1, ], Z[2, ])
 plot(Y[1, ], Y[2, ])
+plot(W[, 1], W[, 2])
 
+
+fullGraph <- igraph::graph.adjacency(as.matrix(stree),
+                                     mode = "undirected",
+                                     weighted = TRUE)
+plot(fullGraph)
 
 save(object, file = "0328.fspy.Robj")
 load("0328.fspy.Robj")

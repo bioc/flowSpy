@@ -22,11 +22,11 @@ plotSOM <- function(object,
                     color.theme = NULL) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
-  if (is.null(object@som)) stop(Sys.time(), " [ERROR] som is missing, please run runSOM first!")
+  if (is.null(object@som.network)) stop(Sys.time(), " [ERROR] som is missing, please run runSOM first!")
 
-  layout.attr <- object@som$layout
-  node.attr <- object@som$node.attr
-  edge.attr <- object@som$edge.attr
+  layout.attr <- object@som.network$layout
+  node.attr <- object@som.network$node.attr
+  edge.attr <- object@som.network$edge.attr
 
 
   if (!size.by %in% colnames(node.attr)) {
@@ -48,8 +48,8 @@ plotSOM <- function(object,
   size <- node.attr[, which(colnames(node.attr) == size.by)]
 
   gg <- ggplot()
-  gg <- gg + geom_segment(aes(x = edge.attr$from.x, y = edge.attr$from.y, xend = edge.attr$to.x, yend = edge.attr$to.y))
-  gg <- gg + geom_point(mapping = aes(x = layout.attr$pos.x, y = layout.attr$pos.y, size = size, color = color))
+  gg <- gg + geom_segment(mapping = aes(x = edge.attr$from.x, y = edge.attr$from.y, xend = edge.attr$to.x, yend = edge.attr$to.y))
+  gg <- gg + geom_point(mapping = aes(x = layout.attr$Pos.x, y = layout.attr$Pos.y, size = size, color = color))
 
   if (is.numeric(color)) {
     gg <- gg + scale_colour_gradientn(colours = rainbow(10))
@@ -59,7 +59,7 @@ plotSOM <- function(object,
 
   gg <- gg + scale_size(range = c(0, 6) * cex.size)
 
-  if (show.node.name) gg <- gg + geom_text(aes(x = layout.attr$pos.x, y = layout.attr$pos.y, label = rownames(node.attr) ), check_overlap = TRUE, size = 3 * cex.size)
+  if (show.node.name) gg <- gg + geom_text(aes(x = layout.attr$Pos.x, y = layout.attr$Pos.y, label = rownames(node.attr) ), check_overlap = TRUE, size = 3 * cex.size)
   gg <- gg + theme_void()
   gg <- gg + labs(x = "", y = "", title = paste0("SOM plot, color.by: ", color.by, ", size.by: ", size.by))
 
