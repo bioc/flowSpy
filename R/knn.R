@@ -103,4 +103,27 @@ addBranch <- function(object) {
   return(object)
 }
 
+#'
+#' mclust
+#'
+#' @import mclust
+#'
+addMclust <- function(object) {
+  mc.id <- Mclust(object@log.data)$classification
+
+  object@meta.data$mc.id <- mc.id
+
+  return(object)
+}
+
+
+slingshot <- function(object) {
+  sds <- slingshot(object@log.data, object@meta.data$mc.id, start.clus = '1')
+
+  plot(rd, col = cl, asp = 1)
+  lines(sds, lwd = 3)
+
+  return(object)
+}
+
 
