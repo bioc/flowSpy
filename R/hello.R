@@ -111,9 +111,9 @@ sds <- slingshot(rd, clusterLabels = cl, start.clus = '1')
 
 id <- as.vector(object@meta.data$som.id)
 names(id) <- rownames(object@umap.layout[, 1:2])
-sds <- slingshot(object@umap.layout[, 1:2], clusterLabels = object@meta.data$som.id, start.clus = '11')
+sds <- slingshot(object@pca.load[, 1:6], clusterLabels = object@meta.data$som.id, start.clus = '11')
 
-plot(object@umap.layout[, 1:2], col = object@meta.data$som.id)
+plot(object@tsne.value[, 1:2], col = object@log.data[, 2], pch = 16)
 lines(sds, lwd = 3)
 
 return(object)
@@ -124,8 +124,8 @@ return(object)
 
 ############ DDRtree
 library(DDRTree)
-idx <- match(markers, colnames(object@som.network$node.attr))
-a <- DDRTree(t(object@som.network$node.attr), dimensions = 2)
+
+a <- DDRTree(t(object@umap.layout[, 1:2]), dimensions = 2)
 
 Z <- a$Z
 Y <- a$Y
