@@ -59,9 +59,11 @@ object <- runUMAP(object)
 
 object <- runSOM(object)
 
+object <- runMclust(object)
+
 
 xdim = 4
-ydim = 3
+ydim = 4
 rlen = 8
 mst = 1
 alpha = c(0.05, 0.01)
@@ -90,9 +92,9 @@ show.node.name = T
 color.theme = NULL
 
 ############ test of plot
-plot2D(object, item.use = c("PC1", "PC2"), color.by = "som.id", alpha = 0.6, main = "PCA", category = "categorical")
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", alpha = 0.6, main = "tSNE", category = "categorical")
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "UMAP", category = "categorical")
+plot2D(object, item.use = c("PC1", "PC2"), color.by = "mc.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "mc.id", alpha = 0.6, main = "tSNE", category = "categorical", trajectory = "")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "UMAP", category = "categorical", trajectory = "som")
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA")
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD34", size = 0.5,
@@ -103,7 +105,18 @@ plotSOMtree(object, color.by = "trunk.id",
             color.theme = "#FFCC66")
 
 
+data("slingshotExample")
+sds <- slingshot(rd, clusterLabels = cl, start.clus = '1')
 
+
+id <- as.vector(object@meta.data$som.id)
+names(id) <- rownames(object@umap.layout[, 1:2])
+sds <- slingshot(object@umap.layout[, 1:2], clusterLabels = object@meta.data$som.id, start.clus = '11')
+
+plot(object@umap.layout[, 1:2], col = object@meta.data$som.id)
+lines(sds, lwd = 3)
+
+return(object)
 
 
 

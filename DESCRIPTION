@@ -5,9 +5,8 @@ Version: 0.1.0
 Date: 2018-12-11
 Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
             email = "forlynna@sjtu.edu.cn"))
-Author: Yuting Dai
+Author: Yuting Dai [aut, cre, cph]
 Maintainer: Yuting Dai <forlynna@sjtu.edu.cn>
-Suggests: BiocStyle
 Description: flowSpy offers visualization options for flow cytometry data.
     PCA, tSNE, diffusion map and SOM were included in base function section, 
     and pseudotime, differentiation tree, differentiation trajectory, sankey 
@@ -15,8 +14,20 @@ Description: flowSpy offers visualization options for flow cytometry data.
 Depends: R (>= 3.4), igraph
 Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
         flowUtils, Biobase, Matrix, flowCore, ggthemes, 
-        matrixStats, methods
+        matrixStats, methods, mclust
+Suggests: BiocGenerics, gam, knitr, RColorBrewer,
+        rmarkdown, splatter, testthat, BiocStyle
+biocViews: Clustering, GeneExpression, flowCytometry,
+        Software, Sequencing, Visualization
 License: GPL-3.0 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+BugReports: https://github.com/ytdai/flowSpy/issues
+git_url: https://github.com/ytdai/flowSpy
+git_branch: 
+git_last_commit: 
+git_last_commit_date: 
+Date/Publication: 
+NeedsCompilation: no
+Packaged: 
