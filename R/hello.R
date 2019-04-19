@@ -21,12 +21,14 @@ library(roxygen2)
 roxygenize()
 
 verbose = T
+cell.number = 500
 
 sample.list <- paste0("D", c(0, 2, 4, 6,8, 10))
 raw <- NULL
 for (i in 1:length(sample.list)) {
   sub <- read.table(paste0("inst/extdata/dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
   sub$sample <- sample.list[i]
+  sub <- sub[1:cell.number, ]
   raw <- rbind(raw, sub)
 }
 table(raw$sample)
@@ -47,7 +49,7 @@ object <- createFSPY(raw.data = raw.data, markers = markers,
                      log.transformed = F,
                      verbose = T)
 
-object <- runKNN(object, knn = 30, knn.replace = T)
+object <- runCluster(object, knn = 30, knn.replace = T)
 
 object <- runFastPCA(object)
 
