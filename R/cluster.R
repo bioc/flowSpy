@@ -54,4 +54,48 @@ runKNN <- function(object, cluster.method = c("som", "kmeans", "mclust", "hclust
 }
 
 
+#'
+#' runKmeans
+#'
+#' @name runKmeans
+#'
+runKmeans <- function(object) {
+
+  return(object)
+}
+
+
+
+#'
+#' runMclust
+#'
+#' @name runMclust
+#'
+runMclust <- function(object) {
+
+  return(object)
+}
+
+
+#'
+#' runHclust
+#'
+#' @name runHclust
+#'
+#' @export
+#'
+runHclust <- function(object) {
+
+  return(object)
+}
+
+
+
+
+
+
+
+
+
+
 
