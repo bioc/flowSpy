@@ -4,8 +4,24 @@
 \alias{runHclust}
 \title{runHclust}
 \usage{
-runHclust(object)
+runHclust(object, k = 25, hclust.method = "complete",
+  dist.method = "euclidean", verbose = T, ...)
+}
+\arguments{
+\item{object}{an FSPY object}
+
+\item{k}{numeric}
+
+\item{hclust.method}{character}
+
+\item{dist.method}{character}
+
+\item{verbose}{verbose}
 }
 \description{
-runHclust
+Hierarchical cluster analysis on a set of dissimilarities
+   and methods for analyzing it.
+}
+\examples{
+
 }

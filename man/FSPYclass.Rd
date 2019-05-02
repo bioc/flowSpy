@@ -33,8 +33,6 @@ FSPY object as input, and return a modified FSPY obejct as well.
 in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
 And each row of the \code{knn.distance} contains the distance of its nearest neighbors.}
 
-\item{\code{tsne.parameter}}{list. tSNE paramters in calculation of the \code{tsne.value} in \code{\link[Rtsne]{Rtsne}}}
-
 \item{\code{tsne.value}}{matrix. tSNE coordinates information.}
 
 \item{\code{dm.parameter}}{list. Diffusion map parameters in calculation of the \code{dm}.}

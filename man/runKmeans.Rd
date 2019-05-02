@@ -4,8 +4,21 @@
 \alias{runKmeans}
 \title{runKmeans}
 \usage{
-runKmeans(object)
+runKmeans(object, k = 25, iter.max = 10, nstart = 1,
+  algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
+  trace = FALSE, scale = T, verbose = T)
+}
+\arguments{
+\item{object}{an FSPY object}
+}
+\value{
+an FSPY object
 }
 \description{
-runKmeans
+Perform k-means clustering on a data matrix.
+}
+\examples{
+
+
+
 }

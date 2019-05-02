@@ -20,10 +20,11 @@ rm(list = ls())
 library(roxygen2)
 roxygenize()
 
+
 verbose = T
 cell.number = 500
 
-sample.list <- paste0("D", c(0, 2, 4, 6,8, 10))
+sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
 raw <- NULL
 for (i in 1:length(sample.list)) {
   sub <- read.table(paste0("inst/extdata/dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
@@ -49,7 +50,7 @@ object <- createFSPY(raw.data = raw.data, markers = markers,
                      log.transformed = F,
                      verbose = T)
 
-object <- runCluster(object, knn = 30, knn.replace = T)
+object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
 
 object <- runFastPCA(object)
 

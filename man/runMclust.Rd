@@ -6,6 +6,12 @@
 \usage{
 runMclust(object)
 }
+\arguments{
+\item{object}{an FSPY object}
+}
+\value{
+an FSPY object
+}
 \description{
-runMclust
+Model-based clustering based on parameterized finite Gaussian mixture models.
 }

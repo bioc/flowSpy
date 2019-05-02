@@ -30,7 +30,6 @@ NULL
 #' @slot knn.index,knn.distance matrix. Each row of the \code{knn.index} matrix corresponds to a point
 #'     in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
 #'     And each row of the \code{knn.distance} contains the distance of its nearest neighbors.
-#' @slot tsne.parameter list. tSNE paramters in calculation of the \code{tsne.value} in \code{\link[Rtsne]{Rtsne}}
 #' @slot tsne.value matrix. tSNE coordinates information.
 #' @slot dm.parameter list. Diffusion map parameters in calculation of the \code{dm}.
 #' @slot dm data.frame. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}
@@ -64,30 +63,35 @@ FSPY <- methods::setClass("FSPY", slots = c(
   markers.idx = "vector",
   cell.name = "vector",
 
-  # pca information
-  pca.sdev = "vector",
-  pca.load = "matrix",
-  pca.scores = "matrix",
-
   # KNN
   knn = "numeric",
   knn.index = "matrix",
   knn.distance = "matrix",
 
-  # som information
+  # som network
   som = "list",
-  som.network = "list",
+
+  # hclust network
+  hclust = "list",
+
+  # mclust network
+  mclust = "list",
+
+  # kmeans network
+  kmeans = "list",
+
+  # pca information
+  pca.sdev = "vector",
+  pca.value = "matrix",
 
   # tsne information
-  tsne.parameter = "list",
   tsne.value = "matrix",
 
   # diffusion map information
-  dm.parameter = "list",
   dm = c("DiffusionMap", NULL),
 
   # umap information
-  umap.layout = "matrix",
+  umap.value = "matrix",
 
   # trunk and branch
   trunk.network = "list",
