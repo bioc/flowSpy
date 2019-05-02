@@ -65,16 +65,22 @@ object <- runUMAP(object)
 
 object <- updatePlotMeta(object)
 
-object <- buildTree(object, cluster.type = "hclust")
+object <- buildTree(object, cluster.type = "mclust")
 
 
+# pseudotime
+root.cell <- as.character(object@meta.data$cell[which(object@meta.data$som.node.id == 2)])
 
+root.cell <- sample(root.cell, size = floor(length(root.cell)/4))
+root.cell <- root.cell[grep("D0", root.cell)]
 
+object <- defRootCells(object, root.cell = root.cell)
 
 
 
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "mclust.id", alpha = 0.6, main = "PCA", category = "categorical")
 
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "stage", alpha = 0.6, main = "PCA", category = "categorical")
 
 
 
@@ -134,7 +140,7 @@ return(object)
 ############ DDRtree
 library(DDRTree)
 
-a <- DDRTree(t(object@umap.layout[, 1:2]), dimensions = 2)
+a <- DDRTree(object@network$mst.mat[, 2:3], dimensions = 2)
 
 Z <- a$Z
 Y <- a$Y
