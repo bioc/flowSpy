@@ -50,7 +50,10 @@ object <- createFSPY(raw.data = raw.data, markers = markers,
                      log.transformed = F,
                      verbose = T)
 
-object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
+
+object <- runKNN(object, knn = 30)
+
+object <- runCluster(object, cluster.method = "mclust")
 
 object <- runFastPCA(object)
 
@@ -60,27 +63,30 @@ object <- runDiffusionMap(object)
 
 object <- runUMAP(object)
 
-object <- runSOM(object)
-
-object <- runMclust(object)
-
-
-xdim = 4
-ydim = 4
-rlen = 8
-mst = 1
-alpha = c(0.05, 0.01)
-radius = 1
-init = FALSE
-distf = 2
-codes = NULL
-importance = NULL
-method = "euclidean"
-verbose= T
-
-object <- runSOM(object, xdim = xdim, ydim = ydim)
-
 object <- updatePlotMeta(object)
+
+object <- buildTree(object, cluster.type = "hclust")
+
+
+
+
+
+
+
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "mclust.id", alpha = 0.6, main = "PCA", category = "categorical")
+
+
+
+
+
+
+
+
+
+
+
+
+############3
 
 item.use = c("tSNE1", "tSNE2")
 color.by = "stage"
@@ -95,7 +101,7 @@ show.node.name = T
 color.theme = NULL
 
 ############ test of plot
-plot2D(object, item.use = c("PC1", "PC2"), color.by = "mc.id", alpha = 0.6, main = "PCA", category = "categorical")
+
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "mc.id", alpha = 0.6, main = "tSNE", category = "categorical", trajectory = "")
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "UMAP", category = "categorical", trajectory = "som")
 

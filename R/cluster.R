@@ -9,8 +9,9 @@
 #'    provided.
 #'
 #' @param object an FSPY object
-#' @param cluster.method character.
+#' @param cluster.method character. Four clustering method are provided: som, hclust, mclust, kmeans.
 #' @param verbose logic. Whether to print calculation progress.
+#' @param ... options to pass on to the clustering functions.
 #'
 #' @return An FSPY object
 #'
@@ -29,77 +30,22 @@ runCluster <- function(object, cluster.method = "som", verbose = T, ...) {
 
   if (cluster.method == "som") {
     object <- runSOM(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$som.id
   } else if (cluster.method == "hclust") {
     object <- runHclust(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$hclust.id
   } else if (cluster.method == "mclust") {
     object <- runMclust(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$mclust.id
   } else if (cluster.method == "kmeans") {
     object <- runKmeans(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$kmeans.id
   } else {
     warning(Sys.time(), " [WARNING] Invalid cluster.method parameter ")
   }
 
   return(object)
 
-}
-
-
-
-
-
-#'
-#' Calculate k-nearest neighbors of FSPY
-#'
-#' @name runKNN
-#'
-#' @description Calculates and stores a k-nearest neighbor graph based on Euclidean
-#'    distance with (KMKNN) algorithm using log-transformed signaling matrix of
-#'    flow cytometry data. The base function referes to \code{\link[BiocNeighbors]{findKNN}}.
-#'
-#' @param object an FSPY object
-#' @param knn numeric, number of k-nearest neighbors
-#' @param BNPARAM A BiocNeighborParam object, or NULL if BININDEX is supplied.
-#'    See \code{\link[BiocNeighbors]{findKNN}}.
-#' @param iter.max numeric. The maximum number of iterations allowed.
-#' @param knn.replace logic. Whether to replace knn in FSPY object
-#' @param knn.cluster logic. Whether to run knn cluster.
-#' @param verbose logic. Whether to print calculation progress.
-#'
-#'
-#' @return An FSPY object
-#'
-#' @import BiocNeighbors
-#' @importFrom igraph graph.adjacency cluster_walktrap minimum.spanning.tree
-#' @export
-#'
-#' @examples
-#'
-#'
-runKNN <- function(object, cluster.method = c("som", "kmeans", "mclust", "hclust"),
-                   list.params = list(),
-                   verbose = T) {
-
-  if (isTRUE(object@knn > 0) & !(knn.replace)) {
-    if (verbose) message(Sys.time(), " [INFO] Using knn in FSPY object: ", object@knn )
-  } else if ( isTRUE(object@knn > 0) & (knn.replace) ) {
-    if (verbose) message(Sys.time(), " [INFO] Using knn provided in this function: ", knn )
-    object@knn <- knn
-  } else {
-    object@knn <- knn
-  }
-
-  if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
-  fout <- findKNN(object@log.data, k = object@knn, BNPARAM = BNPARAM)
-
-  rownames(fout$index) <- object@meta.data$cell
-  rownames(fout$distance) <- object@meta.data$cell
-
-  object@knn = knn
-  object@knn.index = fout$index
-  object@knn.distance = fout$distance
-
-  if (verbose) message(Sys.time(), " [INFO] Calculating KNN completed. ")
-  return(object)
 }
 
 
@@ -139,7 +85,7 @@ runHclust <- function(object, k = 25,
   object@hclust <- list(k = k,
                         d = d,
                         hc = hc,
-                        value = aggregate(object@log.data, list(cluster = object@meta.data$kmeans.id), mean))
+                        value = aggregate(object@log.data, list(cluster = object@meta.data$hclust.id), mean))
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Hclust completed.")
   return(object)
@@ -200,7 +146,7 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #' @import mclust
 #'
 #'
-runMclust <- function(object) {
+runMclust <- function(object, verbose = T, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Mclust.")
 

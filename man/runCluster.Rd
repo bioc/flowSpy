@@ -9,9 +9,11 @@ runCluster(object, cluster.method = "som", verbose = T, ...)
 \arguments{
 \item{object}{an FSPY object}
 
-\item{cluster.method}{character.}
+\item{cluster.method}{character. Four clustering method are provided: som, hclust, mclust, kmeans.}
 
 \item{verbose}{logic. Whether to print calculation progress.}
+
+\item{...}{options to pass on to the clustering functions.}
 }
 \value{
 An FSPY object

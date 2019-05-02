@@ -36,11 +36,14 @@ plot2D <- function(object,
                    node.lab.szie = 4,
                    color.theme = NULL) {
 
+  # update plot meta information
   object <- updatePlotMeta(object, verbose = F)
 
+  # check item.use parameter in plot.meta data.frame
   if ( !all(item.use %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
-  if ( !all(color.by %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
+  # check color.by parameter in plot.meta data.frame
+  if ( !all(color.by %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   if (length(item.use) < 2) stop(Sys.time(), " [ERROR] item.use is less than two characters.")
   if (length(item.use) > 2) {
@@ -90,7 +93,7 @@ plot2D <- function(object,
 
 
 
-  if (trajectory == "som") {
+  if (F) {
     if ("som.id" %in% colnames(object@meta.data)) {
       plot.data$som.id <- object@meta.data$som.id
       traj.layout.node <- aggregate(plot.data[, 1:2], list(som.id = plot.data$som.id), mean)

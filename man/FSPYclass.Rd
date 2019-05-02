@@ -25,25 +25,28 @@ FSPY object as input, and return a modified FSPY obejct as well.
 
 \item{\code{cell.name}}{vector. Cell names of log data.}
 
-\item{\code{pca.sdev,pca.load,pca.scores}}{Pca information of FSPY object which are generated from \code{\link[gmodels]{fast.prcomp}}.}
-
 \item{\code{knn}}{numeric. Numbers of nearest neighbors}
 
-\item{\code{knn.index,knn.distance}}{matrix. Each row of the \code{knn.index} matrix corresponds to a point
+\item{\code{knn.index,knn.distance}}{matrix. Each row of the \code{knn.index} matrix corresponds to a point}
+
+\item{\code{som}}{list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.}
+
+\item{\code{hclust}}{list. Hierarchical cluster analysis on a mergea flow cytometry data set. See \code{\link[hclust]{stats}}}
+
+\item{\code{mclust}}{list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}}
+
+\item{\code{kmeans}}{list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}}
+
+\item{\code{pca.sdev,pca.value,pca.scores}}{Pca information of FSPY object which are
+generated from \code{\link[gmodels]{fast.prcomp}}.
 in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
 And each row of the \code{knn.distance} contains the distance of its nearest neighbors.}
 
 \item{\code{tsne.value}}{matrix. tSNE coordinates information.}
 
-\item{\code{dm.parameter}}{list. Diffusion map parameters in calculation of the \code{dm}.}
-
 \item{\code{dm}}{data.frame. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}}
 
-\item{\code{som}}{list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.}
-
-\item{\code{som.network}}{list. SOM network including edge and node attributes.}
-
-\item{\code{umap.layout}}{matrix umap coordinates information calculated using \code{\link[umap]{umap}}.}
+\item{\code{umap.value}}{matrix umap coordinates information calculated using \code{\link[umap]{umap}}.}
 
 \item{\code{root.cells}}{vector, Names of root cells.}
 
@@ -56,12 +59,6 @@ And each row of the \code{knn.distance} contains the distance of its nearest nei
 \item{\code{diff.tree}}{list. Differentiation tree of all cells.}
 
 \item{\code{diff.traj}}{list. Differentiation trajectory all cells.}
-
-\item{\code{trunk.network}}{list. Network of trunk.}
-
-\item{\code{branch.network}}{list. Network of branch.}
-
-\item{\code{network}}{list. Network generated from knn.}
 
 \item{\code{plot.meta}}{data.frame. Plot meta information for \code{plot2D} or \code{plot3D}.}
 

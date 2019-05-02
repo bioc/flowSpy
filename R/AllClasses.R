@@ -25,26 +25,25 @@ NULL
 #' @slot markers vector. Markers used in the calculation of PCA, tSNE, destiny and umap.
 #' @slot markers.idx vector. Index of markers used in the calculation of PCA, tSNE, destiny and umap.
 #' @slot cell.name vector. Cell names of log data.
-#' @slot pca.sdev,pca.load,pca.scores Pca information of FSPY object which are generated from \code{\link[gmodels]{fast.prcomp}}.
 #' @slot knn numeric. Numbers of nearest neighbors
 #' @slot knn.index,knn.distance matrix. Each row of the \code{knn.index} matrix corresponds to a point
+#' @slot som list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.
+#' @slot hclust list. Hierarchical cluster analysis on a mergea flow cytometry data set. See \code{\link[hclust]{stats}}
+#' @slot mclust list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}
+#' @slot kmeans list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}
+#' @slot pca.sdev,pca.value,pca.scores Pca information of FSPY object which are
+#'     generated from \code{\link[gmodels]{fast.prcomp}}.
 #'     in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
 #'     And each row of the \code{knn.distance} contains the distance of its nearest neighbors.
 #' @slot tsne.value matrix. tSNE coordinates information.
-#' @slot dm.parameter list. Diffusion map parameters in calculation of the \code{dm}.
 #' @slot dm data.frame. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}
-#' @slot som list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.
-#' @slot som.network list. SOM network including edge and node attributes.
-#' @slot umap.layout matrix umap coordinates information calculated using \code{\link[umap]{umap}}.
+#' @slot umap.value matrix umap coordinates information calculated using \code{\link[umap]{umap}}.
 #' @slot root.cells vector, Names of root cells.
 #' @slot leaf.cells vector. Names of leaf cells.
 #' @slot pseudotime data.frame. Pseudotime of all cells.
 #' @slot walk list. Random forward and backward walk between \code{root.cells} and \code{leaf.cells}.
 #' @slot diff.tree list. Differentiation tree of all cells.
 #' @slot diff.traj list. Differentiation trajectory all cells.
-#' @slot trunk.network list. Network of trunk.
-#' @slot branch.network list. Network of branch.
-#' @slot network list. Network generated from knn.
 #' @slot plot.meta data.frame. Plot meta information for \code{plot2D} or \code{plot3D}.
 #' @slot add.meta list. Additional meta information of FSPY object.
 #'
@@ -83,6 +82,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
   # pca information
   pca.sdev = "vector",
   pca.value = "matrix",
+  pca.scores = "matrix",
 
   # tsne information
   tsne.value = "matrix",
@@ -94,8 +94,6 @@ FSPY <- methods::setClass("FSPY", slots = c(
   umap.value = "matrix",
 
   # trunk and branch
-  trunk.network = "list",
-  branch.network = "list",
   network = "list",
 
   # run for improved function

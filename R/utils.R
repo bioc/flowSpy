@@ -12,8 +12,8 @@ updatePlotMeta <- function(object, verbose = T) {
   if (dim(object@log.data)[2] > 0) {
     plot.meta <- cbind(plot.meta, object@log.data)
   }
-  if (dim(object@pca.load)[2] > 0) {
-    plot.meta <- cbind(plot.meta, object@pca.load)
+  if (dim(object@pca.value)[2] > 0) {
+    plot.meta <- cbind(plot.meta, object@pca.value)
   }
   if (dim(object@tsne.value)[2] > 0) {
     plot.meta <- cbind(plot.meta, object@tsne.value)
@@ -21,8 +21,8 @@ updatePlotMeta <- function(object, verbose = T) {
   if (dim(object@dm@eigenvectors)[2] > 0) {
     plot.meta <- cbind(plot.meta, object@dm@eigenvectors)
   }
-  if (dim(object@umap.layout)[2] > 0) {
-    plot.meta <- cbind(plot.meta, object@umap.layout)
+  if (dim(object@umap.value)[2] > 0) {
+    plot.meta <- cbind(plot.meta, object@umap.value)
   }
 
   plot.meta <- as.data.frame(plot.meta)
