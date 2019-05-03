@@ -24,12 +24,13 @@ roxygenize()
 verbose = T
 cell.number = 500
 
+
 sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
 raw <- NULL
 for (i in 1:length(sample.list)) {
   sub <- read.table(paste0("inst/extdata/dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
   sub$sample <- sample.list[i]
-  sub <- sub[1:cell.number, ]
+  sub <- sub[sample(1:dim(sub)[1], cell.number), ]
   raw <- rbind(raw, sub)
 }
 table(raw$sample)
@@ -53,7 +54,7 @@ object <- createFSPY(raw.data = raw.data, markers = markers,
 
 object <- runKNN(object, knn = 30)
 
-object <- runCluster(object, cluster.method = "mclust")
+object <- runCluster(object, cluster.method = "som", xdim = 4, ydim = 4)
 
 object <- runFastPCA(object)
 
@@ -65,28 +66,205 @@ object <- runUMAP(object)
 
 object <- updatePlotMeta(object)
 
-object <- buildTree(object, cluster.type = "mclust")
+object <- buildTree(object, cluster.type = "som", dim.type = "umap")
 
 
 # pseudotime
-root.cell <- as.character(object@meta.data$cell[which(object@meta.data$som.node.id == 2)])
+root.cells <- as.character(object@meta.data$cell[which(object@meta.data$som.id == 5)])
 
-root.cell <- sample(root.cell, size = floor(length(root.cell)/4))
-root.cell <- root.cell[grep("D0", root.cell)]
-
-object <- defRootCells(object, root.cell = root.cell)
+object <- defRootCells(object, root.cells = root.cells)
 
 
 
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "mclust.id", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 0.6, main = "PCA", category = "categorical")
 
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "stage", alpha = 0.6, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 0.6, main = "PCA", category = "categorical")
+
+p <- plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA", category = "numeric")
+p <- p + gradient_color(c("blue", "white", "red"))
+p
+
+
+
+walk <- random_walk(object@network$knn.G, start = root.cells, step = 12000)
+
+
+gorder(object@network$mst)
+
+
+plot(object@network$mst)
+
+
+l = layout_as_tree(object@network$mst, root = 5)
+plot(object@network$mst, layout=l)
+
+ee <- 1:16
+a <- distances(object@network$mst, 5, ee)
+a <- a/max(a)
+
+as.vector(get.all.shortest.paths(object@network$mst, from = 5))
+net_leaves <- which(degree(object@network$mst, v = V(object@network$mst))==1, useNames = T)
+
+get.diameter(object@network$mst)
+
+
+mat <- t(object@log.data)
+adj <- matrix(0, ncol(mat), ncol(mat))
+rownames(adj) <- colnames(adj) <- colnames(mat)
+for(i in seq_len(ncol(mat))) {
+  adj[i, colnames(mat)[object@knn.index[i,]]] <- 1
+}
+g <- igraph::graph.adjacency(adj, mode="undirected")
+# remove self loops
+g <- simplify(g)
+g.mst <- minimum.spanning.tree(g)
+
+root.cells <- as.character(object@meta.data$cell[which(object@meta.data$som.id == 5)])
+leaf.cells <- as.character(object@meta.data$cell[object@meta.data$som.id %in% c(1,15,6)])
+leaf.cells.mst <- V(g.mst)[degree(g.mst) == 1]
+other.cells <- as.character(object@meta.data$cell[!object@meta.data$som.id %in% c(5)])
+
+
+root.cells.idx <- which(object@meta.data$som.id == 5)
+leaf.cells.idx <- which(object@meta.data$som.id %in% c(1,15,6))
+
+all.path = get.all.shortest.paths(g.mst, from = root.cells, to = leaf.cells.mst)
+all.path.res <- all.path$res
+all.path.length <- sapply(all.path$res, length)
+
+length(unique(unlist(all.path$res)))
+start <- unlist(lapply(all.path.res, function(x) x[1]))
+start <- unique(names(start))
+dist.all.path <- distances(g, v = root.cells)
+pst <- colMeans(dist.all.path)
+pst <- (pst - min(pst)) / max(pst - min(pst))
+pst.o <- pst[order(pst)]
+plot(pst.o)
+
+object@meta.data$pseudotime <- pst
+
+
+
+get.all.shortest.paths(object@network$mst, from = V(object@network$mst), to = V(object@network$mst))
+
+
+dp <- as.matrix(dist(object@network$tree.mat))
+gp <- graph.adjacency(dp, mode="undirected", weighted=TRUE)
+dp_mst <- minimum.spanning.tree(gp)
+
+mst <- dp_mst
+
+
+new_subtree <- graph.empty()
+
+
+new_subtree <- new_subtree + vertex(root.cells, type="Q", color="black")
 
 
 
 
+diam <- V(dp_mst)[get.diameter(mst)]
 
 
+V(new_subtree)[root.cells]$diam_path_len = length(diam)
+
+diam_decisiveness <- igraph::degree(mst, v=diam) > 2
+
+ind_nodes <- diam_decisiveness[diam_decisiveness == TRUE]
+
+first_diam_path_node_idx <- head(as.vector(diam), n=1)
+last_diam_path_node_idx <- tail(as.vector(diam), n=1)
+if (sum(ind_nodes) == 0 ||
+    (igraph::degree(mst, first_diam_path_node_idx) == 1 &&
+     igraph::degree(mst, last_diam_path_node_idx) == 1))
+{
+  ind_backbone <- diam
+} else {
+  last_bb_point <- names(tail(ind_nodes, n=1))[[1]]
+  first_bb_point <- names(head(ind_nodes, n=1))[[1]]
+  #diam_path_vertex_names <- as.vector()
+  #print (last_bb_point)
+  #print (first_bb_point)
+  diam_path_names <- V(mst)[as.vector(diam)]$name
+  last_bb_point_idx <- which(diam_path_names == last_bb_point)[1]
+  first_bb_point_idx <- which(diam_path_names == first_bb_point)[1]
+  ind_backbone_idxs <- as.vector(diam)[first_bb_point_idx:last_bb_point_idx]
+  #print (ind_backbone_idxs)
+  ind_backbone <- V(mst)[ind_backbone_idxs]
+
+  #ind_backbone <- diam[first_bb_point:last_bb_point]
+}
+
+
+mst_no_backbone <- mst - ind_backbone
+#print (V(mst_no_backbone)$name)
+
+for (backbone_n in ind_backbone) {
+  #print (n)
+  #backbone_n <- ind_backbone[[i]]
+
+  if (igraph::degree(dp_mst, v=backbone_n) > 2)
+  {
+    new_p_id <- paste("P_", get_next_node_id(), sep="")
+    #print(new_p_id)
+    new_subtree <- new_subtree + vertex(new_p_id, type="P", color="grey")
+    new_subtree <- new_subtree + vertex(V(mst)[backbone_n]$name, type="leaf", color="white")
+    new_subtree <- new_subtree + edge(new_p_id, V(mst)[backbone_n]$name)
+    new_subtree <- new_subtree + edge(root_node_id, new_p_id)
+
+    nb <- graph.neighborhood(mst, 1, nodes=backbone_n)[[1]]
+
+    #print (E(nb))
+    #print (V(nb))
+    for (n_i in V(nb))
+    {
+      n <- V(nb)[n_i]$name
+      if (n %in% V(mst_no_backbone)$name)
+      {
+        #print (n)
+
+        sc <- subcomponent(mst_no_backbone, n)
+
+        sg <- induced.subgraph(mst_no_backbone, sc, impl="copy_and_delete")
+
+
+        if (ecount(sg) > 0)
+        {
+          #print (E(sg))
+          sub_pq <- pq_helper(sg, use_weights)
+
+
+          # Works, but slow:
+          for (v in V(sub_pq$subtree))
+          {
+            new_subtree <- new_subtree + vertex(V(sub_pq$subtree)[v]$name, type=V(sub_pq$subtree)[v]$type, color=V(sub_pq$subtree)[v]$color, diam_path_len=V(sub_pq$subtree)[v]$diam_path_len)
+          }
+
+          edge_list <- get.edgelist(sub_pq$subtree)
+          for (i in 1:nrow(edge_list))
+          {
+            new_subtree <- new_subtree + edge(V(sub_pq$subtree)[edge_list[i, 1]]$name, V(sub_pq$subtree)[edge_list[i, 2]]$name)
+          }
+          #plot (new_subtree)
+
+          new_subtree <- new_subtree + edge(new_p_id, V(sub_pq$subtree)[sub_pq$root]$name)
+        }
+        else
+        {
+          new_subtree <- new_subtree + vertex(n, type="leaf", color="white")
+          new_subtree <- new_subtree + edge(new_p_id, n)
+        }
+      }
+
+    }
+    #print ("##########################")
+  }
+  else
+  {
+    new_subtree <- new_subtree + vertex(V(mst)[backbone_n]$name, type="leaf", color="white")
+    new_subtree <- new_subtree + edge(root.cells, V(mst)[backbone_n]$name)
+  }
+}
 
 
 

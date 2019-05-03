@@ -41,10 +41,12 @@ buildTree <- function(object, method = "euclidean",
   tree.graph <- igraph::minimum.spanning.tree(fullGraph)
 
   object@network <- list(mst = tree.graph,
+                         dist = adjacency,
                          method = method,
                          cluster.type = cluster.type,
                          dim.type = dim.type,
                          dim.use = dim.use,
+                         tree.mat = tree.mat,
                          mst.mat = mst.mat)
 
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree completed.")
