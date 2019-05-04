@@ -11,9 +11,9 @@
 #'    For the allowed values, see \code{\link[destiny]{find_knn}}
 #' @param density.norm logical. If TRUE, use density normalisation. See \code{\link[destiny]{DiffusionMap}}
 #' @param verbose logical. Whether to print calculation progress.
-#' @param ... options to pass on to the DiffusionMap function
+#' @param ... options to pass on to the \code{\link[destiny]{DiffusionMap}} function
 #'
-#' @seealso
+#' @seealso \code{\link[destiny]{DiffusionMap}}
 #'
 #' @import destiny
 #'

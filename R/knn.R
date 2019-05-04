@@ -1,5 +1,3 @@
-
-
 #'
 #' Calculate k-nearest neighbors of FSPY
 #'
@@ -7,32 +5,29 @@
 #'
 #' @description Calculates and stores a k-nearest neighbor graph based on Euclidean
 #'    distance with (KMKNN) algorithm using log-transformed signaling matrix of
-#'    flow cytometry data. The base function referes to \code{\link[BiocNeighbors]{findKNN}}.
+#'    flow cytometry data. The base function are base on \code{\link[BiocNeighbors]{findKNN}}.
 #'
 #' @param object an FSPY object
-#' @param knn numeric, number of k-nearest neighbors
+#' @param knn numeric. Number of k-nearest neighbors.
 #' @param BNPARAM A BiocNeighborParam object, or NULL if BININDEX is supplied.
 #'    See \code{\link[BiocNeighbors]{findKNN}}.
-#' @param iter.max numeric. The maximum number of iterations allowed.
 #' @param knn.replace logic. Whether to replace knn in FSPY object
-#' @param knn.cluster logic. Whether to run knn cluster.
-#' @param verbose logic. Whether to print calculation progress.
+#' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[BiocNeighbors]{findKNN}} function
 #'
+#' @seealso \code{\link[BiocNeighbors]{findKNN}}
 #'
-#' @return An FSPY object
+#' @return An FSPY object with knn, knn.index and knn.distance information.
 #'
 #' @import BiocNeighbors
-#' @importFrom igraph graph.adjacency cluster_walktrap minimum.spanning.tree
 #' @export
 #'
-#' @examples
 #'
-#'
-runKNN <- function(object, knn = 30,
-                   list.params = list(),
-                   knn.replace = T,
+runKNN <- function(object,
+                   knn = 30,
                    BNPARAM = NULL,
-                   verbose = T) {
+                   knn.replace = T,
+                   verbose = T, ...) {
 
   if (isTRUE(object@knn > 0) & !(knn.replace)) {
     if (verbose) message(Sys.time(), " [INFO] Using knn in FSPY object: ", object@knn )
@@ -44,7 +39,7 @@ runKNN <- function(object, knn = 30,
   }
 
   if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
-  fout <- findKNN(object@log.data, k = object@knn, BNPARAM = BNPARAM)
+  fout <- findKNN(object@log.data, k = object@knn, BNPARAM = BNPARAM, ...)
 
   rownames(fout$index) <- object@meta.data$cell
   rownames(fout$distance) <- object@meta.data$cell

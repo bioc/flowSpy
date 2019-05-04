@@ -13,17 +13,18 @@
 #'    a vector of length equal the number of columns of x can be supplied.
 #'    The value is passed to scale. See \code{\link[gmodels]{fast.prcomp}}
 #' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[gmodels]{fast.prcomp}} function
 #'
 #' @importFrom gmodels fast.prcomp
-#'
-#' @examples
+#' @seealso \code{\link[gmodels]{fast.prcomp}}
 #'
 #' @export
 #'
-runFastPCA <- function(object, center = FALSE, scale. = TRUE,  verbose = T) {
+runFastPCA <- function(object, center = FALSE, scale. = TRUE,
+                       verbose = T, ...) {
   # PCA calculation
   if (verbose) message(Sys.time(), " [INFO] Calculating PCA.")
-  pca.obj <- fast.prcomp( t(object@log.data), retx = TRUE, center = center, scale. = scale.)
+  pca.obj <- fast.prcomp( t(object@log.data), retx = TRUE, center = center, scale. = scale., ...)
 
   object@pca.sdev <- pca.obj$sdev
   object@pca.value <- pca.obj$rotation

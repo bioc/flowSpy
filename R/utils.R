@@ -1,6 +1,8 @@
 #'
 #' Update plot metadata of FSPY
 #'
+#' @name updatePlotMeta
+#'
 #' @param object An FSPY object
 #' @param verbose logical. Whether to print calculation progress.
 #'
@@ -34,7 +36,23 @@ updatePlotMeta <- function(object, verbose = T) {
 }
 
 
+#'
+#' Fetching plot metadata of FSPY
+#'
+#' @name fetchPlotMeta
+#'
+#' @param object An FSPY object
+#' @param verbose logical. Whether to print calculation progress.
+#'
+#' @export
+#'
+#'
+fetchPlotMeta <- function(object, verbose = T) {
 
+  object <- updatePlotMeta(object, verbose = verbose)
+
+  return(object@plot.meta)
+}
 
 
 

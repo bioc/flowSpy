@@ -6,9 +6,9 @@
 \alias{FSPY}
 \title{flowSpy class}
 \description{
-All information stored in FSPY object, and you can use creatFSPY to
-create this object. In this package, most of the function will use
-FSPY object as input, and return a modified FSPY obejct as well.
+All information stored in FSPY object. You can use \code{creatFSPY} to
+   create this object. In this package, most of the functions will use
+   FSPY object as input, and return a modified FSPY obejct as well.
 }
 \section{Slots}{
 
@@ -17,7 +17,7 @@ FSPY object as input, and return a modified FSPY obejct as well.
 
 \item{\code{log.data}}{matrix. Log-transfromed dataset of raw.data.}
 
-\item{\code{meta.data}}{data.frame. Meta data information.}
+\item{\code{meta.data}}{data.frame. Meta data information, and colnames of "stage" and "cell" are required.}
 
 \item{\code{markers}}{vector. Markers used in the calculation of PCA, tSNE, destiny and umap.}
 
@@ -27,32 +27,32 @@ FSPY object as input, and return a modified FSPY obejct as well.
 
 \item{\code{knn}}{numeric. Numbers of nearest neighbors}
 
-\item{\code{knn.index,knn.distance}}{matrix. Each row of the \code{knn.index} matrix corresponds to a point}
+\item{\code{knn.index,knn.distance}}{matrix. Each row of the \code{knn.index} matrix corresponds to a point
+in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
+And each row of the \code{knn.distance} contains the distance of its nearest neighbors.}
 
-\item{\code{som}}{list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.}
+\item{\code{som}}{list. Store som network information calculated using \code{\link[FlowSOM]{FlowSOM}}.}
 
-\item{\code{hclust}}{list. Hierarchical cluster analysis on a mergea flow cytometry data set. See \code{\link[hclust]{stats}}}
+\item{\code{hclust}}{list. Hierarchical cluster analysis on a merged flow cytometry data set. See \code{\link[hclust]{stats}}}
 
 \item{\code{mclust}}{list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}}
 
 \item{\code{kmeans}}{list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}}
 
 \item{\code{pca.sdev,pca.value,pca.scores}}{Pca information of FSPY object which are
-generated from \code{\link[gmodels]{fast.prcomp}}.
-in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
-And each row of the \code{knn.distance} contains the distance of its nearest neighbors.}
+generated from \code{\link[gmodels]{fast.prcomp}}.}
 
-\item{\code{tsne.value}}{matrix. tSNE coordinates information.}
+\item{\code{tsne.value}}{matrix. tSNE coordinates information. See \code{\link[Rtsne]{Rtsne}}.}
 
-\item{\code{dm}}{data.frame. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}}
+\item{\code{dm}}{DiffusionMap object. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}}
 
 \item{\code{umap.value}}{matrix umap coordinates information calculated using \code{\link[umap]{umap}}.}
 
-\item{\code{root.cells}}{vector, Names of root cells.}
+\item{\code{root.cells}}{vector, Names of root cells, which can be modified by \code{defRootCells}.}
 
-\item{\code{leaf.cells}}{vector. Names of leaf cells.}
+\item{\code{leaf.cells}}{vector. Names of leaf cells, which can be modified by \code{defLeafCells}.}
 
-\item{\code{pseudotime}}{data.frame. Pseudotime of all cells.}
+\item{\code{network}}{list. Network stored in the calculation of trajectory and pseudotime.}
 
 \item{\code{walk}}{list. Random forward and backward walk between \code{root.cells} and \code{leaf.cells}.}
 

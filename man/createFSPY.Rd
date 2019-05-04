@@ -4,29 +4,34 @@
 \alias{createFSPY}
 \title{create an FSPY object}
 \usage{
-createFSPY(raw.data, markers, meta.data, log.transformed = T,
+createFSPY(raw.data, markers, meta.data, log.transform = T,
   verbose = T)
 }
 \arguments{
-\item{raw.data}{matrix. Raw data read from FCS file.}
+\item{raw.data}{matrix. Raw data read from FCS file after perform preprocessing.}
 
-\item{markers}{vector. Detailed marker information in the gate of flow cytometer}
+\item{markers}{vector. Detailed marker information in the gate of flow cytometer.}
 
-\item{meta.data}{data.frame. Raw metadata of each cell. column "cell" and "stage" are required}
+\item{meta.data}{data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.}
 
-\item{log.transformed}{logical. Whether to log transformed the raw data. If not, it's better
-to set the print parameter as logical.}
+\item{log.transform}{logical. Whether to log transformed raw.data. If FALSE, it's better
+to perform transformation using \code{\link[transformation]{flowCore}} before creating FSPY
+object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
+scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
+information.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }
 \value{
-An FSPY object
+An FSPY object with raw.data and markers and meta.data
 }
 \description{
 This function include all information used in flow cytometry data
 processing.
 }
 \examples{
+
+
 
 
 }

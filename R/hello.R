@@ -24,6 +24,7 @@ roxygenize()
 verbose = T
 cell.number = 500
 
+set.seed(1)
 
 sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
 raw <- NULL
@@ -35,6 +36,8 @@ for (i in 1:length(sample.list)) {
 }
 table(raw$sample)
 raw$sample <- factor(as.character(raw$sample), levels = sample.list)
+
+
 
 markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
 length(markers)
@@ -48,13 +51,16 @@ meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
 
 object <- createFSPY(raw.data = raw.data, markers = markers,
                      meta.data = meta.data,
-                     log.transformed = F,
+                     log.transform = F,
                      verbose = T)
 
 
 object <- runKNN(object, knn = 30)
 
+set.seed(1)
 object <- runCluster(object, cluster.method = "som", xdim = 4, ydim = 4)
+table(object@meta.data$cluster.id)
+
 
 object <- runFastPCA(object)
 
@@ -66,36 +72,34 @@ object <- runUMAP(object)
 
 object <- updatePlotMeta(object)
 
-object <- buildTree(object, cluster.type = "som", dim.type = "umap")
-
-
-# pseudotime
-root.cells <- as.character(object@meta.data$cell[which(object@meta.data$som.id == 5)])
-
-object <- defRootCells(object, root.cells = root.cells)
-
-
-
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 0.6, main = "PCA", category = "categorical")
-
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 0.6, main = "PCA", category = "categorical")
-
-p <- plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 0.6, main = "PCA", category = "numeric")
-p <- p + gradient_color(c("blue", "white", "red"))
-p
-
-
-
-walk <- random_walk(object@network$knn.G, start = root.cells, step = 12000)
-
-
-gorder(object@network$mst)
-
+object <- buildTree(object, cluster.type = "som", dim.type = "tSNE")
 
 plot(object@network$mst)
 
+# pseudotime
+object <- defRootCells(object, root.cells = c(11,10))
 
-l = layout_as_tree(object@network$mst, root = 5)
+object <- runPseudotime(object)
+
+plotPseudotimeDensity(object)
+
+
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical")
+
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical")
+
+p <- plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 1, main = "PCA", category = "numeric")
+p <- p + scale_colour_gradientn(colors = c("blue", "white", "red"))
+p
+
+plot.info <- fetchPlotMeta(object, verbose = F)
+ggplot(plot.info, aes(x=pseudotime, colour = stage)) + geom_density() + theme_base()
+
+
+
+
+
+l = layout_as_tree(object@network$mst, root = 10)
 plot(object@network$mst, layout=l)
 
 ee <- 1:16

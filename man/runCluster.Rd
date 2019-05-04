@@ -16,17 +16,16 @@ runCluster(object, cluster.method = "som", verbose = T, ...)
 \item{...}{options to pass on to the clustering functions.}
 }
 \value{
-An FSPY object
+An FSPY object with cluster.id in meta.data
 }
 \description{
 Compute a specific clustering using the combined flow
-   cytometry data. "som" \code{\link[SOM]{flowSOM}}, "hclust" \code{\link[hclust]{stats}},
-   "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[kmeans]{stats}} are
+   cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
+   "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[stats]{kmeans}} are
    provided.
 }
-\examples{
-
-
-
-
+\seealso{
+Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+   \code{\link[mclust]{mlcust}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
+   \code{runMclust} and \code{runKmeans} to run clustering respectively.
 }

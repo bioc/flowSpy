@@ -6,19 +6,33 @@
 \usage{
 runKmeans(object, k = 25, iter.max = 10, nstart = 1,
   algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-  trace = FALSE, scale = T, verbose = T)
+  trace = FALSE, scale = F, verbose = T, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
+
+\item{k}{numeric. The number of clusters.}
+
+\item{iter.max}{numeric. The maximum number of iterations allowed.}
+
+\item{nstart}{numeric. If k is a number, how many random sets should be chosen.}
+
+\item{algorithm}{numeric.}
+
+\item{trace}{logical or integer number.}
+
+\item{scale}{logical. Whether to use scales data in hclust.}
+
+\item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to \code{\link[stats]{kmeans}} function}
 }
 \value{
-an FSPY object
+an FSPY object with kmeans.id in meta.data
 }
 \description{
 Perform k-means clustering on a data matrix.
 }
-\examples{
-
-
-
+\seealso{
+\code{\link[stats]{kmeans}}
 }

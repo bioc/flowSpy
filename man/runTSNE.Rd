@@ -7,7 +7,7 @@
 runTSNE(object, dims = 2, initial_dims = 50, perplexity = 30,
   theta = 0.5, check_duplicates = TRUE, pca = TRUE,
   max_iter = 1000, verbose = TRUE, is_distance = FALSE,
-  Y_init = NULL, pca_center = TRUE, pca_scale = FALSE)
+  Y_init = NULL, pca_center = TRUE, pca_scale = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -30,13 +30,11 @@ See \code{\link[Rtsne]{Rtsne}}}
 \item{pca, max_iter, is_distance, Y_init, pca_center, pca_scale}{See \code{\link[Rtsne]{Rtsne}}}
 
 \item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to \code{\link[Rtsne]{Rtsne}} function}
 }
 \description{
 Calculate t-Distributed Stochastic Neighbor Embedding in FSPY
-}
-\examples{
-
-
 }
 \references{
 Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based
@@ -44,4 +42,7 @@ Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based
 
    van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing High-Dimensional
    Data Using t-SNE. Journal of Machine Learning Research, 9, pp.2579-2605.
+}
+\seealso{
+\code{\link[Rtsne]{Rtsne}}
 }

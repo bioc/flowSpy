@@ -1,18 +1,32 @@
 #'
 #' runCompensation
 #'
+#' @description Run compensation by applying a spillover matrix.
+#'    See \code{\link[flowCore]{compensate}} for more information.
+#'
 #' @name runCompensation
 #'
-#' @param x An object of class flowFrame or flowSet.
+#' @param x An object of class \code{\link[flowCore]{flowFrame}} or \code{\link[flowCore]{flowSet}}.
 #' @param spillover matrix, The spillover or compensation matrix.
-#' @param ...  options to pass on to the compensate functions. See \code{\link[compensate]{flowCore}}
+#' @param ...  options to pass on to the further arguments. See \code{\link[flowCore]{compensate}}
 #'
+#' @seealso \code{\link[flowCore]{compensate}}
+#'
+#' @importFrom flowCore compensate
 #' @export
 #'
-#' @example
+#' @examples
 #'
 #' # DO NOT RUN
 #' if (F) {
+#'   fileName <- system.file("extdata","D2.fcs",
+#'                           package="flowSpy")
+#'
+#'   # read FACs data
+#'   fcs.data <- read.FCS(filename = fileName)
+#'
+#'   # run compensation
+#'   fcs.data <- runCompensation(fcs.data)
 #'
 #' }
 #'
@@ -21,8 +35,8 @@ runCompensation <- function(x, spillover = NULL, ...) {
   if (missing(x)) stop(Sys.time(), " [ERROR] input object is missing")
 
   if (is.null(spillover)) {
-    if (is.null(data.1@description$SPILL)) {
-      stop(Sys.time(), " [ERROR] compensation matrix is missing")
+    if (is.null(x@description$SPILL)) {
+      stop(Sys.time(), " [ERROR] compensation matrix in x is missing")
     } else {
       spillover <- x@description$SPILL
     }
@@ -32,7 +46,7 @@ runCompensation <- function(x, spillover = NULL, ...) {
     }
   }
 
-  x <- compensate(x, comp.mat)
+  x <- flowCore::compensate(x, spillover, ...)
 
   return(x)
 }

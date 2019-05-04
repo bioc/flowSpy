@@ -39,15 +39,14 @@ according to importance}
 Any unambiguous substring can be given. See \code{\link[stats]{dist}}}
 
 \item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to \code{\link[FlowSOM]{SOM}} function}
 }
 \value{
-an FSPY object
+an FSPY object with som.id in FSPY object
 }
 \description{
 Build a self-organizing map
-}
-\examples{
-
 }
 \references{
 This code is strongly based on the \code{\link[FlowSOM]{SOM}} function.
@@ -55,4 +54,6 @@ This code is strongly based on the \code{\link[FlowSOM]{SOM}} function.
 }
 \seealso{
 \code{\link{BuildSOM}}
+
+\code{\link[FlowSOM]{SOM}}
 }

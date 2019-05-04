@@ -4,7 +4,8 @@
 \alias{runUMAP}
 \title{Calculating UMAP}
 \usage{
-runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = T)
+runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = T,
+  ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -14,10 +15,12 @@ runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = T)
 \item{dim}{numeric. Dim of umap, you can also change it in umap.config.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Options to pass on to the \code{\link[umap]{umap}} function}
 }
 \description{
 Calculate Uniform Manifold Approximation and Projection in FSPY
 }
-\examples{
-
+\seealso{
+\code{\link[umap]{umap}}
 }

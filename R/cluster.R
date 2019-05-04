@@ -4,8 +4,8 @@
 #' @name runCluster
 #'
 #' @description Compute a specific clustering using the combined flow
-#'    cytometry data. "som" \code{\link[SOM]{flowSOM}}, "hclust" \code{\link[hclust]{stats}},
-#'    "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[kmeans]{stats}} are
+#'    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
+#'    "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[stats]{kmeans}} are
 #'    provided.
 #'
 #' @param object an FSPY object
@@ -13,12 +13,11 @@
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the clustering functions.
 #'
-#' @return An FSPY object
+#' @seealso Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+#'    \code{\link[mclust]{mlcust}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
+#'    \code{runMclust} and \code{runKmeans} to run clustering respectively.
 #'
-#' @export
-#'
-#' @examples
-#'
+#' @return An FSPY object with cluster.id in meta.data
 #'
 #'
 #'
@@ -58,26 +57,52 @@ runCluster <- function(object, cluster.method = "som", verbose = T, ...) {
 #'    and methods for analyzing it.
 #'
 #' @param object an FSPY object
-#' @param hclust.method character
-#' @param dist.method character
-#' @param k numeric
-#' @param verbose verbose
+#' @param hclust.method character or a function. The agglomeration method to be used.
+#'    This should be one of "ward.D", "ward.D2", "single", "complete", "average",
+#'    "mcquitty", "median" or "centroid". Or you can specify an equation as input, for example
+#'    \code{function(x) hclust(x,method = 'ward.D2')}.
+#' @param dist.method character or a function. The distance measure to be used.
+#'    This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary"
+#'    or "minkowski". Or you can specify an equation as input, for example
+#'    \code{function(x) as.dist((1-cor(t(x)))/2)}.
+#' @param k numeric. The number of clusters.
+#' @param verbose logical. Whether to print calculation progress.
 #'
+#' @seealso \code{\link[stats]{hclust}}, \code{\link[stats]{dist}}
 #'
-#' @importFrom stats hclust
+#' @importFrom stats hclust dist
 #'
+#' @return An FSPY object with hclust.id in FSPY object
 #' @export
 #'
-#' @examples
 #'
 runHclust <- function(object, k = 25,
                       hclust.method = "complete", dist.method = "euclidean",
-                      verbose = T, ...) {
+                      verbose = T) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Hclust.")
 
-  d <- dist(object@log.data, method = dist.method)
-  hc <- hclust(d, method = hclust.method)
+  # check dist parameters
+  if (is.character(dist.method)) {
+    d <- stats::dist(object@log.data, method = dist.method)
+  } else if (is.function(dist.method)) {
+    d <- dist.method(object@log.data)
+  } else {
+    warning(Sys.time(), " [WARNING] Invalid dist.method parameter.")
+    d <- stats::dist(object@log.data)
+  }
+
+  # check hclust parameters
+  if (is.character(hclust.method)) {
+    hc <- stats::hclust(d, method = hclust.method)
+  } else if (is.function()) {
+    hc <- dist.method(d)
+  } else {
+    warning(Sys.time(), " [WARNING] Invalid hclust.method parameter.")
+    hc <- stats::hclust(d)
+  }
+
+
   hc.tree <- cutree(hc, k = k)
 
   object@meta.data$hclust.id <- hc.tree
@@ -101,18 +126,28 @@ runHclust <- function(object, k = 25,
 #' @description Perform k-means clustering on a data matrix.
 #'
 #' @param object  an FSPY object
+#' @param k numeric. The number of clusters.
+#' @param iter.max numeric. The maximum number of iterations allowed.
+#' @param nstart numeric. If k is a number, how many random sets should be chosen.
+#' @param algorithm numeric.
+#' @param trace logical or integer number.
+#' @param scale logical. Whether to use scales data in hclust.
+#' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[stats]{kmeans}} function
 #'
-#' @return an FSPY object
+#' @return an FSPY object with kmeans.id in meta.data
 #'
+#' @seealso \code{\link[stats]{kmeans}}
+#'
+#' @importFrom stats kmeans
 #' @export
 #'
-#' @examples
 #'
 #'
 #'
 runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
                       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-                      trace=FALSE, scale = T, verbose = T) {
+                      trace=FALSE, scale = F, verbose = T, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans.")
 
@@ -137,20 +172,31 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #' @name runMclust
 #'
 #' @description Model-based clustering based on parameterized finite Gaussian mixture models.
+#'    This function is based on \code{\link[mclust]{Mclust}}.
 #'
 #' @param object  an FSPY object
-#' @return an FSPY object
+#' @param scale logical. Whether to use scaled data in Mclust.
+#' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[mclust]{Mclust}} function
+#'
+#'
+#' @return an FSPY object with mclust.id in meta.data
+#'
+#' @seealso \code{\link[mclust]{Mclust}}
 #'
 #' @export
 #'
-#' @import mclust
+#' @importFrom mclust Mclust
 #'
 #'
-runMclust <- function(object, verbose = T, ...) {
+runMclust <- function(object, scale = F,
+                      verbose = T, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Mclust.")
 
-  mod <- Mclust(object@log.data)
+  if (scale) mclust.data <- scale(object@log.data) else mclust.data = object@log.data
+
+  mod <- Mclust(mclust.data, ...)
 
   object@meta.data$mclust.id <- mod$classification
 
@@ -186,19 +232,20 @@ runMclust <- function(object, verbose = T, ...) {
 #'      "maximum", "manhattan", "canberra", "binary" or "minkowski".
 #'      Any unambiguous substring can be given. See \code{\link[stats]{dist}}
 #' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[FlowSOM]{SOM}} function
 #'
-#' @return an FSPY object
+#' @return an FSPY object with som.id in FSPY object
 #' @seealso \code{\link{BuildSOM}}
 #'
 #' @references This code is strongly based on the \code{\link[FlowSOM]{SOM}} function.
 #'             Which is developed by Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2018).
 #'
-#' @import FlowSOM
-#' @importFrom igraph graph.adjacency minimum.spanning.tree layout.kamada.kawai
+#' @importFrom FlowSOM SOM
+#'
+#' @seealso \code{\link[FlowSOM]{SOM}}
 #'
 #' @export
 #'
-#' @examples
 #'
 runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
                    alpha = c(0.05,  0.01), radius = 1, init = FALSE,
@@ -213,7 +260,8 @@ runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
                           alpha = alpha[1], radius = radius,
                           init = init,
                           distf = distf, silent = verbose,
-                          codes = codes, importance = importance)
+                          codes = codes, importance = importance,
+                          ...)
 
 
   # generating som network

@@ -5,23 +5,32 @@
 \title{runHclust}
 \usage{
 runHclust(object, k = 25, hclust.method = "complete",
-  dist.method = "euclidean", verbose = T, ...)
+  dist.method = "euclidean", verbose = T)
 }
 \arguments{
 \item{object}{an FSPY object}
 
-\item{k}{numeric}
+\item{k}{numeric. The number of clusters.}
 
-\item{hclust.method}{character}
+\item{hclust.method}{character or a function. The agglomeration method to be used.
+This should be one of "ward.D", "ward.D2", "single", "complete", "average",
+"mcquitty", "median" or "centroid". Or you can specify an equation as input, for example
+\code{function(x) hclust(x,method = 'ward.D2')}.}
 
-\item{dist.method}{character}
+\item{dist.method}{character or a function. The distance measure to be used.
+This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary"
+or "minkowski". Or you can specify an equation as input, for example
+\code{function(x) as.dist((1-cor(t(x)))/2)}.}
 
-\item{verbose}{verbose}
+\item{verbose}{logical. Whether to print calculation progress.}
+}
+\value{
+An FSPY object with hclust.id in FSPY object
 }
 \description{
 Hierarchical cluster analysis on a set of dissimilarities
    and methods for analyzing it.
 }
-\examples{
-
+\seealso{
+\code{\link[stats]{hclust}}, \code{\link[stats]{dist}}
 }

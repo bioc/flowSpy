@@ -2,23 +2,20 @@
 % Please edit documentation in R/plotFSPY.R
 \name{plotPseudotimeDensity}
 \alias{plotPseudotimeDensity}
-\title{plot heatmap of FSPY}
+\title{plot Pseudotime density of FSPY}
 \usage{
 plotPseudotimeDensity(object, color.by = "stage",
-  main = "Density of pseudotime", adjust = 0.5, color.theme = NULL)
+  main = "Density of pseudotime", adjust = 0.5)
 }
 \arguments{
 \item{object}{an FSPY object}
 
 \item{color.by}{character.}
 
-\item{main}{character. title of the plot}
+\item{main}{character. Title of the plot}
 
-\item{color.theme}{character. Library of color theme}
+\item{adjust}{numeric. A multiplicate bandwidth adjustment.}
 }
 \description{
-plot heatmap of FSPY
-}
-\examples{
-
+plot Pseudotime density of FSPY
 }

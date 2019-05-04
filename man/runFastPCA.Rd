@@ -4,7 +4,7 @@
 \alias{runFastPCA}
 \title{Calculate principal components in FSPY}
 \usage{
-runFastPCA(object, center = FALSE, scale. = TRUE, verbose = T)
+runFastPCA(object, center = FALSE, scale. = TRUE, verbose = T, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -22,10 +22,12 @@ a vector of length equal the number of columns of x can be supplied.
 The value is passed to scale. See \code{\link[gmodels]{fast.prcomp}}}
 
 \item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to \code{\link[gmodels]{fast.prcomp}} function}
 }
 \description{
 Calculate principal components in FSPY
 }
-\examples{
-
+\seealso{
+\code{\link[gmodels]{fast.prcomp}}
 }

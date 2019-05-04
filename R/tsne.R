@@ -14,8 +14,10 @@
 #'    See \code{\link[Rtsne]{Rtsne}}
 #' @param verbose logical. Whether to print calculation progress.
 #' @param pca,max_iter,is_distance,Y_init,pca_center,pca_scale See \code{\link[Rtsne]{Rtsne}}
+#' @param ... Parameters passing to \code{\link[Rtsne]{Rtsne}} function
 #'
 #' @import Rtsne
+#' @seealso \code{\link[Rtsne]{Rtsne}}
 #'
 #' @references
 #'    Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based
@@ -26,13 +28,13 @@
 #'
 #' @export
 #'
-#' @examples
 #'
 #'
 runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     theta = 0.5, check_duplicates = TRUE, pca = TRUE, max_iter = 1000,
                     verbose = TRUE, is_distance = FALSE, Y_init = NULL,
-                    pca_center = TRUE, pca_scale = FALSE) {
+                    pca_center = TRUE, pca_scale = FALSE,
+                    ...) {
 
   # tSNE calculation
   if (verbose) message(Sys.time(), " [INFO] Calculating tSNE.")
@@ -40,7 +42,8 @@ runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     dims = dims, initial_dims = initial_dims, perplexity = perplexity,
                     theta = theta, check_duplicates = check_duplicates, pca = pca, max_iter = max_iter,
                     verbose = FALSE, is_distance = is_distance, Y_init = Y_init,
-                    pca_center = pca_center, pca_scale = pca_scale)
+                    pca_center = pca_center, pca_scale = pca_scale,
+                    ...)
 
   object@tsne.value <- tsne.obj$Y
   colnames(object@tsne.value) <- paste0("tSNE", 1:ncol(tsne.obj$Y))

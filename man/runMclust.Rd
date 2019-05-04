@@ -4,14 +4,24 @@
 \alias{runMclust}
 \title{runMclust}
 \usage{
-runMclust(object, verbose = T, ...)
+runMclust(object, scale = F, verbose = T, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
+
+\item{scale}{logical. Whether to use scaled data in Mclust.}
+
+\item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to \code{\link[mclust]{Mclust}} function}
 }
 \value{
-an FSPY object
+an FSPY object with mclust.id in meta.data
 }
 \description{
 Model-based clustering based on parameterized finite Gaussian mixture models.
+   This function is based on \code{\link[mclust]{Mclust}}.
+}
+\seealso{
+\code{\link[mclust]{Mclust}}
 }

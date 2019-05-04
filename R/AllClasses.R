@@ -8,39 +8,39 @@
 #' @import BiocNeighbors
 #' @import matrixStats
 #' @import flowUtils
+#' @import umap
 NULL
 
 #' flowSpy class
 #'
 #' @name FSPYclass
 #'
-#' @description
-#' All information stored in FSPY object, and you can use creatFSPY to
-#' create this object. In this package, most of the function will use
-#' FSPY object as input, and return a modified FSPY obejct as well.
+#' @description  All information stored in FSPY object. You can use \code{creatFSPY} to
+#'    create this object. In this package, most of the functions will use
+#'    FSPY object as input, and return a modified FSPY obejct as well.
 #'
 #' @slot raw.data matrix. Raw signal data captured using flow cytometry.
 #' @slot log.data matrix. Log-transfromed dataset of raw.data.
-#' @slot meta.data data.frame. Meta data information.
+#' @slot meta.data data.frame. Meta data information, and colnames of "stage" and "cell" are required.
 #' @slot markers vector. Markers used in the calculation of PCA, tSNE, destiny and umap.
 #' @slot markers.idx vector. Index of markers used in the calculation of PCA, tSNE, destiny and umap.
 #' @slot cell.name vector. Cell names of log data.
 #' @slot knn numeric. Numbers of nearest neighbors
 #' @slot knn.index,knn.distance matrix. Each row of the \code{knn.index} matrix corresponds to a point
-#' @slot som list. Som network calculate by \code{\link[FlowSOM]{FlowSOM}}.
-#' @slot hclust list. Hierarchical cluster analysis on a mergea flow cytometry data set. See \code{\link[hclust]{stats}}
+#'     in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
+#'     And each row of the \code{knn.distance} contains the distance of its nearest neighbors.
+#' @slot som list. Store som network information calculated using \code{\link[FlowSOM]{FlowSOM}}.
+#' @slot hclust list. Hierarchical cluster analysis on a merged flow cytometry data set. See \code{\link[hclust]{stats}}
 #' @slot mclust list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}
 #' @slot kmeans list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}
 #' @slot pca.sdev,pca.value,pca.scores Pca information of FSPY object which are
 #'     generated from \code{\link[gmodels]{fast.prcomp}}.
-#'     in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
-#'     And each row of the \code{knn.distance} contains the distance of its nearest neighbors.
-#' @slot tsne.value matrix. tSNE coordinates information.
-#' @slot dm data.frame. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}
+#' @slot tsne.value matrix. tSNE coordinates information. See \code{\link[Rtsne]{Rtsne}}.
+#' @slot dm DiffusionMap object. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}
 #' @slot umap.value matrix umap coordinates information calculated using \code{\link[umap]{umap}}.
-#' @slot root.cells vector, Names of root cells.
-#' @slot leaf.cells vector. Names of leaf cells.
-#' @slot pseudotime data.frame. Pseudotime of all cells.
+#' @slot root.cells vector, Names of root cells, which can be modified by \code{defRootCells}.
+#' @slot leaf.cells vector. Names of leaf cells, which can be modified by \code{defLeafCells}.
+#' @slot network list. Network stored in the calculation of trajectory and pseudotime.
 #' @slot walk list. Random forward and backward walk between \code{root.cells} and \code{leaf.cells}.
 #' @slot diff.tree list. Differentiation tree of all cells.
 #' @slot diff.traj list. Differentiation trajectory all cells.
@@ -93,17 +93,17 @@ FSPY <- methods::setClass("FSPY", slots = c(
   # umap information
   umap.value = "matrix",
 
-  # trunk and branch
-  network = "list",
-
-  # run for improved function
+  # run for pseudotime
   root.cells = "vector",
   leaf.cells = "vector",
-  pseudotime = "data.frame",
+  network = "list",
+
+  # trajectory analysis
   walk = "list",
   diff.tree = "list",
   diff.traj = "list",
 
+  # for visualization
   plot.meta = "data.frame",
   add.meta = "list"
   )
@@ -117,21 +117,26 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 #' @name createFSPY
 #'
-#' @param raw.data matrix. Raw data read from FCS file.
-#' @param markers vector. Detailed marker information in the gate of flow cytometer
-#' @param meta.data data.frame. Raw metadata of each cell. column "cell" and "stage" are required
-#' @param log.transformed logical. Whether to log transformed the raw data. If not, it's better
-#'    to set the print parameter as logical.
+#' @param raw.data matrix. Raw data read from FCS file after perform preprocessing.
+#' @param markers vector. Detailed marker information in the gate of flow cytometer.
+#' @param meta.data data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.
+#' @param log.transform logical. Whether to log transformed raw.data. If FALSE, it's better
+#'    to perform transformation using \code{\link[transformation]{flowCore}} before creating FSPY
+#'    object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
+#'    scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
+#'    information.
 #' @param verbose logical. Whether to print calculation progress.
 #'
-#' @return An FSPY object
+#' @export
+#'
+#' @return An FSPY object with raw.data and markers and meta.data
 #'
 #' @examples
 #'
 #'
-#' @export
 #'
-createFSPY <- function(raw.data, markers, meta.data, log.transformed = T, verbose = T) {
+#'
+createFSPY <- function(raw.data, markers, meta.data, log.transform = T, verbose = T) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {
@@ -181,7 +186,7 @@ createFSPY <- function(raw.data, markers, meta.data, log.transformed = T, verbos
                 markers = markers, markers.idx = markers.idx)
 
   # log transfromed using base 10
-  if (log.transformed) {
+  if (log.transform) {
     if (verbose) message(Sys.time(), " [INFO] Log transformed ")
     object@log.data <- log10(abs(raw.data[, markers.idx]) + 1)
   } else {
@@ -194,6 +199,11 @@ createFSPY <- function(raw.data, markers, meta.data, log.transformed = T, verbos
   if (verbose) message(Sys.time(), " [INFO] Build FSPY object succeed ")
   return(object)
 }
+
+
+
+
+
 
 
 

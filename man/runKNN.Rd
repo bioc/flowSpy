@@ -4,34 +4,31 @@
 \alias{runKNN}
 \title{Calculate k-nearest neighbors of FSPY}
 \usage{
-runKNN(object, knn = 30, list.params = list(), knn.replace = T,
-  BNPARAM = NULL, verbose = T)
+runKNN(object, knn = 30, BNPARAM = NULL, knn.replace = T,
+  verbose = T, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
 
-\item{knn}{numeric, number of k-nearest neighbors}
-
-\item{knn.replace}{logic. Whether to replace knn in FSPY object}
+\item{knn}{numeric. Number of k-nearest neighbors.}
 
 \item{BNPARAM}{A BiocNeighborParam object, or NULL if BININDEX is supplied.
 See \code{\link[BiocNeighbors]{findKNN}}.}
 
-\item{verbose}{logic. Whether to print calculation progress.}
+\item{knn.replace}{logic. Whether to replace knn in FSPY object}
 
-\item{iter.max}{numeric. The maximum number of iterations allowed.}
+\item{verbose}{logical. Whether to print calculation progress.}
 
-\item{knn.cluster}{logic. Whether to run knn cluster.}
+\item{...}{Parameters passing to \code{\link[BiocNeighbors]{findKNN}} function}
 }
 \value{
-An FSPY object
+An FSPY object with knn, knn.index and knn.distance information.
 }
 \description{
 Calculates and stores a k-nearest neighbor graph based on Euclidean
    distance with (KMKNN) algorithm using log-transformed signaling matrix of
-   flow cytometry data. The base function referes to \code{\link[BiocNeighbors]{findKNN}}.
+   flow cytometry data. The base function are base on \code{\link[BiocNeighbors]{findKNN}}.
 }
-\examples{
-
-
+\seealso{
+\code{\link[BiocNeighbors]{findKNN}}
 }

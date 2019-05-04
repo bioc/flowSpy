@@ -23,11 +23,11 @@ For the allowed values, see \code{\link[destiny]{find_knn}}}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
-\item{...}{options to pass on to the DiffusionMap function}
+\item{...}{options to pass on to the \code{\link[destiny]{DiffusionMap}} function}
 }
 \description{
 Calculate diffusion map in FSPY
 }
 \seealso{
-
+\code{\link[destiny]{DiffusionMap}}
 }
