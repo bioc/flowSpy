@@ -19,6 +19,7 @@ Suggests: BiocGenerics, gam, knitr, RColorBrewer,
         rmarkdown, splatter, testthat, BiocStyle
 biocViews: Clustering, GeneExpression, flowCytometry,
         Software, Sequencing, Visualization
+VignetteBuilder: knitr
 License: GPL-3.0 + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -1,0 +1,43 @@
+---
+title: "Clustering methods using flowSpy"
+author: "Yuting Dai"
+package: flowSpy
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    toc: true
+    theme: cayman
+    highlight: github
+  pdf_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Clustering methods using flowSpy}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r use-libs, echo = FALSE, message = FALSE}
+
+library(flowCore)
+
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.width = 6, fig.height = 4,
+                      warning = FALSE, message = FALSE)
+```
+
+## R Markdown
+
+
+
+## Session info 
+
+``` {r}
+sessionInfo()
+```
+
+
+
+
+
+
+

@@ -79,11 +79,6 @@ garbage <- function(object) {
     return(object)
   }
 
-  #'
-  #' mclust
-  #'
-  #' @import mclust
-  #'
   runMclust <- function(object) {
     mc.id <- Mclust(object@log.data)$classification
 
@@ -121,22 +116,22 @@ garbage <- function(object) {
 
 
 
-  #' Calculate pseudotime by 'flooding'
-  #'
-  #' This calculates pseudotime by performing a probabilistic breadth-first search
-  #' of the k-nearest neighbor graph that was used to generate the diffusion map
-  #' calculated on the data. The results of this function should be passed to
-  #' \code{\link{floodPseudotimeProcess}} to convert them into pseudotime.
-  #'
-  #' @keywords internal
-  #'
-  #' @references
-  #'   This code is strongly based on the \code{\link[URD]{floodPseudotime}} function,
-  #'   which is developed by Jeffrey A. Farrell. See paper Jeffrey A. Farrell, et. al.,
-  #'   Single-cell reconstruction of developmental trajectories during zebrafish
-  #'   embryogenesis, Science, 2018.
-  #'
-  #'
+  # Calculate pseudotime by 'flooding'
+  #
+  # This calculates pseudotime by performing a probabilistic breadth-first search
+  # of the k-nearest neighbor graph that was used to generate the diffusion map
+  # calculated on the data. The results of this function should be passed to
+  # \code{\link{floodPseudotimeProcess}} to convert them into pseudotime.
+  #
+  # @keywords internal
+  #
+  # @references
+  #   This code is strongly based on the \code{\link[URD]{floodPseudotime}} function,
+  #   which is developed by Jeffrey A. Farrell. See paper Jeffrey A. Farrell, et. al.,
+  #   Single-cell reconstruction of developmental trajectories during zebrafish
+  #   embryogenesis, Science, 2018.
+  #
+  #
   pseudotimeFlood <- function(object, n = 10, minimum.cells.flooded = 2, thread = 1, verbose = F) {
 
     if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
@@ -220,21 +215,21 @@ garbage <- function(object) {
     1-prod(1-x)
   }
 
-  #' Process Flood Pseudotime
-  #'
-  #' This processes the values returned by \code{\link{floodPseudotime}} and stores
-  #' the result as a pseudotime in an URD object.
-  #'
-  #' @export
-  #'
-  #' @examples
-  #'
-  #' @references
-  #'   This code is strongly based on the \code{\link[URD]{floodPseudotime}} function,
-  #'   which is developed by Jeffrey A. Farrell. See paper Jeffrey A. Farrell, et. al.,
-  #'   Single-cell reconstruction of developmental trajectories during zebrafish
-  #'   embryogenesis, Science, 2018.
-  #'
+  # Process Flood Pseudotime
+  #
+  # This processes the values returned by \code{\link{floodPseudotime}} and stores
+  # the result as a pseudotime in an URD object.
+  #
+  # @export
+  #
+  # @examples
+  #
+  # @references
+  #   This code is strongly based on the \code{\link[URD]{floodPseudotime}} function,
+  #   which is developed by Jeffrey A. Farrell. See paper Jeffrey A. Farrell, et. al.,
+  #   Single-cell reconstruction of developmental trajectories during zebrafish
+  #   embryogenesis, Science, 2018.
+  #
   pseudotimeProcess <- function(object, pseudotime.fun = mean, stability.div = 10,
                                 n = 10, minimum.cells.flooded = 2, thread = 1, verbose = F) {
 
