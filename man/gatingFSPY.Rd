@@ -20,6 +20,3 @@ is the end paramter of gating cutoff.}
 \description{
 Apply gating on FSPY object
 }
-\examples{
-
-}

@@ -8,8 +8,6 @@
 #' @param initialization logical. Whether to initialize gating process
 #' @param verbose logical. Whether to print calculation progress.
 #'
-#' @examples
-#'
 #' @export
 #'
 gatingFSPY <- function(object, gating = NULL, initialization = T, verbose = T) {

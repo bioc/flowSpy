@@ -27,6 +27,8 @@ defRootCells <- function(object, root.cells = NULL, verbose = T) {
     stop(Sys.time(), " [ERROR] invalid root.cells .")
   }
 
+  object@meta.data$is.root.cells <- 0
+  object@meta.data$is.root.cells[match(root.cells, object@meta.data$cell)] <- 1
   if ( length(root.cells) == 0 ) {
     stop(Sys.time(), " [ERROR] root.cells are not in meta.data")
   } else {
@@ -53,7 +55,7 @@ defRootCells <- function(object, root.cells = NULL, verbose = T) {
 #' @export
 #'
 #'
-defLeafCells <- function(object, leaf.cells = NULL, verbose = T) {
+defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = T) {
   if (length(object@leaf.cells) != 0) message(Sys.time(), " [INFO] leaf.cells in FSPY object exist, they will be replaced.")
 
   if (!is.vector(leaf.cells)) stop(Sys.time(), " [ERROR] leaf.cells must be a vector")
@@ -66,7 +68,18 @@ defLeafCells <- function(object, leaf.cells = NULL, verbose = T) {
     stop(Sys.time(), " [ERROR] invalid leaf.cells .")
   }
 
+  if (pseudotime.cutoff > 0) {
+    if ( !all("pseudotime" %in% colnames(object@meta.data)) ) {
+      warning(Sys.time(), " [WARNING] pseudotime is not in meta.data of FSPY, please run Pseudotime first.")
+      pseudotime.cutoff = 0
+    }
+  }
 
+  leaf.time <- object@meta.data$pseudotime[match(leaf.cells, object@meta.data$cell)]
+  leaf.cells <- leaf.cells[which(leaf.time > pseudotime.cutoff )]
+
+  object@meta.data$is.leaf.cells <- 0
+  object@meta.data$is.leaf.cells[match(leaf.cells, object@meta.data$cell)] <- 1
   if ( length(leaf.cells) == 0 ) {
     stop(Sys.time(), " [ERROR] leaf.cells are not in meta.data")
   } else {
@@ -106,7 +119,7 @@ runPseudotime <- function(object, mode = "undirected", ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Pseudotime.")
 
-  if ("Pseudotime" %in% colnames(object@meta.data)) message(Sys.time(), " [INFO] Pseudotime exists in meta.data, it will be replaced.")
+  if ("pseudotime" %in% colnames(object@meta.data)) message(Sys.time(), " [INFO] Pseudotime exists in meta.data, it will be replaced.")
 
   mat <- t(object@log.data)
   adj <- matrix(0, ncol(mat), ncol(mat))

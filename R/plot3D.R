@@ -10,16 +10,14 @@
 #' @param size numeric. size of the dot
 #' @param angle numberic. angle of the plot
 #' @param scale.y numeric. scale of y axis related to x- and z axis
-#' @param main character. title of the plot
 #' @param category character. numeric or categorical
-#' @param plot.theme themes from \code{\link[ggthemes]{ggthemes}}
-#' @param color.theme character. Library of color theme
+#' @param main character. title of the plot
+#' @param ... options to pass on to the \code{\link[scatterplot3d]{scatterplot3d}} function.
 #'
 #' @import scatterplot3d
 #'
 #' @export
 #'
-#' @examples
 #'
 plot3D <- function(object,
                    item.use = c("PC1", "PC2", "PC3"),
@@ -28,10 +26,9 @@ plot3D <- function(object,
                    size = 1,
                    angle = 60,
                    scale.y = 0.8,
-                   category = NULL,
+                   category = "categorical",
                    main = "3D plot of FSPY",
-                   plot.theme = theme_base(),
-                   color.theme = NULL) {
+                   ...) {
 
   object <- updatePlotMeta(object, verbose = F)
 
@@ -57,6 +54,10 @@ plot3D <- function(object,
                           plot.z = object@plot.meta[, item.use.idx[3]],
                           color.by = object@plot.meta[, color.by.idx])
 
+  if ((length( unique(plot.data$color.by) ) > 50) & (category != "numeric")) {
+    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 50 elements. It will be used as numeric instead.")
+    category = "numeric"
+  }
 
   if (is.null(category)) {
     if (is.numeric(plot.data$color.by)) category="numeric" else category="categorical"
@@ -84,7 +85,8 @@ plot3D <- function(object,
                 scale.y = scale.y, angle = angle,
                 xlab = item.use[1], ylab = item.use[2], zlab = item.use[3],
                 main = main,
-                col.axis = "#444444", col.grid = "#CCCCCC")
+                col.axis = "#444444", col.grid = "#CCCCCC",
+                ...)
 
 
 }

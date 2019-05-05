@@ -6,8 +6,7 @@
 \usage{
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage",
   order.by = NULL, size = 1, angle = 60, scale.y = 0.8,
-  category = NULL, main = "3D plot of FSPY",
-  plot.theme = theme_base(), color.theme = NULL)
+  category = "categorical", main = "3D plot of FSPY", ...)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -27,13 +26,8 @@ of plot.meta, or it can be just "density" (the default value).}
 
 \item{main}{character. title of the plot}
 
-\item{plot.theme}{themes from \code{\link[ggthemes]{ggthemes}}}
-
-\item{color.theme}{character. Library of color theme}
+\item{...}{options to pass on to the \code{\link[scatterplot3d]{scatterplot3d}} function.}
 }
 \description{
 Visualization of 3D data of FSPY
-}
-\examples{
-
 }

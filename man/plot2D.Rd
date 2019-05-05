@@ -5,10 +5,9 @@
 \title{Visualization of 2D data of FSPY}
 \usage{
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage",
-  order.by = NULL, size = 1, alpha = 1, category = NULL,
-  main = "2D plot of FSPY", plot.theme = theme_base(),
-  trajectory = "som", show.node.name = T, node.lab.szie = 4,
-  color.theme = NULL)
+  order.by = NULL, size = 1, alpha = 1, category = "categorical",
+  show.cluser.id = F, show.cluser.id.size = 4,
+  main = "2D plot of FSPY", plot.theme = theme_base())
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -20,17 +19,19 @@ of plot.meta, or it can be just "density" (the default value).}
 
 \item{order.by}{vector. Order of color theme.}
 
-\item{size}{numeric. size of the dot}
+\item{size}{numeric. Size of the dot}
 
-\item{alpha}{numberic. transparency (0-1) of the dot, default is 0.2.}
+\item{alpha}{numberic. Transparency (0-1) of the dot, default is 1.}
 
 \item{category}{character. numeric or categorical}
 
-\item{main}{character. title of the plot}
+\item{show.cluser.id}{logical. Whether to show cluster id in the plot.}
+
+\item{show.cluser.id.size}{numeric. Size of the cluster id.}
+
+\item{main}{character. Title of the plot.}
 
 \item{plot.theme}{themes from \code{\link[ggthemes]{ggthemes}}}
-
-\item{color.theme}{character. Library of color theme}
 }
 \description{
 Visualization of 2D data of FSPY
