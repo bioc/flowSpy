@@ -7,6 +7,22 @@
 buildTree(object, method = "euclidean", cluster.type = "som",
   dim.type = "tsne", dim.use = 1:2, verbose = T)
 }
+\arguments{
+\item{object}{an FSPY object}
+
+\item{method}{character. Mehtod to build MST.}
+
+\item{cluster.type}{character.}
+
+\item{dim.type}{character.}
+
+\item{dim.use}{numeric}
+
+\item{verbose}{logical. Whether to print calculation progress.}
+}
+\value{
+An FSPY object
+}
 \description{
 buildTree
 }

@@ -1,6 +1,19 @@
 #'
 #' buildTree
 #'
+#' @name buildTree
+#'
+#' @param object an FSPY object
+#' @param method character. Mehtod to build MST.
+#' @param cluster.type character.
+#' @param dim.type character.
+#' @param dim.use numeric
+#' @param verbose logical. Whether to print calculation progress.
+#'
+#' @export
+#'
+#' @return An FSPY object
+#'
 #'
 buildTree <- function(object, method = "euclidean",
                       cluster.type = "som",
