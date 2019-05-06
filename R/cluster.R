@@ -19,9 +19,10 @@
 #'
 #' @return An FSPY object with cluster.id in meta.data
 #'
+#' @export
 #'
 #'
-runCluster <- function(object, cluster.method = "som", verbose = T, ...) {
+runCluster <- function(object, cluster.method = "som", verbose = F, ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
@@ -78,7 +79,7 @@ runCluster <- function(object, cluster.method = "som", verbose = T, ...) {
 #'
 runHclust <- function(object, k = 25,
                       hclust.method = "complete", dist.method = "euclidean",
-                      verbose = T) {
+                      verbose = F) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Hclust.")
 
@@ -147,7 +148,7 @@ runHclust <- function(object, k = 25,
 #'
 runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
                       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-                      trace=FALSE, scale = F, verbose = T, ...) {
+                      trace=FALSE, scale = F, verbose = F, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans.")
 
@@ -190,7 +191,7 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 #'
 runMclust <- function(object, scale = F,
-                      verbose = T, ...) {
+                      verbose = F, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Mclust.")
 
@@ -250,7 +251,7 @@ runMclust <- function(object, scale = F,
 runSOM <- function(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
                    alpha = c(0.05,  0.01), radius = 1, init = FALSE,
                    distf = 2, codes = NULL, importance = NULL,
-                   method = "euclidean", verbose= T, ...) {
+                   method = "euclidean", verbose= F, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM.")
   # flowSOM

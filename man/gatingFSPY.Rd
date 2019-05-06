@@ -4,7 +4,7 @@
 \alias{gatingFSPY}
 \title{Apply gating on FSPY object}
 \usage{
-gatingFSPY(object, gating = NULL, initialization = T, verbose = T)
+gatingFSPY(object, gating = NULL, initialization = T, verbose = F)
 }
 \arguments{
 \item{object}{S4 object. FSPY object}

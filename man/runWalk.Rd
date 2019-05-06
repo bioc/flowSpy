@@ -5,7 +5,7 @@
 \title{Walk between root cells and leaf cells}
 \usage{
 runWalk(object, mode = "undirected", max.run = 20, weighted = T,
-  verbose = T, ...)
+  verbose = F, ...)
 }
 \arguments{
 \item{object}{An FSPY object}

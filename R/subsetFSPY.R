@@ -26,7 +26,7 @@
 subsetFSPY <- function(object, cells = NULL,
                        id.keep = NULL, id.name = NULL,
                        recalculate = F, knn = NA,
-                       verbose = T) {
+                       verbose = F) {
   # Make sure all cells are actually in the object
   cells.keep <- intersect(cells, rownames(object@log.data))
 

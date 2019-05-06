@@ -47,7 +47,7 @@ updatePlotMeta <- function(object, verbose = T) {
 #' @export
 #'
 #'
-fetchPlotMeta <- function(object, verbose = T) {
+fetchPlotMeta <- function(object, verbose = F) {
 
   object <- updatePlotMeta(object, verbose = verbose)
 

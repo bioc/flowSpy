@@ -1,6 +1,5 @@
 #' @import Matrix
 #' @import ggplot2
-#' @import ggthemes
 #' @import gmodels
 #' @import Rtsne
 #' @import destiny
@@ -136,7 +135,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 #'
 #'
-createFSPY <- function(raw.data, markers, meta.data, log.transform = T, verbose = T) {
+createFSPY <- function(raw.data, markers, meta.data, log.transform = T, verbose = F) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {

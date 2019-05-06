@@ -19,7 +19,7 @@
 #'
 runWalk <- function(object, mode = "undirected",
                     max.run = 20, weighted = T,
-                    verbose = T, ...) {
+                    verbose = F, ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing.")
 

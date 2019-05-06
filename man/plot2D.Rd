@@ -7,7 +7,7 @@
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage",
   order.by = NULL, size = 1, alpha = 1, category = "categorical",
   show.cluser.id = F, show.cluser.id.size = 4,
-  main = "2D plot of FSPY", plot.theme = theme_base())
+  main = "2D plot of FSPY", plot.theme = theme_bw())
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -31,7 +31,7 @@ of plot.meta, or it can be just "density" (the default value).}
 
 \item{main}{character. Title of the plot.}
 
-\item{plot.theme}{themes from \code{\link[ggthemes]{ggthemes}}}
+\item{plot.theme}{themes from \code{ggplot2}}
 }
 \description{
 Visualization of 2D data of FSPY

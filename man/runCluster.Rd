@@ -4,7 +4,7 @@
 \alias{runCluster}
 \title{Specific Clustering Method Toolkits}
 \usage{
-runCluster(object, cluster.method = "som", verbose = T, ...)
+runCluster(object, cluster.method = "som", verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

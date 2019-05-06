@@ -5,7 +5,7 @@
 \title{create an FSPY object}
 \usage{
 createFSPY(raw.data, markers, meta.data, log.transform = T,
-  verbose = T)
+  verbose = F)
 }
 \arguments{
 \item{raw.data}{matrix. Raw data read from FCS file after perform preprocessing.}

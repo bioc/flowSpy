@@ -4,7 +4,7 @@
 \alias{runFastPCA}
 \title{Calculate principal components in FSPY}
 \usage{
-runFastPCA(object, center = FALSE, scale. = TRUE, verbose = T, ...)
+runFastPCA(object, center = FALSE, scale. = TRUE, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

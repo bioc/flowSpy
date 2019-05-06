@@ -17,7 +17,7 @@
 #'
 #' @export
 #'
-runUMAP <- function(object, umap.config = umap.defaults, dim = 2, verbose = T, ...) {
+runUMAP <- function(object, umap.config = umap.defaults, dim = 2, verbose = F, ...) {
   if (verbose) message(Sys.time(), " [INFO] Calculating Umap.")
 
   umap.config$n_neighbors <- object@knn

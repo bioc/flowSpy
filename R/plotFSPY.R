@@ -7,12 +7,14 @@
 #' @param color.by character.
 #' @param main character. Title of the plot
 #' @param adjust numeric. A multiplicate bandwidth adjustment.
+#' @param plot.theme themes from \code{ggplot2}
 #'
 #' @export
 #'
 plotPseudotimeDensity <- function(object, color.by = "stage",
                                   main = "Density of pseudotime",
-                                  adjust = 0.5) {
+                                  adjust = 0.5,
+                                  plot.theme = theme_bw()) {
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   object <- updatePlotMeta(object, verbose = F)
 
@@ -35,8 +37,8 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 
   gg <- ggplot(plot.data, aes(x=pseudotime, colour = color.by))
   gg <- gg + geom_density(adjust = adjust)
+  gg <- gg + plot.theme
 
-  gg <- gg + theme_base()
   gg <- gg + labs(title = paste0(main))
 
   return(gg)
@@ -55,6 +57,7 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 #' @param alpha numeric. Transparency (0-1) of the dot, default is 1.
 #' @param print.curve logical. Whether to perform curve fitting
 #' @param var.cols logical. Whether to plot stage
+#' @param plot.theme themes from \code{ggplot2}
 #'
 #' @importFrom stats predict
 #'
@@ -66,7 +69,8 @@ plotPseudotimeTraj <- function(object,
                                size = 0.5,
                                alpha = 0.6,
                                print.curve = T,
-                               var.cols = F) {
+                               var.cols = F,
+                               plot.theme = theme_bw()) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   object <- updatePlotMeta(object, verbose = F)
@@ -105,7 +109,7 @@ plotPseudotimeTraj <- function(object,
   }
 
   gg <- ggplot(plot.data, aes(x=Pseudotime, y=Signal, color = Pseudotime)) + geom_point(size = size, alpha = alpha)
-  gg <- gg + theme_base()
+  gg <- gg + plot.theme
 
   if (var.cols) {
     gg <- gg + facet_grid(rows = vars(Marker), cols = vars(Stage))

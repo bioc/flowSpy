@@ -6,7 +6,7 @@
 \usage{
 runKmeans(object, k = 25, iter.max = 10, nstart = 1,
   algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-  trace = FALSE, scale = F, verbose = T, ...)
+  trace = FALSE, scale = F, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

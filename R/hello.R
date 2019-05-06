@@ -27,7 +27,7 @@ cell.number = 500
 sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
 raw <- NULL
 for (i in 1:length(sample.list)) {
-  sub <- read.table(paste0("inst/extdata/dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
+  sub <- read.table(paste0("../dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
   sub$sample <- sample.list[i]
   #sub <- sub[sample(1:dim(sub)[1], cell.number), ]
   raw <- rbind(raw, sub)
@@ -45,10 +45,13 @@ rownames(raw.data) <- paste0(raw$sample, "_", 1:length(raw$sample))
 meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
                         stage = raw$sample)
 
+fspy.meta.data <- meta.data
+fspy.raw.data <- raw.data
 
+#save(fspy.meta.data, fspy.raw.data, file = "data/fspy.data.rda")
 
-object <- createFSPY(raw.data = raw.data, markers = markers,
-                     meta.data = meta.data,
+object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
+                     meta.data = fspy.meta.data,
                      log.transform = F,
                      verbose = T)
 

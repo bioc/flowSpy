@@ -4,7 +4,7 @@
 \alias{defRootCells}
 \title{definition of root cells}
 \usage{
-defRootCells(object, root.cells = NULL, verbose = T)
+defRootCells(object, root.cells = NULL, verbose = F)
 }
 \arguments{
 \item{object}{an FSPY object}

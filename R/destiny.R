@@ -20,8 +20,8 @@
 #' @export
 #'
 runDiffusionMap <- function(object, sigma.use = NULL,
-                            distance=c("euclidean", "cosine", "rankcor"),
-                            density.norm = TRUE,  verbose=T,
+                            distance = c("euclidean", "cosine", "rankcor"),
+                            density.norm = TRUE,  verbose = F,
                             ...) {
 
   dm.data <- as.matrix(object@log.data)

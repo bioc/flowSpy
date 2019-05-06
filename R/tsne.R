@@ -32,7 +32,7 @@
 #'
 runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     theta = 0.5, check_duplicates = TRUE, pca = TRUE, max_iter = 1000,
-                    verbose = TRUE, is_distance = FALSE, Y_init = NULL,
+                    verbose = FALSE, is_distance = FALSE, Y_init = NULL,
                     pca_center = TRUE, pca_scale = FALSE,
                     ...) {
 

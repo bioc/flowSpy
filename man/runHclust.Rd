@@ -5,7 +5,7 @@
 \title{runHclust}
 \usage{
 runHclust(object, k = 25, hclust.method = "complete",
-  dist.method = "euclidean", verbose = T)
+  dist.method = "euclidean", verbose = F)
 }
 \arguments{
 \item{object}{an FSPY object}

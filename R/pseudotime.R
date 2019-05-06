@@ -14,7 +14,7 @@
 #' @export
 #'
 #'
-defRootCells <- function(object, root.cells = NULL, verbose = T) {
+defRootCells <- function(object, root.cells = NULL, verbose = F) {
   if (length(object@root.cells) != 0) message(Sys.time(), " [INFO] root.cells in FSPY object exist, they will be replaced.")
 
   if (!is.vector(root.cells)) stop(Sys.time(), " [ERROR] root.cells must be a vector")

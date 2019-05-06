@@ -5,7 +5,7 @@
 \title{Calculate diffusion map in FSPY}
 \usage{
 runDiffusionMap(object, sigma.use = NULL, distance = c("euclidean",
-  "cosine", "rankcor"), density.norm = TRUE, verbose = T, ...)
+  "cosine", "rankcor"), density.norm = TRUE, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

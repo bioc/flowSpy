@@ -27,7 +27,7 @@ runKNN <- function(object,
                    knn = 30,
                    BNPARAM = NULL,
                    knn.replace = T,
-                   verbose = T, ...) {
+                   verbose = F, ...) {
 
   if (isTRUE(object@knn > 0) & !(knn.replace)) {
     if (verbose) message(Sys.time(), " [INFO] Using knn in FSPY object: ", object@knn )

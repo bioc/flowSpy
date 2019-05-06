@@ -4,7 +4,7 @@
 \alias{runMclust}
 \title{runMclust}
 \usage{
-runMclust(object, scale = F, verbose = T, ...)
+runMclust(object, scale = F, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

@@ -4,7 +4,7 @@
 \alias{runUMAP}
 \title{Calculating UMAP}
 \usage{
-runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = T,
+runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = F,
   ...)
 }
 \arguments{

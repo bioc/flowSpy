@@ -49,6 +49,9 @@ buildTree <- function(object, method = "euclidean",
                          tree.mat = tree.mat,
                          mst.mat = mst.mat)
 
+  object@meta.data$is.root.cells <- 0
+  object@meta.data$is.leaf.cells <- 0
+
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree completed.")
   return(object)
 }

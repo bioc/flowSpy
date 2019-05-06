@@ -14,10 +14,9 @@
 #' @param show.cluser.id logical. Whether to show cluster id in the plot.
 #' @param show.cluser.id.size numeric. Size of the cluster id.
 #' @param main character. Title of the plot.
-#' @param plot.theme themes from \code{\link[ggthemes]{ggthemes}}
+#' @param plot.theme themes from \code{ggplot2}
 #'
 #' @import ggplot2
-#' @import ggthemes
 #'
 #' @export
 #'
@@ -33,7 +32,7 @@ plot2D <- function(object,
                    show.cluser.id = F,
                    show.cluser.id.size = 4,
                    main = "2D plot of FSPY",
-                   plot.theme = theme_base()) {
+                   plot.theme = theme_bw()) {
 
   # update plot meta information
   object <- updatePlotMeta(object, verbose = F)
@@ -83,7 +82,7 @@ plot2D <- function(object,
 
   # plot
   gg <- ggplot(plot.data) + geom_point(aes(x=plot.x, y=plot.y, color = color.by), size = size, alpha = alpha)
-  gg <- gg + theme_base()
+  gg <- gg + plot.theme
   gg <- gg + labs(x = item.use[1], y = item.use[2], title = paste0(main))
 
   if (show.cluser.id & (category == "categorical")) {

@@ -32,7 +32,9 @@
 #'
 runCompensation <- function(x, spillover = NULL, ...) {
 
-  if (missing(x)) stop(Sys.time(), " [ERROR] input object is missing")
+  if (missing(x)) stop(Sys.time(), " [ERROR] input x is missing")
+
+  if (!isFCSfile(x)) stop(Sys.time(), " [ERROR] x is not a FCS file")
 
   if (is.null(spillover)) {
     if (is.null(x@description$SPILL)) {

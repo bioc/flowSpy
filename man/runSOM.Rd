@@ -7,7 +7,7 @@
 runSOM(object, xdim = 5, ydim = 5, rlen = 8, mst = 1,
   alpha = c(0.05, 0.01), radius = 1, init = FALSE, distf = 2,
   codes = NULL, importance = NULL, method = "euclidean",
-  verbose = T, ...)
+  verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

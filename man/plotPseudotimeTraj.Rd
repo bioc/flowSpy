@@ -5,7 +5,8 @@
 \title{plotPseudotimeTraj}
 \usage{
 plotPseudotimeTraj(object, cutoff = -1, markers = NULL, size = 0.5,
-  alpha = 0.6, print.curve = T, var.cols = F)
+  alpha = 0.6, print.curve = T, var.cols = F,
+  plot.theme = theme_bw())
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -21,6 +22,8 @@ plotPseudotimeTraj(object, cutoff = -1, markers = NULL, size = 0.5,
 \item{print.curve}{logical. Whether to perform curve fitting}
 
 \item{var.cols}{logical. Whether to plot stage}
+
+\item{plot.theme}{themes from \code{ggplot2}}
 }
 \description{
 plotPseudotimeTraj
