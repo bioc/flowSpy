@@ -8,6 +8,7 @@
 #' @import matrixStats
 #' @import flowUtils
 #' @import umap
+#' @import prettydoc
 NULL
 
 #' flowSpy class

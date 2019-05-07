@@ -76,6 +76,8 @@ library(flowSpy)
 ``` {r preprocess-read-fcs, fig.width = 5, fig.height = 4}
 
 suppressMessages({
+library(ggplot2)
+library(LSD)
 library(flowCore)
 library(flowViz)
 library(flowSpy)
@@ -124,7 +126,7 @@ dim(fcs.d2)
 
 ### 3.2 Build an FSPY object
 
-``` {r load-data, eval = T}
+``` {r load-data, eval = T, fig.width = 3, fig.height = 3}
 
 # load raw.data and meta.data of flowSy
 data("fspy.data")
@@ -136,17 +138,29 @@ head(fspy.raw.data)
 # show cell number in each time point
 table(fspy.meta.data$stage)
 
+markers.plot <- c("CD43", "CD90")
+
+par(mfrow=c(2,3))
+for (day in c("D0","D2","D4","D6","D8","D10")) {
+  sub.fspy.raw.data <- fspy.raw.data[grep(day, rownames(fspy.raw.data)), ]
+  px <- sub.fspy.raw.data[, which(colnames(sub.fspy.raw.data) == "CD43")]
+  py <- sub.fspy.raw.data[, which(colnames(sub.fspy.raw.data) == "CD90")]
+  heatscatter(px, py, cexplot = 0.3,
+              xlim = c(0,5), ylim = c(0,5),
+              main = day, xlab = "CD43", ylab = "CD90")
+}
+
 
 ```
 
 
 ``` {r create-object, eval = T}
+par(mfrow=c(1,1))
 
 # create an FSPY object using fspy.meta.data and fspy.log.data
 object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
                      meta.data = fspy.meta.data,
-                     log.transform = F,
-                     verbose = F)
+                     log.transform = F)
 
 # see information in object
 object
@@ -157,11 +171,11 @@ object
 
 ``` {r run-knn, eval = T}
 
-object <- runKNN(object, knn = 30, verbose = F)
+object <- runKNN(object, knn = 30)
 
 
 set.seed(1)
-object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6, verbose = F)
+object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
 
 ```
 
@@ -170,7 +184,7 @@ object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6, verbose
 
 ``` {r run-pca, eval = T, fig.width = 5, fig.height = 4}
 
-object <- runFastPCA(object, verbose = F)
+object <- runFastPCA(object)
 
 plot2D(object, item.use = c("PC1", "PC2"), color.by = "som.id", 
        alpha = 0.7, main = "PCA", show.cluser.id = T)
@@ -189,7 +203,7 @@ plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage", main = "PC
 
 ``` {r run-tsne, eval = T, fig.width = 5, fig.height = 4}
 
-object <- runTSNE(object, verbose = F)
+object <- runTSNE(object)
 
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", 
        alpha = 0.7, main = "tSNE", show.cluser.id = T)
@@ -202,7 +216,7 @@ plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "stage",
 
 ``` {r run-destiny, eval = T, fig.width = 5, fig.height = 4}
 
-object <- runDiffusionMap(object, verbose = F)
+object <- runDiffusionMap(object)
 
 plot2D(object, item.use = c("DC1", "DC2"), color.by = "som.id", 
        alpha = 0.7, main = "DiffusionMap", show.cluser.id = T)
@@ -220,7 +234,7 @@ plot3D(object, item.use = c("DC1", "DC2", "DC3"), color.by = "stage", main = "Di
 
 ``` {r run-umap, eval = T, fig.width = 5, fig.height = 4}
 
-object <- runUMAP(object, verbose = F)
+object <- runUMAP(object)
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", 
        alpha = 0.7, main = "UMAP", show.cluser.id = T)
@@ -233,7 +247,7 @@ plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage",
 ### 3.5 Build tree
 
 ``` {r build-tree, eval = T, fig.width = 6, fig.height = 4}
-object <- buildTree(object, cluster.type = "som", dim.type = "umap", verbose = F)
+object <- buildTree(object, cluster.type = "som", dim.type = "umap")
 
 p <- plotTree(object, color.by = "CD34", show.node.name = T) 
 p + scale_colour_gradientn(colors = c("blue", "red"))
@@ -244,7 +258,7 @@ p + scale_colour_gradientn(colors = c("blue", "red"))
 
 ``` {r pseudotime, eval = T, fig.width = 6, fig.height = 4}
 
-object <- defRootCells(object, root.cells = c(24), verbose = F)
+object <- defRootCells(object, root.cells = c(24))
 
 object <- runPseudotime(object)
 

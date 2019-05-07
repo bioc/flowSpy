@@ -88,16 +88,16 @@ object <- runWalk(object)
 
 
 plotPseudotimeDensity(object)
-plotPseudotimeTraj(object, var.cols = T) + scale_colour_gradientn(colors = c("blue", "red"))
-plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(colors = c("blue", "red"))
+plotPseudotimeTraj(object, var.cols = F) + scale_colour_gradientn(colors = c("#00599F",  "#EEEEEE", "#FF3222"))
+plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 
-
+plot2D(object, item.use = c("pseudotime", "CD43"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical")
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 1, main = "PCA") + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "traj.value.log", alpha = 0.5, main = "PCA", category = "numeric") + scale_colour_gradientn(colors = c("#FFFFCC", "red", "red", "red"))
 
@@ -107,17 +107,28 @@ plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "CD49f", alpha = 1, ma
 
 plot2D(object, item.use = c("pseudotime", "traj.value.log"), color.by = "stage")
 
-plotTree(object, color.by = "CD49f", as.tree = T, show.node.name = T, root.id = 24)  + scale_colour_gradientn(colors = c("blue", "white", "red"))
+plotTree(object, color.by = "pseudotime", as.tree = T, show.node.name = T, root.id = 24)  + scale_colour_gradientn(colors = c("#00599F", "#00599F","#EEEEEE", "#FF3222","#FF3222"))
 
 plot.info <- fetchPlotMeta(object, verbose = F)
-ggplot(plot.info, aes(x=pseudotime, colour = stage)) + geom_density() + theme_base()
+ggplot(plot.info, aes(x=traj.value.log, colour = stage)) + geom_density() + theme_bw()
+
+pdata <- aggregate(plot.info[, c(markers, "pseudotime")], list(id = plot.info$som.id), mean)
+pdata <- pdata[, -1]
+
+pdata <- pdata[order(pdata$pseudotime), ]
+
+plot.info.sub <- plot.info[, c(markers, "pseudotime")]
+plot.info.sub <- plot.info.sub[order(plot.info.sub$pseudotime), ]
+plot.info.sub <- plot.info.sub[, match(c("CD34", "CD43","CD31","CD45RA","CD38","CD49f","CD90","FLK1","CD73"), colnames(plot.info.sub))]
+pheatmap(plot.info.sub,
+         color = colorRampPalette(c("#00599F", "#00599F", "#FFFFFF", "#FF3222", "#FF3222"))(100),
+         cluster_rows = F, cluster_cols = F, scale = "column")
 
 
-
-
-save(object, file = "0505.FSPY.Robj")
-
-
+plot.info.sub <- plot.info[, c("pseudotime", "traj.value.log")]
+plot.info.sub <- plot.info.sub[plot.info.sub$traj.value.log >= 0, ]
+plot.info.sub <- plot.info.sub[order(plot.info.sub$pseudotime),]
+plot(plot.info.sub$pseudotime, ylim = c(0,1))
 
 
 }

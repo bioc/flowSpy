@@ -111,7 +111,7 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #'
 #' @export
 #'
-runPseudotime <- function(object, mode = "undirected", ...) {
+runPseudotime <- function(object, mode = "undirected", verbose = F, ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing.")
 

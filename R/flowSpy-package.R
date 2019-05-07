@@ -9,12 +9,6 @@
 #' for both quality control and infernece of the data. This package provides a
 #' number of different visualization tools for flow data.
 #'
-#' @section Create an FSPY object
-#'
-#' @section Base function
-#'
-#' @section Improved function
-#'
 #'
 #' @name flowSpy-package
 #' @aliases flowSpy-package flowSpy

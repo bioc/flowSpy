@@ -13,8 +13,8 @@ Description: flowSpy offers visualization options for flow cytometry data.
     diagrams and network were included in improved function section.
 Depends: R (>= 3.4), igraph
 Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
-        flowUtils, Biobase, Matrix, flowCore, ggthemes, 
-        matrixStats, methods, mclust
+        flowUtils, Biobase, Matrix, flowCore, 
+        matrixStats, methods, mclust, prettydoc
 Suggests: BiocGenerics, gam, knitr, RColorBrewer,
         rmarkdown, splatter, testthat, BiocStyle
 biocViews: Clustering, GeneExpression, flowCytometry,

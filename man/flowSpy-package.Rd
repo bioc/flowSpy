@@ -16,18 +16,6 @@ qualitative. To this end, dedicated visualization techniques have been used
 for both quality control and infernece of the data. This package provides a
 number of different visualization tools for flow data.
 }
-\section{Create an FSPY object}{
-NA
-}
-
-\section{Base function}{
-NA
-}
-
-\section{Improved function}{
-NA
-}
-
 \examples{
 
 ## examples go here

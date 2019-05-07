@@ -4,7 +4,7 @@
 \alias{runPseudotime}
 \title{Calculation of Pseudotime}
 \usage{
-runPseudotime(object, mode = "undirected", ...)
+runPseudotime(object, mode = "undirected", verbose = F, ...)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -12,9 +12,9 @@ runPseudotime(object, mode = "undirected", ...)
 \item{mode}{character. Specifies how igraph should interpret the supplied matrix.
 Possible values are: directed, undirected, upper, lower, max, min, plus.}
 
-\item{...}{Parameters passing to calculation function.}
-
 \item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to calculation function.}
 }
 \value{
 An FSPY object
