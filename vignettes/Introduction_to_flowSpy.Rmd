@@ -24,14 +24,19 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
 
 ## Abstract
 
-The package **flowSpy** provides tools for differential trajectory analysis and visualization of flow cytometry data.
+Highthroughput cell-based assays with flow cytometric signals enables ones to analyze multiple single-cell parameters and identify cellular populations. The package **flowSpy** provides tools for differential trajectory analysis and visualization of flow cytometry data. 
 
 
 
 ## 1 Introduction
 
+The monocle package provides a toolkit for analyzing flow cytometry data. This vignette provides an overview of time courses flow cytometry data analysis workflow with flowSpy. flowSpy was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. 
 
-<img src="../man/figures/Workflow.jpg" align="center" />
+Monocle can help you to perform four main types of analysis:
+
+- 
+
+<img src="../man/figures/Workflow.png" align="center" />
 
 
 ## 2 Installation
@@ -126,7 +131,7 @@ dim(fcs.d2)
 
 ### 3.2 Build an FSPY object
 
-``` {r load-data, eval = T, fig.width = 3, fig.height = 3}
+``` {r load-data, eval = T, fig.width = 9, fig.height = 6}
 
 # load raw.data and meta.data of flowSy
 data("fspy.data")
@@ -251,6 +256,7 @@ object <- buildTree(object, cluster.type = "som", dim.type = "umap")
 
 p <- plotTree(object, color.by = "CD34", show.node.name = T) 
 p + scale_colour_gradientn(colors = c("blue", "red"))
+
 ```
 
 
@@ -264,6 +270,10 @@ object <- runPseudotime(object)
 
 plotPseudotimeDensity(object)
 
+p <- plotTree(object, color.by = "CD34", show.node.name = T, 
+              as.tree = T, root.id = 24) 
+p + scale_colour_gradientn(colors = c("blue", "red"))
+
 ```
 
 
@@ -275,6 +285,8 @@ plotPseudotimeDensity(object)
 object <- defLeafCells(object, leaf.cells = c(6,35), pseudotime.cutoff = 0.5)
 
 object <- runWalk(object)
+
+plotPseudotimeTraj(object, cutoff = -1, var.cols = T) + scale_colour_gradientn(colors = c("blue", "red"))
 
 plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(colors = c("blue", "red"))
 

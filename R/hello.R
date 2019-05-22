@@ -89,7 +89,7 @@ object <- runWalk(object)
 
 plotPseudotimeDensity(object)
 plotPseudotimeTraj(object, var.cols = F) + scale_colour_gradientn(colors = c("#00599F",  "#EEEEEE", "#FF3222"))
-plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+plotPseudotimeTraj(object, cutoff = -1, var.cols = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 
 plot2D(object, item.use = c("pseudotime", "CD43"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
