@@ -41,3 +41,7 @@ rsconnect/
 .Rhistory
 .Rbuildignore
 .gitignore
+
+
+flowSpy.Rproj
+
