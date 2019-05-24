@@ -30,13 +30,17 @@ Highthroughput cell-based assays with flow cytometric signals enables ones to an
 
 ## 1 Introduction
 
-The monocle package provides a toolkit for analyzing flow cytometry data. This vignette provides an overview of time courses flow cytometry data analysis workflow with flowSpy. flowSpy was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. 
+The `flowSpy` package provides a toolkit for analyzing flow cytometry data. This vignette provides an overview of time courses flow cytometry data analysis workflow with `flowSpy`. `flowSpy` was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. 
 
-Monocle can help you to perform four main types of analysis:
+`flowSpy` can help you to perform four main types of analysis:
+
+- Clustering. 
+
+- Reducing Dimensions
 
 - 
 
-<img src="../man/figures/Workflow.png" align="center" />
+<img src="../man/figures/Workflow.png" align="middle" alt="Workflow of flowSpy" />
 
 
 ## 2 Installation
@@ -76,9 +80,14 @@ library(flowSpy)
 
 ## 3 Getting started with FSPY
 
-## 3.1 Preprocessing
+The datasets analyzed in this study are available from the GitHub repository (https://github.com/ytdai/flowSpy-dataset). It can be downloaded through [git](https://git-scm.com/) `git clone https://github.com/ytdai/flowSpy-dataset.git`, or via web page. 
 
-``` {r preprocess-read-fcs, fig.width = 5, fig.height = 4}
+### 3.1 Preprocessing
+
+The preprocessing steps in flowSpy are based on some packages on Bioconductor. It need to be pre-installed before running flowSpy. For example, the FCS data is read via `flowCore::read.FCS`, and the compensation is made via `flowCore::compensate`. Also, you can visulaze different channels using `flowViz` and preform transformation using `flowCore::logTransform`.
+
+
+``` {r preprocess-load-packages, eval = T}
 
 suppressMessages({
 library(ggplot2)
@@ -87,26 +96,39 @@ library(flowCore)
 library(flowViz)
 library(flowSpy)
 })
-
-
-# read Flow Cytometry Data
-# a sample file
-fcs.file <- system.file("extdata", "D2.fcs", package="flowSpy")
-
-# head(fcs.data, 2)
-fcs.data <- read.FCS(filename = fcs.file)
-
-# Compensation
-fcs.data <- compensate(fcs.data, spillover = fcs.data@description$SPILL)
-
-# plot SSC-H and FSC-H
-xyplot(`SSC-H` ~ `FSC-H`, data = fcs.data)
-
 ```
 
 
+``` {r preprocess-read-fcs, eval = FALSE}
+# Read Flow Cytometry Data
+# A sample file
+# It can be downloaded via `git clone https://github.com/ytdai/flowSpy-dataset.git` 
+fcs.file <- "../../flowSpy-dataset/flowSpy-dataset/D2.fcs"
 
-``` {r preprocess-rename, eval = T}
+# Read flow cytomery data via flowCore::read.FCS
+fcs.data <- flowCore::read.FCS(filename = fcs.file)
+
+# If you want to see the first 6 rows of the FCS data 
+head(fcs.data, 2)
+
+# Make compensation
+# The essential premise of compensation is that some fluorochromes may register 
+# signals in detectors that do not correspond to their primary detector. If you 
+# have adjust it on the flow cytometer, you can just make componsation through 
+# flowCore::compensate base on the spillover matrix fcs.data@description$SPILL in 
+# you flow cytometer data.
+fcs.data <- flowCore::compensate(fcs.data, spillover = fcs.data@description$SPILL)
+
+# Visualization of SSC-H and FSC-H
+xyplot(`SSC-H` ~ `FSC-H`, data = fcs.data)
+```
+
+<img src="../man/figures/flowVis-1.png" alt="flowVis of FSC-H and SSC-H" height=50% width=50% />
+
+Before you 
+
+
+``` {r preprocess-rename, eval = FALSE}
 # Transform
 colnames.mapping <- c(`FSC-A` = "FSC_A", `FSC-H` = "FSC_H", `FSC-W` = "FSC_W", 
                       `SSC-A` = "SSC_A", `SSC-H` = "SSC_H", `SSC-W` = "SSC_W",
@@ -131,10 +153,10 @@ dim(fcs.d2)
 
 ### 3.2 Build an FSPY object
 
-``` {r load-data, eval = T, fig.width = 9, fig.height = 6}
+``` {r load-data, eval = F, fig.width = 9, fig.height = 6}
 
 # load raw.data and meta.data of flowSy
-data("fspy.data")
+data("FSPYdata")
 
 # view raw.data and meta.data
 head(fspy.meta.data)
@@ -159,7 +181,7 @@ for (day in c("D0","D2","D4","D6","D8","D10")) {
 ```
 
 
-``` {r create-object, eval = T}
+``` {r create-object, eval = F}
 par(mfrow=c(1,1))
 
 # create an FSPY object using fspy.meta.data and fspy.log.data
@@ -174,7 +196,7 @@ object
 
 ### 3.3 Classifying cells
 
-``` {r run-knn, eval = T}
+``` {r run-knn, eval = F}
 
 object <- runKNN(object, knn = 30)
 
@@ -187,7 +209,7 @@ object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
 
 ### 3.4 Reducing dimensionality
 
-``` {r run-pca, eval = T, fig.width = 5, fig.height = 4}
+``` {r run-pca, eval = F, fig.width = 5, fig.height = 4}
 
 object <- runFastPCA(object)
 
@@ -199,14 +221,14 @@ plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage",
 
 ```
 
-``` {r run-pca-3d, eval = T, fig.width = 5, fig.height = 5}
+``` {r run-pca-3d, eval = F, fig.width = 5, fig.height = 5}
 
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage", main = "PCA")
 
 ```
 
 
-``` {r run-tsne, eval = T, fig.width = 5, fig.height = 4}
+``` {r run-tsne, eval = F, fig.width = 5, fig.height = 4}
 
 object <- runTSNE(object)
 
@@ -219,7 +241,7 @@ plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "stage",
 ```
 
 
-``` {r run-destiny, eval = T, fig.width = 5, fig.height = 4}
+``` {r run-destiny, eval = F, fig.width = 5, fig.height = 4}
 
 object <- runDiffusionMap(object)
 
@@ -230,14 +252,14 @@ plot2D(object, item.use = c("DC1", "DC2"), color.by = "stage",
        alpha = 0.7, main = "DiffusionMap", show.cluser.id = T)
 ```
 
-``` {r run-destiny-3d, eval = T, fig.width = 5, fig.height = 5}
+``` {r run-destiny-3d, eval = F, fig.width = 5, fig.height = 5}
 
 plot3D(object, item.use = c("DC1", "DC2", "DC3"), color.by = "stage", main = "DiffusionMap")
 
 ```
 
 
-``` {r run-umap, eval = T, fig.width = 5, fig.height = 4}
+``` {r run-umap, eval = F, fig.width = 5, fig.height = 4}
 
 object <- runUMAP(object)
 
@@ -251,7 +273,7 @@ plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage",
 
 ### 3.5 Build tree
 
-``` {r build-tree, eval = T, fig.width = 6, fig.height = 4}
+``` {r build-tree, eval = F, fig.width = 6, fig.height = 4}
 object <- buildTree(object, cluster.type = "som", dim.type = "umap")
 
 p <- plotTree(object, color.by = "CD34", show.node.name = T) 
@@ -262,7 +284,7 @@ p + scale_colour_gradientn(colors = c("blue", "red"))
 
 ### 3.6 Pseudotime calculation
 
-``` {r pseudotime, eval = T, fig.width = 6, fig.height = 4}
+``` {r pseudotime, eval = F, fig.width = 6, fig.height = 4}
 
 object <- defRootCells(object, root.cells = c(24))
 
@@ -280,7 +302,7 @@ p + scale_colour_gradientn(colors = c("blue", "red"))
 
 ### 3.7 Trajectory inference
 
-``` {r Trajectory, eval = T, fig.width = 10, fig.height = 10}
+``` {r Trajectory, eval = F, fig.width = 10, fig.height = 10}
 
 object <- defLeafCells(object, leaf.cells = c(6,35), pseudotime.cutoff = 0.5)
 
