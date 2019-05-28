@@ -24,24 +24,27 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
 
 ## Abstract
 
-Highthroughput cell-based assays with flow cytometric signals enables ones to analyze multiple single-cell parameters and identify cellular populations. The package **flowSpy** provides tools for differential trajectory analysis and visualization of flow cytometry data. 
-
-
+High throughput cell-based assays with flow cytometric signals enable ones to analyze multiple single-cell parameters and identify cellular populations. 
+Based on classical softwares for analyzing flow cytometry (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for identifying intermediate states during a biological process are very important in cellular trajectory inference. 
+To objectively define the intermediate states based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of flow cytometry data. `flowSpy` package was applied to flow cytometry data of directional induced differentiation of Human embryonic stem cell line HUES 9 (HUES9) and tracking the trajectory when HUES9 was induced into mesodermal cells, hemogenic endothelium and hematopoietic stem/progenitor cells in succession. 
 
 ## 1 Introduction
 
-The `flowSpy` package provides a toolkit for analyzing flow cytometry data. This vignette provides an overview of time courses flow cytometry data analysis workflow with `flowSpy`. `flowSpy` was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. 
+The `flowSpy` package provides an analysis toolkit for flow cytometry data. This vignette presents an overview of time courses flow cytometry data analysis workflow with `flowSpy`. `flowSpy` was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. `flowSpy` was originally developed to analyze time courses FCS data such as cell differentiation, although it also supports other experimental workflows such as gating and subpopulation identification from cancer tissues.
 
 `flowSpy` can help you to perform four main types of analysis:
 
-- Clustering. 
+- Clustering. `flowSpy` can help you to discover and identify subtypes of cells. 
 
-- Reducing Dimensions
+- Reducing Dimensions. Severval dimensionality reduction method are proveided in `flowSpy` package such as principal components analysis (PCA) and t-distributed stochastic neighbor embedding (tSNE).
 
-- 
+- Pseudotime and Trajectory Inference. `flowSpy` can help you to construct the celluar differential based on minimum spanning tree approach.
 
-<img src="../man/figures/Workflow.png" align="middle" alt="Workflow of flowSpy" />
+- Intermediate cell fate definition. Subset FCS data set in `flowSpy` and find the key intermediate cell states.
 
+<center> <img src="../man/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
+
+<center> **Workflow of flowSpy** </center>
 
 ## 2 Installation
 
@@ -56,6 +59,7 @@ The `flowSpy` package is not uploaded to Bioconductor server yet, so now you can
 ``` {r install-bioconductor, eval = FALSE}
 
 # The flowSpy package is not uploaded to Bioconductor server yet
+# Please install it through GitHub.
 if (!requireNamespace("BiocManager", quietly=TRUE))
     install.packages("BiocManager")
 BiocManager::install("flowSpy")
@@ -80,7 +84,11 @@ library(flowSpy)
 
 ## 3 Getting started with FSPY
 
-The datasets analyzed in this study are available from the GitHub repository (https://github.com/ytdai/flowSpy-dataset). It can be downloaded through [git](https://git-scm.com/) `git clone https://github.com/ytdai/flowSpy-dataset.git`, or via web page. 
+The [datasets](https://github.com/ytdai/flowSpy-dataset) analyzed in this study are available from the GitHub repository (https://github.com/ytdai/flowSpy-dataset). It can be downloaded through [git](https://git-scm.com/) `git clone https://github.com/ytdai/flowSpy-dataset.git`, or via web page. 
+
+This dataset was generated based on an in-house induced differentiation protocol of human embryonic stem cells. Nine cellular surface markers were evaluated during the experiment: CD34, CD43, CD38, CD90, CD49f, CD31, CD45RA, FLK1 and CD73. By add different cytokines in differen days, Human embryonic stem cell line HUES 9 (HUES9) were directional differentiated into mesodermal cells (Day 4), hemogenic endothelium (Day 6) and Hematopoietic Stem/Progenitor cells (HSPC, Day 8) in succession. Cellular surface markers were continuous changes during the induction process.
+
+The main goal of this analysis workflow was to identify cell subtypes in each time point, track the differential trajctory of cell populations, calculation pseudotime of each cell and filteration of cells which play an key role in this biological progress.
 
 ### 3.1 Preprocessing
 
@@ -103,7 +111,9 @@ library(flowSpy)
 # Read Flow Cytometry Data
 # A sample file
 # It can be downloaded via `git clone https://github.com/ytdai/flowSpy-dataset.git` 
-fcs.file <- "../../flowSpy-dataset/flowSpy-dataset/D2.fcs"
+# fcs.path musted be modified based on the download directory from GitHub
+fcs.path <- "../../flowSpy-dataset/FCS/"
+fcs.file <- paste0(fcs.path, "D2.fcs")
 
 # Read flow cytomery data via flowCore::read.FCS
 fcs.data <- flowCore::read.FCS(filename = fcs.file)
@@ -123,13 +133,15 @@ fcs.data <- flowCore::compensate(fcs.data, spillover = fcs.data@description$SPIL
 xyplot(`SSC-H` ~ `FSC-H`, data = fcs.data)
 ```
 
-<img src="../man/figures/flowVis-1.png" alt="flowVis of FSC-H and SSC-H" height=50% width=50% />
+<center> <img src="../man/figures/flowVis-1.png" alt="flowVis of FSC-H and SSC-H" height=50% width=50% /> </center>
 
-Before you 
+<center> **flowVis of FSC-H and SSC-H"** </center>
+
+Before started building an FSPY object, it'e better to rename the colnames of `fcs.data`. 
 
 
 ``` {r preprocess-rename, eval = FALSE}
-# Transform
+# Renames of colnames of fcs.data
 colnames.mapping <- c(`FSC-A` = "FSC_A", `FSC-H` = "FSC_H", `FSC-W` = "FSC_W", 
                       `SSC-A` = "SSC_A", `SSC-H` = "SSC_H", `SSC-W` = "SSC_W",
                       `FITC-A` = "CD43", `PerCP-Cy5-5-A` = "PerCP", 
@@ -146,7 +158,26 @@ markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", 
 idx.markers <- match(markers, colnames(fcs.data))
 
 fcs.d2 <- fcs.data@exprs
-dim(fcs.d2)
+```
+
+Before merge FCS data into one matrix, gating must be performed to filter dead cells and adhered cells.
+
+``` {r preprocess-gating, eval = FALSE}
+
+sample.size = 2000
+set.seed(1)
+fcs.d2 <- fcs.d2[sample(1:nrow(fcs.d2), sample.size), ]
+
+```
+
+
+In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling step must be taken to make sure the merged FCS data matrix enrolled the same sample sizes for each day.
+
+``` {r preprocess-downsampling, eval = FALSE}
+
+sample.size = 2000
+set.seed(1)
+fcs.d2 <- fcs.d2[sample(1:nrow(fcs.d2), sample.size), ]
 
 ```
 

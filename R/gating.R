@@ -1,5 +1,5 @@
 #'
-#' Apply gating on FSPY object
+#' Apply gating on the matrix data
 #'
 #' @param object S4 object. FSPY object
 #' @param gating data.frame. gating paramete, the first column in gating is the marker name,
@@ -10,7 +10,9 @@
 #'
 #' @export
 #'
-gatingFSPY <- function(object, gating = NULL, initialization = T, verbose = F) {
+#' @return a matrix
+#'
+gatingFCS <- function(object, gating = NULL, initialization = T, verbose = F) {
   if (is.null(gating)) {
     message(paste0(Sys.time(), " [WARNING] gating parameter is missing"))
     return(object)
