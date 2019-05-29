@@ -103,6 +103,7 @@ library(LSD)
 library(flowCore)
 library(flowViz)
 library(flowSpy)
+library(LSD)
 })
 ```
 
@@ -113,7 +114,7 @@ library(flowSpy)
 # It can be downloaded via `git clone https://github.com/ytdai/flowSpy-dataset.git` 
 # fcs.path musted be modified based on the download directory from GitHub
 fcs.path <- "../../flowSpy-dataset/FCS/"
-fcs.file <- paste0(fcs.path, "D2.fcs")
+fcs.file <- paste0(fcs.path, "D12.fcs")
 
 # Read flow cytomery data via flowCore::read.FCS
 fcs.data <- flowCore::read.FCS(filename = fcs.file)
@@ -130,7 +131,7 @@ head(fcs.data, 2)
 fcs.data <- flowCore::compensate(fcs.data, spillover = fcs.data@description$SPILL)
 
 # Visualization of SSC-H and FSC-H
-xyplot(`SSC-H` ~ `FSC-H`, data = fcs.data)
+xyplot(`SSC-A` ~ `FSC-A`, data = fcs.data)
 ```
 
 <center> <img src="../man/figures/flowVis-1.png" alt="flowVis of FSC-H and SSC-H" height=50% width=50% /> </center>
@@ -153,22 +154,50 @@ colnames.mapping <- c(`FSC-A` = "FSC_A", `FSC-H` = "FSC_H", `FSC-W` = "FSC_W",
 
 colnames(fcs.data) <- colnames.mapping[match(colnames(fcs.data), names(colnames.mapping))]
 
-# define markers
-markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
-idx.markers <- match(markers, colnames(fcs.data))
-
-fcs.d2 <- fcs.data@exprs
+fcs.d0 <- fcs.data@exprs
 ```
 
-Before merge FCS data into one matrix, gating must be performed to filter dead cells and adhered cells.
+When FCS data of fcs.data was transformed into a matrix, we can use visualization packages to plot FCS signals, such as `heatscatter` from package [`LSD`](https://cran.r-project.org/web/packages/LSD/index.html).
 
-``` {r preprocess-gating, eval = FALSE}
+``` {r preprocess-gating-heatscatter, eval = FALSE}
 
-sample.size = 2000
-set.seed(1)
-fcs.d2 <- fcs.d2[sample(1:nrow(fcs.d2), sample.size), ]
+# Here we recommend heatscatter, a plot method for visualization of density of FCS data.
+# This function is from LSD::heatscatter
+fcs.d0 <- fcs.d0[fcs.d0[, "FSC_A"] > 0, ]
+fcs.d0 <- fcs.d0[fcs.d0[, "SSC_A"] > 0, ]
+heatscatter(fcs.d0[, "FSC_A"], fcs.d0[, "SSC_A"], 
+            cexplot = 0.3, main = "FCS in Day 0 before Gating", 
+            xlab = "FSC_A", ylab = "SSC_A")
 
 ```
+
+<center> <img src="../man/figures/heatscatter-1.png" alt="Heatscatter plot of FSC-A and SSC-A" height=50% width=50% /> </center>
+
+<center> **Heatscatter plot of FSC-A and SSC-A before Gating"** </center>
+
+Before merge FCS data into one matrix, gating must be performed to filter dead cells and adhered cells. After the signal values from FCS data were transformed into a matrix, we can use `gatingMatrix` to remove dead cells and adhered cells. Or it is recommended to write a fitting function to finish the filteration.
+
+``` {r preprocess-gating-flowSpy, eval = FALSE}
+
+# gating FCS matrix using flowSpy::gatingMatrix
+lower.gate <- c(FSC_A = 60000, SSC_A = 30000,
+                FSC_H = 40000, FSC_W = 60000,
+                SSC_H = 20000, SSC_W = 60000)
+upper.gate <- c(FSC_A = 200000, SSC_A = 150000,
+                FSC_H = 120000, FSC_W = 120000,
+                FSC_H = 130000, FSC_W = 110000)
+
+fcs.d0.filter <- gatingMatrix(fcs.d0, lower.gate = lower.gate, upper.gate = upper.gate)
+
+heatscatter(fcs.d0.filter[, "FSC_A"], fcs.d0.filter[, "SSC_A"], 
+            cexplot = 0.3, main = "FCS in Day 0 after Gating", 
+            xlab = "FSC_A", ylab = "SSC_A")
+
+```
+
+<center> <img src="../man/figures/heatscatter-2.png" alt="Heatscatter plot of FSC-A and SSC-A" height=50% width=50% /> </center>
+
+<center> **Heatscatter plot of FSC-A and SSC-A after Gating"** </center>
 
 
 In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling step must be taken to make sure the merged FCS data matrix enrolled the same sample sizes for each day.
@@ -177,10 +206,22 @@ In order to ensure the efficiency of calculation and avoiding migration for one 
 
 sample.size = 2000
 set.seed(1)
-fcs.d2 <- fcs.d2[sample(1:nrow(fcs.d2), sample.size), ]
+fcs.d0.downsample <- fcs.d0.filter[sample(1:nrow(fcs.d0.filter), sample.size), ]
 
+# output data 
+write.table(fcs.d2.downsample, paste0("../../dataset/D0.sub2000.txt"), 
+            row.names = F, col.names = T, quote = F, sep = "\t")
 ```
 
+In the analysis of FSPY workflow, it is recommended to remove batch effects for each time point. Batch effects in FCS data were usually caused by unstable voltage. In the example dataset, we collected cell sample at a specific time of each two days to make sure interval between every time point was equal. But batch effect is ineluctable. You can choose to use built-in function `correctBatchFSPY` provided in `flowSpy` packages, or you can choose to use other method before building an FSPY object. 
+The methology of removing batch effects in `flowSpy` refers to `ComBat` function in  [`sva`](https://bioconductor.org/packages/release/bioc/html/sva.html) package, which can correct batch effects in by detecting mutual nearest neighbors (MNNs). 
+
+``` {r preprocess-batch, eval = FALSE}
+
+# read FCS file generating by 
+
+
+```
 
 ### 3.2 Build an FSPY object
 

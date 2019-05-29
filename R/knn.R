@@ -9,8 +9,6 @@
 #'
 #' @param object an FSPY object
 #' @param knn numeric. Number of k-nearest neighbors.
-#' @param BNPARAM A BiocNeighborParam object, or NULL if BININDEX is supplied.
-#'    See \code{\link[BiocNeighbors]{findKNN}}.
 #' @param knn.replace logic. Whether to replace knn in FSPY object
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to \code{\link[BiocNeighbors]{findKNN}} function
@@ -25,7 +23,6 @@
 #'
 runKNN <- function(object,
                    knn = 30,
-                   BNPARAM = NULL,
                    knn.replace = T,
                    verbose = F, ...) {
 
@@ -39,7 +36,7 @@ runKNN <- function(object,
   }
 
   if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
-  fout <- findKNN(object@log.data, k = object@knn, BNPARAM = BNPARAM, ...)
+  fout <- findKNN(object@log.data, k = object@knn, ...)
 
   rownames(fout$index) <- object@meta.data$cell
   rownames(fout$distance) <- object@meta.data$cell

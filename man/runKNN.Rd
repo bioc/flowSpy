@@ -4,16 +4,12 @@
 \alias{runKNN}
 \title{Calculate k-nearest neighbors of FSPY}
 \usage{
-runKNN(object, knn = 30, BNPARAM = NULL, knn.replace = T,
-  verbose = F, ...)
+runKNN(object, knn = 30, knn.replace = T, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
 
 \item{knn}{numeric. Number of k-nearest neighbors.}
-
-\item{BNPARAM}{A BiocNeighborParam object, or NULL if BININDEX is supplied.
-See \code{\link[BiocNeighbors]{findKNN}}.}
 
 \item{knn.replace}{logic. Whether to replace knn in FSPY object}
 

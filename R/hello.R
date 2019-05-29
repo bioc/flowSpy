@@ -22,19 +22,17 @@ roxygenize()
 
 
 verbose = T
-cell.number = 500
+cell.number = 5000
 
-sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
+sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10, 12))
 raw <- NULL
 for (i in 1:length(sample.list)) {
-  sub <- read.table(paste0("../dataset/", sample.list[i], ".sub.txt"), header = T, stringsAsFactors = F)
+  sub <- read.table(paste0("../dataset/", sample.list[i], ".sub", cell.number, ".txt"), header = T, stringsAsFactors = F)
   sub$sample <- sample.list[i]
-  #sub <- sub[sample(1:dim(sub)[1], cell.number), ]
   raw <- rbind(raw, sub)
 }
-table(raw$sample)
 raw$sample <- factor(as.character(raw$sample), levels = sample.list)
-
+table(raw$sample)
 
 
 markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
@@ -48,11 +46,11 @@ meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
 fspy.meta.data <- meta.data
 fspy.raw.data <- raw.data
 
-#save(fspy.meta.data, fspy.raw.data, file = "data/fspy.data.rda")
+save(fspy.meta.data, fspy.raw.data, file = "data/FSPYdata.rda")
 
 object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
                      meta.data = fspy.meta.data,
-                     log.transform = F,
+                     log.transform = T,
                      verbose = T)
 
 
@@ -97,7 +95,7 @@ plot2D(object, item.use = c("pseudotime", "CD43"), color.by = "som.id", alpha = 
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "pseudotime", alpha = 1, main = "PCA") + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "stage", alpha = 1, main = "PCA")
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "traj.value.log", alpha = 0.5, main = "PCA", category = "numeric") + scale_colour_gradientn(colors = c("#FFFFCC", "red", "red", "red"))
 
