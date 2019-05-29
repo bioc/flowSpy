@@ -137,6 +137,8 @@ runPseudotime <- function(object, mode = "undirected", verbose = F, ...) {
   pst <- ( pst - min(pst) )/ max( pst - min(pst) )
 
   object@meta.data$pseudotime <- pst
+  object@meta.data$traj.value <- 0
+  object@meta.data$traj.value.log <- 0
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Pseudotime completed.")
 

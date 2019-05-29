@@ -84,13 +84,6 @@ plotPseudotimeTraj <- function(object,
       message(Sys.time(), " [INFO] traj.value is not in plot.meta of FSPY, please run runWalk first.")
     }
   }
-
-  if ( !all(c("is.root.cells","is.leaf.cells") %in% colnames(object@plot.meta)) ) {
-    message(Sys.time(), " [INFO] root.cells and leaf.cells are not in FSPY, please run defRootCells and defLeafCells first.")
-    object@plot.meta$is.root.cells <- 1
-    object@plot.meta$is.leaf.cells <- 1
-  }
-
   if (is.null(markers)) markers <- object@markers
 
   plot.data <- NULL
@@ -104,7 +97,20 @@ plotPseudotimeTraj <- function(object,
                       Stage = plot.meta$stage,
                       TrajValue = plot.meta$traj.value,
                       LogTrajValue = plot.meta$traj.value.log)
-    sub <- sub[which( (sub$LogTrajValue > cutoff) | (sub$IsRoot == 1) | (sub$IsLeaf == 1) ), ]
+    idx <- which( (sub$LogTrajValue > cutoff)  )
+    if (sum(sub$IsRoot == 1) > 0) {
+      idx.2 <- which(sub$IsRoot == 1)
+    } else {
+      idx.2 <- NULL
+    }
+    idx <- union(idx, idx.2)
+    if (sum(sub$IsLeaf == 1) > 0) {
+      idx.3 <- which(sub$IsLeaf == 1)
+    } else {
+      idx.3 <- NULL
+    }
+    idx <- union(idx, idx.3)
+    sub <- sub[idx, ]
     plot.data <- rbind(plot.data, sub)
   }
 

@@ -4,12 +4,22 @@
 \alias{correctBatchFSPY}
 \title{correctBatchFSPY}
 \usage{
-correctBatchFSPY(object, batch = NULL, verbose = F)
+correctBatchFSPY(object, batch = NULL, par.prior = TRUE,
+  mean.only = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{object}{An FSPY object}
 
-\item{batch}{vector.}
+\item{batch}{vector. Batch covariate (only one batch allowed)}
+
+\item{par.prior}{logical. TRUE indicates parametric adjustments will be used,
+FALSE indicates non-parametric adjustments will be used.}
+
+\item{mean.only}{logical. FALSE If TRUE ComBat only corrects the mean of the batch
+effect (no scale adjustment)}
+
+\item{prior.plots}{logical. TRUE give prior plots with black as a kernel
+estimate of the empirical batch effect density and red as the parametric.}
 
 \item{...}{Parameters passing to \code{\link[ComBat]{sva}} function}
 }

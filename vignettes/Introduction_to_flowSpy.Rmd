@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
 ## Abstract
 
 High throughput cell-based assays with flow cytometric signals enable ones to analyze multiple single-cell parameters and identify cellular populations. 
-Based on classical softwares for analyzing flow cytometry (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for identifying intermediate states during a biological process are very important in cellular trajectory inference. 
+Based on classical software for analyzing flow cytometry (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for identifying intermediate states during a biological process are very important in cellular trajectory inference. 
 To objectively define the intermediate states based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of flow cytometry data. `flowSpy` package was applied to flow cytometry data of directional induced differentiation of Human embryonic stem cell line HUES 9 (HUES9) and tracking the trajectory when HUES9 was induced into mesodermal cells, hemogenic endothelium and hematopoietic stem/progenitor cells in succession. 
 
 ## 1 Introduction
@@ -36,9 +36,9 @@ The `flowSpy` package provides an analysis toolkit for flow cytometry data. This
 
 - Clustering. `flowSpy` can help you to discover and identify subtypes of cells. 
 
-- Reducing Dimensions. Severval dimensionality reduction method are proveided in `flowSpy` package such as principal components analysis (PCA) and t-distributed stochastic neighbor embedding (tSNE).
+- Reducing Dimensions. Several dimensionality reduction methods are provided in `flowSpy` package such as principal components analysis (PCA) and t-distributed stochastic neighbor embedding (tSNE).
 
-- Pseudotime and Trajectory Inference. `flowSpy` can help you to construct the celluar differential based on minimum spanning tree approach.
+- Pseudotime and Trajectory Inference. `flowSpy` can help you to construct the cellular differential based on minimum spanning tree.
 
 - Intermediate cell fate definition. Subset FCS data set in `flowSpy` and find the key intermediate cell states.
 
@@ -199,7 +199,6 @@ heatscatter(fcs.d0.filter[, "FSC_A"], fcs.d0.filter[, "SSC_A"],
 
 <center> **Heatscatter plot of FSC-A and SSC-A after Gating"** </center>
 
-
 In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling step must be taken to make sure the merged FCS data matrix enrolled the same sample sizes for each day.
 
 ``` {r preprocess-downsampling, eval = FALSE}
@@ -209,18 +208,8 @@ set.seed(1)
 fcs.d0.downsample <- fcs.d0.filter[sample(1:nrow(fcs.d0.filter), sample.size), ]
 
 # output data 
-write.table(fcs.d2.downsample, paste0("../../dataset/D0.sub2000.txt"), 
+write.table(fcs.d2.downsample, "../../dataset/D0.sub2000.txt", 
             row.names = F, col.names = T, quote = F, sep = "\t")
-```
-
-In the analysis of FSPY workflow, it is recommended to remove batch effects for each time point. Batch effects in FCS data were usually caused by unstable voltage. In the example dataset, we collected cell sample at a specific time of each two days to make sure interval between every time point was equal. But batch effect is ineluctable. You can choose to use built-in function `correctBatchFSPY` provided in `flowSpy` packages, or you can choose to use other method before building an FSPY object. 
-The methology of removing batch effects in `flowSpy` refers to `ComBat` function in  [`sva`](https://bioconductor.org/packages/release/bioc/html/sva.html) package, which can correct batch effects in by detecting mutual nearest neighbors (MNNs). 
-
-``` {r preprocess-batch, eval = FALSE}
-
-# read FCS file generating by 
-
-
 ```
 
 ### 3.2 Build an FSPY object
@@ -248,13 +237,13 @@ for (day in c("D0","D2","D4","D6","D8","D10")) {
               xlim = c(0,5), ylim = c(0,5),
               main = day, xlab = "CD43", ylab = "CD90")
 }
-
+par(mfrow=c(1,1))
 
 ```
 
 
 ``` {r create-object, eval = F}
-par(mfrow=c(1,1))
+
 
 # create an FSPY object using fspy.meta.data and fspy.log.data
 object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
@@ -266,12 +255,17 @@ object
 
 ```
 
-### 3.3 Classifying cells
+### 3.3 Batch effects
+
+In the analysis of FSPY workflow, it is recommended to remove batch effects for each time point. Batch effects in FCS data were usually caused by unstable voltage. In the example dataset, we collected cell sample at a specific time of each two days to make sure interval between every time point was equal. But batch effect is ineluctable. You can choose to use built-in function `correctBatchFSPY` provided in `flowSpy` packages, or you can choose to use other method before building an FSPY object. 
+The methology of removing batch effects in `flowSpy` refers to `ComBat` function in  [`sva`](https://bioconductor.org/packages/release/bioc/html/sva.html) package. 
+
+
+### 3.4 Classifying cells
 
 ``` {r run-knn, eval = F}
 
 object <- runKNN(object, knn = 30)
-
 
 set.seed(1)
 object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
@@ -279,7 +273,7 @@ object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
 ```
 
 
-### 3.4 Reducing dimensionality
+### 3.5 Reducing dimensionality
 
 ``` {r run-pca, eval = F, fig.width = 5, fig.height = 4}
 
@@ -343,7 +337,7 @@ plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage",
 
 ```
 
-### 3.5 Build tree
+### 3.6 Build tree
 
 ``` {r build-tree, eval = F, fig.width = 6, fig.height = 4}
 object <- buildTree(object, cluster.type = "som", dim.type = "umap")
@@ -354,7 +348,7 @@ p + scale_colour_gradientn(colors = c("blue", "red"))
 ```
 
 
-### 3.6 Pseudotime calculation
+### 3.7 Pseudotime calculation
 
 ``` {r pseudotime, eval = F, fig.width = 6, fig.height = 4}
 
@@ -372,7 +366,7 @@ p + scale_colour_gradientn(colors = c("blue", "red"))
 
 
 
-### 3.7 Trajectory inference
+### 3.8 Trajectory inference
 
 ``` {r Trajectory, eval = F, fig.width = 10, fig.height = 10}
 
@@ -387,9 +381,11 @@ plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(
 
 ```
 
+### 3.9 Define intermediate states
 
 
-### 3.8 Save object
+
+### 3.10 Save object
 
 
 ``` {r save-object, eval = FALSE}
@@ -422,7 +418,10 @@ sessionInfo()
 
 
 ## References
+[1] Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2019). FlowSOM: Using
+  self-organizing maps for visualization and interpretation of cytometry data.
+  http://www.r-project.org, http://dambi.ugent.be.
 
-
+[2] Qiu, P., et al., Extracting a cellular hierarchy from high-dimensional cytometry data with SPADE. Nat Biotechnol, 2011. 29(10): p.886-91.
 
 

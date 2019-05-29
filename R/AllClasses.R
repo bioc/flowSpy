@@ -195,7 +195,18 @@ createFSPY <- function(raw.data, markers, meta.data,
     object@log.data <- raw.data[, markers.idx]
   }
 
+  # correcting batch effect
+  if (batch.correct) {
+    if (is.null(batch)) {
+      warning(Sys.time(), " [WARNING] batch must be provided when batch.correct is TRUE ")
+    } else {
+      object <- correctBatchFSPY(object, batch = batch, ...)
+    }
+  }
+
   object@plot.meta <- data.frame(row.names = object@meta.data$cell)
+  object@meta.data$is.root.cells <- 0
+  object@meta.data$is.leaf.cells <- 0
 
   if (verbose) message(Sys.time(), " [INFO] Build FSPY object succeed ")
   return(object)
