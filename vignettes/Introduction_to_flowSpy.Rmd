@@ -114,7 +114,7 @@ library(LSD)
 # It can be downloaded via `git clone https://github.com/ytdai/flowSpy-dataset.git` 
 # fcs.path musted be modified based on the download directory from GitHub
 fcs.path <- "../../flowSpy-dataset/FCS/"
-fcs.file <- paste0(fcs.path, "D12.fcs")
+fcs.file <- paste0(fcs.path, "D0.fcs")
 
 # Read flow cytomery data via flowCore::read.FCS
 fcs.data <- flowCore::read.FCS(filename = fcs.file)
@@ -180,7 +180,7 @@ Before merge FCS data into one matrix, gating must be performed to filter dead c
 ``` {r preprocess-gating-flowSpy, eval = FALSE}
 
 # gating FCS matrix using flowSpy::gatingMatrix
-lower.gate <- c(FSC_A = 60000, SSC_A = 30000,
+lower.gate <- c(FSC_A = 55000, SSC_A = 30000,
                 FSC_H = 40000, FSC_W = 60000,
                 SSC_H = 20000, SSC_W = 60000)
 upper.gate <- c(FSC_A = 200000, SSC_A = 150000,
@@ -189,7 +189,11 @@ upper.gate <- c(FSC_A = 200000, SSC_A = 150000,
 
 fcs.d0.filter <- gatingMatrix(fcs.d0, lower.gate = lower.gate, upper.gate = upper.gate)
 
-heatscatter(fcs.d0.filter[, "FSC_A"], fcs.d0.filter[, "SSC_A"], 
+# filteration of cells by a constrained boundary
+markers <- c("CD34", "CD43")
+fcs.d0.filter <- constraintMatrix(fcs.d0.filter, markers = markers)
+
+heatscatter(fcs.d0.filter[, "CD34"], fcs.d0.filter[, "CD43"], 
             cexplot = 0.3, main = "FCS in Day 0 after Gating", 
             xlab = "FSC_A", ylab = "SSC_A")
 
@@ -208,8 +212,9 @@ set.seed(1)
 fcs.d0.downsample <- fcs.d0.filter[sample(1:nrow(fcs.d0.filter), sample.size), ]
 
 # output data 
-write.table(fcs.d2.downsample, "../../dataset/D0.sub2000.txt", 
+write.table(fcs.d0.downsample, "../../dataset/D0.sub2000.txt", 
             row.names = F, col.names = T, quote = F, sep = "\t")
+
 ```
 
 ### 3.2 Build an FSPY object

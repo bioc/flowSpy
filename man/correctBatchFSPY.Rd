@@ -5,7 +5,7 @@
 \title{correctBatchFSPY}
 \usage{
 correctBatchFSPY(object, batch = NULL, par.prior = TRUE,
-  mean.only = TRUE, verbose = FALSE)
+  mean.only = TRUE, verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -18,10 +18,10 @@ FALSE indicates non-parametric adjustments will be used.}
 \item{mean.only}{logical. FALSE If TRUE ComBat only corrects the mean of the batch
 effect (no scale adjustment)}
 
+\item{...}{Parameters passing to \code{\link[ComBat]{sva}} function}
+
 \item{prior.plots}{logical. TRUE give prior plots with black as a kernel
 estimate of the empirical batch effect density and red as the parametric.}
-
-\item{...}{Parameters passing to \code{\link[ComBat]{sva}} function}
 }
 \value{
 An FSPY object after removing batch effect

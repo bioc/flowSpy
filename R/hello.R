@@ -52,8 +52,7 @@ batch <- factor(fspy.meta.data$stage, labels = 1:length(unique(raw$sample)))
 
 object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
                      meta.data = fspy.meta.data,
-                     log.transform = T, batch.correct = T,
-                     batch = batch,
+                     log.transform = T,
                      verbose = T)
 
 object <- runKNN(object, knn = 30)
@@ -79,7 +78,7 @@ plot(object@network$mst)
 
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 plot2D(object, item.use = c("DC1", "DC2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 

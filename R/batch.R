@@ -22,7 +22,7 @@
 #'
 #'
 correctBatchFSPY <- function(object, batch = NULL, par.prior = TRUE,
-                             mean.only = TRUE, verbose = FALSE) {
+                             mean.only = TRUE, verbose = FALSE, ...) {
   log.data <- object@log.data
 
   # correct batch effect using ComBat

@@ -1,7 +1,7 @@
 #'
 #' Apply gating on the matrix data
 #'
-#' @param x S4 matrix
+#' @param x matrix
 #' @param lower.gate vector. Gating parameter, the name of the vector is the marker name, and
 #'    the value of the vector is the lower bound of gating cutoff.
 #' @param upper.gate vector. Gating parameter, the name of the vector is the marker name, and

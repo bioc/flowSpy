@@ -126,6 +126,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'    scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
 #'    information.
 #' @param verbose logical. Whether to print calculation progress.
+#' @param ... paramters pass to \code[correctBatchFSPY] function.
 #'
 #' @export
 #'
@@ -137,7 +138,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = F,
-                       log.transform = T, verbose = F) {
+                       log.transform = T, verbose = F, ...) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {

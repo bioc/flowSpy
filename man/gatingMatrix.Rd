@@ -7,7 +7,7 @@
 gatingMatrix(x, lower.gate = NULL, upper.gate = NULL)
 }
 \arguments{
-\item{x}{S4 matrix}
+\item{x}{matrix}
 
 \item{lower.gate}{vector. Gating parameter, the name of the vector is the marker name, and
 the value of the vector is the lower bound of gating cutoff.}

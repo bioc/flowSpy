@@ -56,3 +56,47 @@ fetchPlotMeta <- function(object, verbose = F) {
 
 
 
+#'
+#' constraintMatrix
+#'
+#' @description
+#' constraint FCS data by a provid cutoff
+#'
+#' @param x matrix
+#' @param cutoff numeric. Cutoff of the constraint value
+#' @param markers character. Markers used in the calculation of constraint model.
+#' @param method character. the distance measure to be used.
+#'    This must be one of "euclidean", "maximum", "manhattan",
+#'    "canberra", "binary" or "minkowski".
+#'
+#' @export
+#'
+constraintMatrix <- function(x, cutoff = 0.99, markers = NULL, method = "euclidean") {
+
+  if (!is.numeric(x)) stop(Sys.time(), " [ERROR] x must be a matrix ")
+
+  if (is.null(markers)) markers <- colnames(x)
+  if (!all(markers %in% colnames(x))) stop(Sys.time(), " [ERROR] markers must belong to the colnames of x ")
+
+  sub <- abs(x[, markers])
+  if (length(markers) > 1) {
+    sub.mean <- colMeans(sub)
+    d <- sapply(1:nrow(sub), function(aa) dist(rbind(sub[aa,], sub.mean), method = method))
+  } else {
+    sub.mean <- mean(sub)
+    d <- sapply(1:length(sub), function(aa) dist(rbind(sub[aa], sub.mean), method = method))
+  }
+
+  filter.mat <- x[order(d), ]
+  filter.mat <- filter.mat[1:floor(cutoff*dim(filter.mat)[1]), ]
+
+  return(filter.mat)
+}
+
+
+
+
+
+
+
+

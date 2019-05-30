@@ -5,7 +5,7 @@
 \title{create an FSPY object}
 \usage{
 createFSPY(raw.data, markers, meta.data, batch = NULL,
-  batch.correct = F, log.transform = T, verbose = F)
+  batch.correct = F, log.transform = T, verbose = F, ...)
 }
 \arguments{
 \item{raw.data}{matrix. Raw data read from FCS file after perform preprocessing.}
@@ -21,6 +21,8 @@ scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{f
 information.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{paramters pass to \code[correctBatchFSPY] function.}
 }
 \value{
 An FSPY object with raw.data and markers and meta.data
