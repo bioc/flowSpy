@@ -47,7 +47,6 @@ fspy.raw.data <- raw.data
 
 save(fspy.meta.data, fspy.raw.data, file = "data/FSPYdata.rda")
 
-
 batch <- factor(fspy.meta.data$stage, labels = 1:length(unique(raw$sample)))
 
 object <- createFSPY(raw.data = fspy.raw.data, markers = markers,

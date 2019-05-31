@@ -22,14 +22,14 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-**This is a quick start version of flowSpy**
+This tutorial contains key steps of flowSpy workflow, including how to build an FSPY object, how to run clustering and dimension reduction, how to build an MST tree, how to run pseudotime and how to inference trajectory. It took about four minutes to run the whole analysis workflow with 12000 cells and 9 markers. 
 
-This tutorial contains key steps of flowSpy workflow, including how to build an FSPY object, how to run clustering and dimension redction, how to build an MST tree, how to run pseudotime and how to inference trajectory. This worklow will last for with 12000 cells and 9 markers on .
+If you want to see detailed information of flowSpy workflow, please see the vignette **Tutorial of flowSpy**
 
 
+``` {r quick-build, eval = FALSE}
 
-``` {r quick-build, eval = TRUE}
-
+# Loading packages
 suppressMessages({
 library(ggplot2)
 library(LSD)
@@ -41,10 +41,12 @@ data("FSPYdata")
 
 markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
 
+# Show time point when the whole workflow is started
 Sys.time()
 
 # Create an FSPY object using fspy.meta.data and fspy.log.data
-fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
+fspy <- createFSPY(raw.data = fspy.raw.data, 
+                   markers = markers,
                    meta.data = fspy.meta.data,
                    log.transform = T)
 
@@ -74,31 +76,28 @@ fspy <- runUMAP(fspy)
 fspy <- buildTree(fspy, cluster.type = "som", dim.type = "umap")
 
 # Visualize Tree
-plotTree(fspy, show.node.name = T, cex.size = 1.5) + scale_colour_gradientn(colors = c("#0066FF", "#FF0000"))
-
-plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", main = "UMAP", show.cluser.id = T)
+plotTree(fspy, show.node.name = T, cex.size = 1.5) + 
+  scale_colour_gradientn(colors = c("#0066FF", "#FF0000"))
 
 # Define root cells
+# The root id is from flowSpy tree, and is defined by users
 fspy <- defRootCells(fspy, root.cells = c(34))
 
 # Run pseudotime
 fspy <- runPseudotime(fspy)
 
 # Define leaf cells
+# The root id is from flowSpy tree, and is defined by users
 fspy <- defLeafCells(fspy, leaf.cells = c(4,9,29), pseudotime.cutoff = 0.5)
 
 # Run walk from root cells to leaf cells
 fspy <- runWalk(fspy)
 
-# Plot pseudotime density
-plotPseudotimeDensity(fspy)
-
-# Plot pseudotime trajectory
-plotPseudotimeTraj(fspy, var.cols = T) + scale_colour_gradientn(colors = c("#000099","#3399FF","#FFCCCC","#FF0000"))
-
-plotPseudotimeTraj(fspy, cutoff = 0.1, var.cols = T) + scale_colour_gradientn(colors =  c("#000099","#3399FF","#FFCCCC","#FF0000"))
-
+# Show time point when the whole workflow is finished
 Sys.time()
+
+# Save object
+save(fspy, file = "Path to you output directory")
 
 ```
 
