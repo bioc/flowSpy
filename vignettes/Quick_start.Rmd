@@ -11,7 +11,7 @@ output:
   pdf_document:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Introduction to flowSpy}
+  %\VignetteIndexEntry{Quick start of flowSpy}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   %\VignetteEncoding{UTF-8}
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
 
 This tutorial contains key steps of flowSpy workflow, including how to build an FSPY object, how to run clustering and dimension reduction, how to build an MST tree, how to run pseudotime and how to inference trajectory. It took about four minutes to run the whole analysis workflow with 12000 cells and 9 markers. 
 
-If you want to see detailed information of flowSpy workflow, please see the vignette **Tutorial of flowSpy**
+If you want to see the detailed information of flowSpy workflow, please see the vignette **Tutorial of flowSpy**
 
 
 ``` {r quick-build, eval = FALSE}
@@ -40,9 +40,6 @@ library(LSD)
 data("FSPYdata")
 
 markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
-
-# Show time point when the whole workflow is started
-Sys.time()
 
 # Create an FSPY object using fspy.meta.data and fspy.log.data
 fspy <- createFSPY(raw.data = fspy.raw.data, 
@@ -76,8 +73,7 @@ fspy <- runUMAP(fspy)
 fspy <- buildTree(fspy, cluster.type = "som", dim.type = "umap")
 
 # Visualize Tree
-plotTree(fspy, show.node.name = T, cex.size = 1.5) + 
-  scale_colour_gradientn(colors = c("#0066FF", "#FF0000"))
+plotTree(fspy, show.node.name = T, cex.size = 1.5)
 
 # Define root cells
 # The root id is from flowSpy tree, and is defined by users
