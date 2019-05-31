@@ -137,8 +137,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 #'
 createFSPY <- function(raw.data, markers, meta.data,
-                       batch = NULL, batch.correct = F,
-                       log.transform = T, verbose = F, ...) {
+                       batch = NULL, batch.correct = FALSE,
+                       log.transform = TRUE, verbose = FALSE, ...) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {

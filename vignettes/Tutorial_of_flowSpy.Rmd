@@ -1,5 +1,5 @@
 ---
-title: "Introduction of flowSpy"
+title: "Tutorial of flowSpy"
 author: "Yuting Dai"
 package: flowSpy
 date: "`r Sys.Date()`"
@@ -209,7 +209,7 @@ In order to ensure the efficiency of calculation and avoiding migration for one 
 ``` {r preprocess-downsampling, eval = FALSE}
 
 # Set sample size
-sample.size = 10000
+sample.size = 2000
 
 # Perform downsampling
 # Set random seed to make the result repeatable
@@ -218,14 +218,16 @@ fcs.d0.downsample <- fcs.d0.filter[sample(1:nrow(fcs.d0.filter), sample.size), ]
 
 # output data 
 output.path <- "Path to your output directory"
-write.table(fcs.d0.downsample, past0(output.path, "/D2.sub10000.txt"), 
+write.table(fcs.d0.downsample, past0(output.path, "/D2.sub2000.txt"), 
             row.names = F, col.names = T, quote = F, sep = "\t")
 
 ```
 
 ### 3.2 Build an FSPY object
 
-``` {r load-data, eval = F, fig.width = 9, fig.height = 6}
+This tutorial was based on the induced HPSCs into 
+
+``` {r load-data, eval = TRUE}
 
 # load raw.data and meta.data of flowSy
 data("FSPYdata")
@@ -237,6 +239,9 @@ head(fspy.raw.data)
 # show cell number in each time point
 table(fspy.meta.data$stage)
 
+```
+
+``` {r load-data, eval = FALSE}
 markers.plot <- c("CD43", "CD90")
 
 par(mfrow=c(2,3))

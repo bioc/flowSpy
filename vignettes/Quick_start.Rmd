@@ -1,0 +1,117 @@
+---
+title: "Quick start of flowSpy"
+author: "Yuting Dai"
+package: flowSpy
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    toc: true
+    theme: cayman
+    highlight: github
+  pdf_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to flowSpy}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r use-libs, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, 
+                      warning = FALSE, message = TRUE)
+```
+
+**This is a quick start version of flowSpy**
+
+This tutorial contains key steps of flowSpy workflow, including how to build an FSPY object, how to run clustering and dimension redction, how to build an MST tree, how to run pseudotime and how to inference trajectory. This worklow will last for with 12000 cells and 9 markers on .
+
+
+
+``` {r quick-build, eval = TRUE}
+
+suppressMessages({
+library(ggplot2)
+library(LSD)
+library(flowSpy)
+library(LSD)
+})
+
+data("FSPYdata")
+
+markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
+
+Sys.time()
+
+# Create an FSPY object using fspy.meta.data and fspy.log.data
+fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
+                   meta.data = fspy.meta.data,
+                   log.transform = T)
+
+# See information in object
+fspy
+
+# Run KNN
+fspy <- runKNN(fspy, knn = 30)
+
+# Run cluster based on SOM 
+set.seed(1)
+fspy <- runCluster(fspy, xdim = 6, ydim = 6)
+
+# Run PCA
+fspy <- runFastPCA(fspy)
+
+# Run tSNE
+fspy <- runTSNE(fspy)
+
+# Run Diffusion Map
+fspy <- runDiffusionMap(fspy)
+
+# Run UMAP
+fspy <- runUMAP(fspy)
+
+# Build Trees using Minimum Spanning Tree (MST) 
+fspy <- buildTree(fspy, cluster.type = "som", dim.type = "umap")
+
+# Visualize Tree
+plotTree(fspy, show.node.name = T, cex.size = 1.5) + scale_colour_gradientn(colors = c("#0066FF", "#FF0000"))
+
+plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", main = "UMAP", show.cluser.id = T)
+
+# Define root cells
+fspy <- defRootCells(fspy, root.cells = c(34))
+
+# Run pseudotime
+fspy <- runPseudotime(fspy)
+
+# Define leaf cells
+fspy <- defLeafCells(fspy, leaf.cells = c(4,9,29), pseudotime.cutoff = 0.5)
+
+# Run walk from root cells to leaf cells
+fspy <- runWalk(fspy)
+
+# Plot pseudotime density
+plotPseudotimeDensity(fspy)
+
+# Plot pseudotime trajectory
+plotPseudotimeTraj(fspy, var.cols = T) + scale_colour_gradientn(colors = c("#000099","#3399FF","#FFCCCC","#FF0000"))
+
+plotPseudotimeTraj(fspy, cutoff = 0.1, var.cols = T) + scale_colour_gradientn(colors =  c("#000099","#3399FF","#FFCCCC","#FF0000"))
+
+Sys.time()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

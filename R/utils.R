@@ -9,7 +9,7 @@
 #' @export
 #'
 #'
-updatePlotMeta <- function(object, verbose = T) {
+updatePlotMeta <- function(object, verbose = TRUE) {
   plot.meta <- object@meta.data
   if (dim(object@log.data)[2] > 0) {
     plot.meta <- cbind(plot.meta, object@log.data)
@@ -67,7 +67,7 @@ fetchPlotMeta <- function(object, verbose = F) {
 #' @export
 #'
 #'
-fetchCell <- function(object, logical.connect = "or", verbose = F, ... ) {
+fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 
   object <- updatePlotMeta(object, verbose = verbose)
 

@@ -22,7 +22,7 @@
 #'
 subsetFSPY <- function(object, cells = NULL,
                        knn = NA,
-                       verbose = F) {
+                       verbose = FALSE) {
   if (is.null(cells)) {
     warning(Sys.time(), " [WARNING] cells must be provided.")
     cells <- rownames(object@log.data)
