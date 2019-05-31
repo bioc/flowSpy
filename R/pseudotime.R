@@ -55,7 +55,7 @@ defRootCells <- function(object, root.cells = NULL, verbose = F) {
 #' @export
 #'
 #'
-defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = T) {
+defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = F) {
   if (length(object@leaf.cells) != 0) message(Sys.time(), " [INFO] leaf.cells in FSPY object exist, they will be replaced.")
 
   if (!is.vector(leaf.cells)) stop(Sys.time(), " [ERROR] leaf.cells must be a vector")

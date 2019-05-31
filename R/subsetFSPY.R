@@ -11,10 +11,7 @@
 #'
 #' @param object An FSPY object
 #' @param cells vector, Names of the cells to retain.
-#' @param id.keep numeric or character. Name of the id to retain
-#' @param id.name character. Name of the column which id.keep is in it.
-#' @param recalculate logic. Whether to recalculate the PCA, tSNE, destiny and umap score.
-#' @param knn numeric. When recalculate is TRUE.
+#' @param knn numeric. If is NA, the KNN will be equal to the knn number in the input FSPY object.
 #' @param verbose logic. Whether to print calculation progress.
 #'
 #' @return An FSPY object
@@ -24,21 +21,26 @@
 #' @export
 #'
 subsetFSPY <- function(object, cells = NULL,
-                       id.keep = NULL, id.name = NULL,
-                       recalculate = F, knn = NA,
+                       knn = NA,
                        verbose = F) {
+  if (is.null(cells)) {
+    warning(Sys.time(), " [WARNING] cells must be provided.")
+    cells <- rownames(object@log.data)
+  }
   # Make sure all cells are actually in the object
   cells.keep <- intersect(cells, rownames(object@log.data))
 
-  object@log.data <- object@log.data[cells.keep, ]
-  object@meta.data <- object@meta.data[cells.keep, ]
+  raw.data <- object@raw.data[cells.keep, ]
+  log.data <- object@log.data[cells.keep, ]
+  meta.data <- object@meta.data[cells.keep, ]
 
-  if (!recalculate) {
-    if(!any(dim(object@pca.scores) == 0))  object@pca.scores <- object@pca.scores[cells.keep, ]
-    if(!any(dim(object@tsne.value) == 0))  object@tsne.value <- object@tsne.value[cells.keep, ]
-  }
+  if (verbose) message(Sys.time(), " [INFO] Subset FSPY object.")
+  object.new <- new("FSPY", raw.data = raw.data,
+                    meta.data = meta.data,
+                    log.data = log.data,
+                    markers = object@markers, markers.idx = object@markers.idx)
 
-  return(object)
+  return(object.new)
 }
 
 

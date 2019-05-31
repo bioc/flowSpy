@@ -22,7 +22,7 @@ information.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
-\item{...}{paramters pass to \code[correctBatchFSPY] function.}
+\item{...}{paramters pass to \code{correctBatchFSPY} function.}
 }
 \value{
 An FSPY object with raw.data and markers and meta.data

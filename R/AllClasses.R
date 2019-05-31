@@ -126,7 +126,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'    scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
 #'    information.
 #' @param verbose logical. Whether to print calculation progress.
-#' @param ... paramters pass to \code[correctBatchFSPY] function.
+#' @param ... paramters pass to \code{correctBatchFSPY} function.
 #'
 #' @export
 #'

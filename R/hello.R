@@ -78,30 +78,30 @@ plot(object@network$mst)
 
 plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 plot2D(object, item.use = c("DC1", "DC2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 
 
 # pseudotime
-object <- defRootCells(object, root.cells = c(18,11))
+object <- defRootCells(object, root.cells = c(34))
 
 object <- runPseudotime(object)
 
-object <- defLeafCells(object, leaf.cells = c(5,12,29), pseudotime.cutoff = 0.5)
+object <- defLeafCells(object, leaf.cells = c(4,29,9), pseudotime.cutoff = 0.5)
 
-object <- runWalk(object)
+object <- runWalk(object, verbose = T)
+
+fetch.cells <- fetchCell(object, traj.value.log = 0.2, is.root.cells = 1, is.leaf.cells = 1)
+sub.obj <- subsetFSPY(object, cells = fetch.cells)
 
 
 plotPseudotimeDensity(object)
 plotPseudotimeTraj(object, var.cols = T) + scale_colour_gradientn(colors = c("#00599F",  "#EEEEEE", "#FF3222"))
-plotPseudotimeTraj(object, cutoff = 0.4, var.cols = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-
+plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 plot2D(object, item.use = c("pseudotime", "CD43"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
-
-
 
 plot2D(object, item.use = c("CD43", "CD34"), color.by = "stage", alpha = 1, main = "PCA")
 
@@ -130,7 +130,7 @@ plot.info.sub <- plot.info.sub[order(plot.info.sub$pseudotime), ]
 plot.info.sub <- plot.info.sub[, match(c("CD34", "CD43","CD31","CD45RA","CD38","CD49f","CD90","FLK1","CD73"), colnames(plot.info.sub))]
 pheatmap(plot.info.sub,
          color = colorRampPalette(c("#00599F", "#00599F", "#FFFFFF", "#FF3222", "#FF3222"))(100),
-         cluster_rows = F, cluster_cols = F, scale = "column")
+         cluster_rows = F, cluster_cols = F, scale = "column", fontsize_row = 0.01)
 
 
 plot.info.sub <- plot.info[, c("pseudotime", "traj.value.log")]

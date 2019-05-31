@@ -4,21 +4,14 @@
 \alias{subsetFSPY}
 \title{subset FSPY object}
 \usage{
-subsetFSPY(object, cells = NULL, id.keep = NULL, id.name = NULL,
-  recalculate = F, knn = NA, verbose = F)
+subsetFSPY(object, cells = NULL, knn = NA, verbose = F)
 }
 \arguments{
 \item{object}{An FSPY object}
 
 \item{cells}{vector, Names of the cells to retain.}
 
-\item{id.keep}{numeric or character. Name of the id to retain}
-
-\item{id.name}{character. Name of the column which id.keep is in it.}
-
-\item{recalculate}{logic. Whether to recalculate the PCA, tSNE, destiny and umap score.}
-
-\item{knn}{numeric. When recalculate is TRUE.}
+\item{knn}{numeric. If is NA, the KNN will be equal to the knn number in the input FSPY object.}
 
 \item{verbose}{logic. Whether to print calculation progress.}
 }

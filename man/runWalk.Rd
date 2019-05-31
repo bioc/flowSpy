@@ -4,14 +4,20 @@
 \alias{runWalk}
 \title{Walk between root cells and leaf cells}
 \usage{
-runWalk(object, mode = "undirected", max.run = 20, weighted = T,
-  verbose = F, ...)
+runWalk(object, mode = "undirected", max.run.forward = 20,
+  backward.walk = TRUE, max.run.backward = 20, verbose = F, ...)
 }
 \arguments{
 \item{object}{An FSPY object}
 
 \item{mode}{character. Specifies how igraph should interpret the supplied matrix.
 Possible values are: directed, undirected, upper, lower, max, min, plus.}
+
+\item{max.run.forward}{numeric. Maximum cycles of forward walk.}
+
+\item{backward.walk}{logical. Whether to run backward walk.}
+
+\item{max.run.backward}{numeric. Maximum cycles of backward walk.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 

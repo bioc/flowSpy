@@ -88,11 +88,11 @@ The [datasets](https://github.com/ytdai/flowSpy-dataset) analyzed in this study 
 
 This dataset was generated based on an in-house induced differentiation protocol of human embryonic stem cells. Nine cellular surface markers were evaluated during the experiment: CD34, CD43, CD38, CD90, CD49f, CD31, CD45RA, FLK1 and CD73. By add different cytokines in differen days, Human embryonic stem cell line HUES 9 (HUES9) were directional differentiated into mesodermal cells (Day 4), hemogenic endothelium (Day 6) and Hematopoietic Stem/Progenitor cells (HSPC, Day 8) in succession. Cellular surface markers were continuous changes during the induction process.
 
-The main goal of this analysis workflow was to identify cell subtypes in each time point, track the differential trajctory of cell populations, calculation pseudotime of each cell and filteration of cells which play an key role in this biological progress.
+The main goal of this workflow was to identify cell subtypes in each time point, track the differential trajctory of cell populations, calculation pseudotime of each cell and filteration of cells which may play an key role in the biological progress.
 
 ### 3.1 Preprocessing
 
-The preprocessing steps in flowSpy are based on some packages on Bioconductor. It need to be pre-installed before running flowSpy. For example, the FCS data is read via `flowCore::read.FCS`, and the compensation is made via `flowCore::compensate`. Also, you can visulaze different channels using `flowViz` and preform transformation using `flowCore::logTransform`.
+The preprocessing steps in flowSpy are based on some packages on Bioconductor. Several packages need to be pre-installed before running flowSpy. For example, the FCS data is read via `flowCore::read.FCS`, and the compensation is made via `flowCore::compensate`. Also, you can visulaze different channels using `flowViz` and preform transformation using `flowCore::logTransform`.
 
 
 ``` {r preprocess-load-packages, eval = T}
@@ -105,6 +105,7 @@ library(flowViz)
 library(flowSpy)
 library(LSD)
 })
+
 ```
 
 
@@ -138,8 +139,7 @@ xyplot(`SSC-A` ~ `FSC-A`, data = fcs.data)
 
 <center> **flowVis of FSC-H and SSC-H"** </center>
 
-Before started building an FSPY object, it'e better to rename the colnames of `fcs.data`. 
-
+Before started building an FSPY object, it's better to rename the colnames of `fcs.data`. You can use `colnames(fcs.data)` to see the raw names of FCS data.
 
 ``` {r preprocess-rename, eval = FALSE}
 # Renames of colnames of fcs.data
@@ -189,30 +189,36 @@ upper.gate <- c(FSC_A = 200000, SSC_A = 150000,
 
 fcs.d0.filter <- gatingMatrix(fcs.d0, lower.gate = lower.gate, upper.gate = upper.gate)
 
-# filteration of cells by a constrained boundary
+# However, some cells present CD34 and CD43 positive in Day 0, so it's
+# recommended to perform filtration of cells by a constrained boundary
 markers <- c("CD34", "CD43")
 fcs.d0.filter <- constraintMatrix(fcs.d0.filter, markers = markers)
 
 heatscatter(fcs.d0.filter[, "CD34"], fcs.d0.filter[, "CD43"], 
-            cexplot = 0.3, main = "FCS in Day 0 after Gating", 
-            xlab = "FSC_A", ylab = "SSC_A")
+            cexplot = 0.3, main = "FCS in Day 0 after Gating and Filteration", 
+            xlab = "CD34", ylab = "CD43")
 
 ```
 
-<center> <img src="../man/figures/heatscatter-2.png" alt="Heatscatter plot of FSC-A and SSC-A" height=50% width=50% /> </center>
+<center> <img src="../man/figures/heatscatter-2.png" alt="Heatscatter plot of CD34 and CD43" height=50% width=50% /> </center>
 
-<center> **Heatscatter plot of FSC-A and SSC-A after Gating"** </center>
+<center> **Heatscatter plot of CD34 and CD43 after Gating"** </center>
 
-In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling step must be taken to make sure the merged FCS data matrix enrolled the same sample sizes for each day.
+In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling step must be taken to make sure the merged FCS data matrix enrolled the same sample size for each day.
 
 ``` {r preprocess-downsampling, eval = FALSE}
 
-sample.size = 2000
+# Set sample size
+sample.size = 10000
+
+# Perform downsampling
+# Set random seed to make the result repeatable
 set.seed(1)
 fcs.d0.downsample <- fcs.d0.filter[sample(1:nrow(fcs.d0.filter), sample.size), ]
 
 # output data 
-write.table(fcs.d0.downsample, "../../dataset/D0.sub2000.txt", 
+output.path <- "Path to your output directory"
+write.table(fcs.d0.downsample, past0(output.path, "/D2.sub10000.txt"), 
             row.names = F, col.names = T, quote = F, sep = "\t")
 
 ```

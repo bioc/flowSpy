@@ -1,10 +1,10 @@
 Package: flowSpy
 Type: Package
 Title: An Analysis Toolkit for Flow Cytometry Data
-Version: 0.1.3
+Version: 0.1.4
 Date: 2019-05-07
 Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
-            email = "forlynna@sjtu.edu.cn"), ORCID = "0000-0001-8275-2115"))
+            email = "forlynna@sjtu.edu.cn"))
 Author: Yuting Dai [aut, cre, cph]
 Maintainer: Yuting Dai <forlynna@sjtu.edu.cn>
 Description: flowSpy offers visualization options for flow cytometry data.

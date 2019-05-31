@@ -9,6 +9,9 @@
 #' @param object An FSPY object
 #' @param mode character. Specifies how igraph should interpret the supplied matrix.
 #'    Possible values are: directed, undirected, upper, lower, max, min, plus.
+#' @param max.run.forward numeric. Maximum cycles of forward walk.
+#' @param backward.walk logical. Whether to run backward walk.
+#' @param max.run.backward numeric. Maximum cycles of backward walk.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to calculation function.
 #'
@@ -18,7 +21,8 @@
 #' @export
 #'
 runWalk <- function(object, mode = "undirected",
-                    max.run = 20, weighted = T,
+                    max.run.forward = 20,
+                    backward.walk = TRUE, max.run.backward = 20,
                     verbose = F, ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing.")
@@ -33,6 +37,9 @@ runWalk <- function(object, mode = "undirected",
   adj <- matrix(0, ncol(mat), ncol(mat))
   rownames(adj) <- colnames(adj) <- colnames(mat)
   pseudotime <- object@meta.data$pseudotime
+
+  # generating a adjacency matrix by nearest neighbors
+  if (verbose) message(Sys.time(), " [INFO] Generating a adjacency matrix.")
   for(i in seq_len(ncol(mat))) {
     idx <- object@knn.index[i,][ pseudotime[object@knn.index[i,]] > pseudotime[i]  ]
     adj[i, colnames(mat)[idx]] <- 1
@@ -41,21 +48,41 @@ runWalk <- function(object, mode = "undirected",
   # remove self loops
   g <- simplify(g)
 
+  if (verbose) message(Sys.time(), " [INFO] Walk forward.")
   root.cells <- object@root.cells
-  if (length(root.cells) > max.run ) {
-    root.cells <- as.character(sample(root.cells, max.run))
+  if (length(root.cells) >= max.run.forward ) {
+    root.cells <- as.character(sample(root.cells, max.run.forward))
+  } else {
+    warning(Sys.time(), " [WARNING] max.run.forward is too large.")
   }
-  walk <- lapply(root.cells, function(x) shortest_paths(g, from = x, to = object@leaf.cells)$vpath )
+  # run forward
+  walk.forward <- lapply(root.cells, function(x) shortest_paths(g, from = x, to = object@leaf.cells)$vpath )
 
-  cell.info <- object@meta.data$cell[unlist(walk)]
+  # run run backward
+  if (backward.walk) {
+    if (verbose) message(Sys.time(), " [INFO] Walk backward.")
+    leaf.cells <- object@leaf.cells
+    if (length(leaf.cells) >= max.run.backward ) {
+      leaf.cells <- as.character(sample(leaf.cells, max.run.backward))
+    } else {
+      warning(Sys.time(), " [WARNING] max.run.backward is too large.")
+    }
+    walk.backward <- lapply(leaf.cells, function(x) shortest_paths(g, from = x, to = object@root.cells)$vpath )
+  } else {
+    walk.backward <- NULL
+    max.run.backward <- 0
+  }
+
+
+  cell.info <- object@meta.data$cell[unlist(c(walk.forward, walk.backward))]
   cell.info <- as.data.frame(table(cell.info))
 
-  object@meta.data$traj.value <- cell.info$Freq[match( object@meta.data$cell, cell.info$cell.info)] / max.run
+  object@meta.data$traj.value <- cell.info$Freq[match( object@meta.data$cell, cell.info$cell.info)] / (max.run.forward + max.run.backward)
   object@meta.data$traj.value[object@root.cells] = 0
   object@meta.data$traj.value[object@leaf.cells] = 0
 
-  object@walk <- list(max.run = max.run,
-                      walk = walk)
+  object@walk <- list(max.run.forward = max.run.forward,
+                      max.run.backward = max.run.backward)
 
   object@meta.data$traj.value.log <- log10(object@meta.data$traj.value + 1)
 

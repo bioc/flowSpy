@@ -54,6 +54,60 @@ fetchPlotMeta <- function(object, verbose = F) {
   return(object@plot.meta)
 }
 
+#'
+#' Fetching cellls of FSPY
+#'
+#' @name fetchCell
+#'
+#' @param object An FSPY object
+#' @param logical.connect character. "and" or "or"
+#' @param verbose logical. Whether to print calculation progress.
+#' @param ... Paramters to pass to limitation
+#'
+#' @export
+#'
+#'
+fetchCell <- function(object, logical.connect = "or", verbose = F, ... ) {
+
+  object <- updatePlotMeta(object, verbose = verbose)
+
+  param.list <- list(...)
+  plot.meta <- object@plot.meta
+
+  cell.left <- NULL
+
+  if (length(param.list) > 0) {
+    param.list <- param.list[names(param.list) %in% colnames(plot.meta)]
+    for (i in 1:length(param.list)) {
+      sub <- param.list[[i]]
+      sub.name <- names(param.list)[i]
+      if (sub.name %in% c("cell", "stage", "is.root.cells", "is.leaf.cells")) {
+        cell.sub <- plot.meta[plot.meta[, sub.name] %in% sub, "cell"]
+      } else if (grepl(".id$", sub.name)) {
+        cell.sub <- plot.meta[plot.meta[, sub.name] %in% sub, "cell"]
+      } else if (is.numeric(sub)) {
+        if (length(sub) == 1) {
+          cell.sub <- plot.meta[which(plot.meta[, sub.name] > sub[1]), "cell"]
+        } else {
+          cell.sub <- plot.meta[which((plot.meta[, sub.name] > sub[1]) & (plot.meta[, sub.name] < sub[2])), "cell"]
+        }
+      } else {
+        cell.sub <- NULL
+      }
+      if (logical.connect == "and") {
+        cell.left <- intersect(cell.left, cell.sub)
+      } else if (logical.connect == "or") {
+        cell.left <- union(cell.left, cell.sub)
+      } else {
+        stop(Sys.time(), " [ERROR] Unidentified logical.connect")
+      }
+    }
+  }
+
+  return(cell.left)
+}
+
+
 
 
 #'

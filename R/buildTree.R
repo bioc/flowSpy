@@ -18,7 +18,7 @@
 buildTree <- function(object, method = "euclidean",
                       cluster.type = "som",
                       dim.type = "tsne", dim.use = 1:2,
-                      verbose = T) {
+                      verbose = F) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree.")
   if (missing(object)) stop(Sys.time(), " [ERROR] FSPY object is missing.")

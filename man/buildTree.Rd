@@ -5,7 +5,7 @@
 \title{buildTree}
 \usage{
 buildTree(object, method = "euclidean", cluster.type = "som",
-  dim.type = "tsne", dim.use = 1:2, verbose = T)
+  dim.type = "tsne", dim.use = 1:2, verbose = F)
 }
 \arguments{
 \item{object}{an FSPY object}

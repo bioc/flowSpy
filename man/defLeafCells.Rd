@@ -5,7 +5,7 @@
 \title{definition of leaf cells}
 \usage{
 defLeafCells(object, leaf.cells = NULL, pseudotime.cutoff = 0,
-  verbose = T)
+  verbose = F)
 }
 \arguments{
 \item{object}{an FSPY object}
