@@ -11,7 +11,7 @@ Description: flowSpy offers visualization options for flow cytometry data.
     PCA, tSNE, diffusion map and SOM were included in base function section, 
     and pseudotime, differentiation tree, differentiation trajectory, sankey 
     diagrams and network were included in improved function section.
-Depends: R (>= 3.4), igraph
+Depends: R (>= 3.5), igraph
 Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
         flowUtils, Biobase, Matrix, flowCore, 
         matrixStats, methods, mclust, prettydoc
