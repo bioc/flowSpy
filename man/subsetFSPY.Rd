@@ -4,7 +4,7 @@
 \alias{subsetFSPY}
 \title{subset FSPY object}
 \usage{
-subsetFSPY(object, cells = NULL, knn = NA, verbose = F)
+subsetFSPY(object, cells = NULL, knn = NA, verbose = FALSE)
 }
 \arguments{
 \item{object}{An FSPY object}

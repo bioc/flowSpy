@@ -4,7 +4,7 @@
 \alias{updatePlotMeta}
 \title{Update plot metadata of FSPY}
 \usage{
-updatePlotMeta(object, verbose = T)
+updatePlotMeta(object, verbose = TRUE)
 }
 \arguments{
 \item{object}{An FSPY object}

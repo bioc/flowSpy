@@ -4,7 +4,7 @@
 \alias{fetchCell}
 \title{Fetching cellls of FSPY}
 \usage{
-fetchCell(object, logical.connect = "or", verbose = F, ...)
+fetchCell(object, logical.connect = "or", verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{An FSPY object}

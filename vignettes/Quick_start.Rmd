@@ -55,7 +55,7 @@ fspy <- runKNN(fspy, knn = 30)
 
 # Run cluster based on SOM 
 set.seed(1)
-fspy <- runCluster(fspy, xdim = 6, ydim = 6)
+fspy <- runCluster(fspy)
 
 # Run PCA
 fspy <- runFastPCA(fspy)
