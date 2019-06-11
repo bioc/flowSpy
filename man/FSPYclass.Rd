@@ -19,7 +19,7 @@ All information stored in FSPY object. You can use \code{creatFSPY} to
 
 \item{\code{meta.data}}{data.frame. Meta data information, and colnames of "stage" and "cell" are required.}
 
-\item{\code{markers}}{vector. Markers used in the calculation of PCA, tSNE, destiny and umap.}
+\item{\code{markers}}{vector. Markers used in the calculation of PCA, tSNE, diffusion map and UMAP.}
 
 \item{\code{markers.idx}}{vector. Index of markers used in the calculation of PCA, tSNE, destiny and umap.}
 
@@ -39,7 +39,7 @@ And each row of the \code{knn.distance} contains the distance of its nearest nei
 
 \item{\code{kmeans}}{list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}}
 
-\item{\code{pca.sdev,pca.value,pca.scores}}{Pca information of FSPY object which are
+\item{\code{pca.sdev,pca.value,pca.scores}}{PCA information of FSPY object which are
 generated from \code{\link[gmodels]{fast.prcomp}}.}
 
 \item{\code{tsne.value}}{matrix. tSNE coordinates information. See \code{\link[Rtsne]{Rtsne}}.}

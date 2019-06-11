@@ -22,7 +22,7 @@ NULL
 #' @slot raw.data matrix. Raw signal data captured using flow cytometry.
 #' @slot log.data matrix. Log-transfromed dataset of raw.data.
 #' @slot meta.data data.frame. Meta data information, and colnames of "stage" and "cell" are required.
-#' @slot markers vector. Markers used in the calculation of PCA, tSNE, destiny and umap.
+#' @slot markers vector. Markers used in the calculation of PCA, tSNE, diffusion map and UMAP.
 #' @slot markers.idx vector. Index of markers used in the calculation of PCA, tSNE, destiny and umap.
 #' @slot cell.name vector. Cell names of log data.
 #' @slot knn numeric. Numbers of nearest neighbors
@@ -33,7 +33,7 @@ NULL
 #' @slot hclust list. Hierarchical cluster analysis on a merged flow cytometry data set. See \code{\link[hclust]{stats}}
 #' @slot mclust list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}
 #' @slot kmeans list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}
-#' @slot pca.sdev,pca.value,pca.scores Pca information of FSPY object which are
+#' @slot pca.sdev,pca.value,pca.scores PCA information of FSPY object which are
 #'     generated from \code{\link[gmodels]{fast.prcomp}}.
 #' @slot tsne.value matrix. tSNE coordinates information. See \code{\link[Rtsne]{Rtsne}}.
 #' @slot dm DiffusionMap object. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}

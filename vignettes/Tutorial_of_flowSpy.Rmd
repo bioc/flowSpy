@@ -86,14 +86,13 @@ library(flowSpy)
 
 The [datasets](https://github.com/ytdai/flowSpy-dataset) analyzed in this study are available from the GitHub repository (https://github.com/ytdai/flowSpy-dataset). It can be downloaded through [git](https://git-scm.com/) `git clone https://github.com/ytdai/flowSpy-dataset.git`, or via web page. 
 
-This dataset was generated based on an in-house induced differentiation protocol of human embryonic stem cells. Nine cellular surface markers were evaluated during the experiment: CD34, CD43, CD38, CD90, CD49f, CD31, CD45RA, FLK1 and CD73. By add different cytokines in differen days, Human embryonic stem cell line HUES 9 (HUES9) were directional differentiated into mesodermal cells (Day 4), hemogenic endothelium (Day 6) and Hematopoietic Stem/Progenitor cells (HSPC, Day 8) in succession. Cellular surface markers were continuous changes during the induction process.
+This dataset was generated based on an in-house induced differentiation protocol of human embryonic stem cells. Nine cellular surface markers were evaluated during the experiment: CD34, CD43, CD38, CD90, CD49f, CD31, CD45RA, FLK1 and CD73. By add different cytokine combinations in differen days, Human embryonic stem cell line HUES 9 (HUES9) were directional differentiated into mesodermal cells (Day 4), hemogenic endothelium (Day 6) and Hematopoietic Stem/Progenitor cells (HSPC, Day 8) in succession. Cellular surface markers were continuous changes during the induction process.
 
-The main goal of this workflow was to identify cell subtypes in each time point, track the differential trajctory of cell populations, calculation pseudotime of each cell and filteration of cells which may play an key role in the biological progress.
+The main goal of this workflow was to identify cell subtypes in each time point. Tracking the differential trajctory of cell populations, calculation pseudotime of each cell and filteration of cells which may play an key role in the biological progress.
 
 ### 3.1 Preprocessing
 
-The preprocessing steps in flowSpy are based on some packages on Bioconductor. Several packages need to be pre-installed before running flowSpy. For example, the FCS data is read via `flowCore::read.FCS`, and the compensation is made via `flowCore::compensate`. Also, you can visulaze different channels using `flowViz` and preform transformation using `flowCore::logTransform`.
-
+The preprocessing steps in flowSpy are based on some packages on Bioconductor. Several packages need to be pre-installed before running flowSpy. For example, the FCS data is read via `flowCore::read.FCS`, and the compensation is made via `flowCore::compensate`. Also, you can visulaze different channels using `flowViz` and preform transformation using `flowCore::logTransform`. If log-transform is preformed before `flowSpy` workflow, the paramter `log.transform` needs to be set `FALSE`.
 
 ``` {r preprocess-load-packages, eval = T}
 
@@ -103,7 +102,6 @@ library(LSD)
 library(flowCore)
 library(flowViz)
 library(flowSpy)
-library(LSD)
 })
 
 ```
@@ -120,7 +118,7 @@ fcs.file <- paste0(fcs.path, "D0.fcs")
 # Read flow cytomery data via flowCore::read.FCS
 fcs.data <- flowCore::read.FCS(filename = fcs.file)
 
-# If you want to see the first 6 rows of the FCS data 
+# If you want to see the first 2 rows of the FCS data 
 head(fcs.data, 2)
 
 # Make compensation
@@ -137,7 +135,7 @@ xyplot(`SSC-A` ~ `FSC-A`, data = fcs.data)
 
 <center> <img src="../man/figures/flowVis-1.png" alt="flowVis of FSC-H and SSC-H" height=50% width=50% /> </center>
 
-<center> **flowVis of FSC-H and SSC-H"** </center>
+<center> **flowVis of FSC-H and SSC-H** </center>
 
 Before started building an FSPY object, it's better to rename the colnames of `fcs.data`. You can use `colnames(fcs.data)` to see the raw names of FCS data.
 
@@ -163,11 +161,10 @@ When FCS data of fcs.data was transformed into a matrix, we can use visualizatio
 
 # Here we recommend heatscatter, a plot method for visualization of density of FCS data.
 # This function is from LSD::heatscatter
-fcs.d0 <- fcs.d0[fcs.d0[, "FSC_A"] > 0, ]
-fcs.d0 <- fcs.d0[fcs.d0[, "SSC_A"] > 0, ]
 heatscatter(fcs.d0[, "FSC_A"], fcs.d0[, "SSC_A"], 
             cexplot = 0.3, main = "FCS in Day 0 before Gating", 
-            xlab = "FSC_A", ylab = "SSC_A")
+            xlab = "FSC_A", ylab = "SSC_A",
+            xlim = c(0,250000), ylim = c(0,250000))
 
 ```
 
@@ -202,9 +199,9 @@ heatscatter(fcs.d0.filter[, "CD34"], fcs.d0.filter[, "CD43"],
 
 <center> <img src="../man/figures/heatscatter-2.png" alt="Heatscatter plot of CD34 and CD43" height=50% width=50% /> </center>
 
-<center> **Heatscatter plot of CD34 and CD43 after Gating"** </center>
+<center> **Heatscatter plot of CD34 and CD43 after Gating** </center>
 
-In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling step must be taken to make sure the merged FCS data matrix enrolled the same sample size for each day.
+In order to ensure the efficiency of calculation and avoiding migration for one day, the downsampling steps must be pre-processed to make sure the merged FCS data matrix enrolled the same sample size for each day.
 
 ``` {r preprocess-downsampling, eval = FALSE}
 
@@ -229,14 +226,20 @@ This tutorial was based on the induced HPSCs into
 
 ``` {r load-data, eval = TRUE}
 
-# load raw.data and meta.data of flowSy
+# Load raw.data and meta.data of flowSy
 data("FSPYdata")
 
-# view raw.data and meta.data
+# View raw.data and meta.data in flowSpy
+# The fspy.meta.data contains metadata in the workflow. 
+# Two columns are required: cell, stage. Column cell represents 
+# each cell name and stage represents day information.
+# The fspy.raw.data contains merged raw data extracted from
+# FCS file. Each day contains 2000 cells, and this data is not 
+# log-transformed.
 head(fspy.meta.data)
 head(fspy.raw.data)
 
-# show cell number in each time point
+# Show cell number in each time point
 table(fspy.meta.data$stage)
 
 ```
@@ -247,8 +250,8 @@ markers.plot <- c("CD43", "CD90")
 par(mfrow=c(2,3))
 for (day in c("D0","D2","D4","D6","D8","D10")) {
   sub.fspy.raw.data <- fspy.raw.data[grep(day, rownames(fspy.raw.data)), ]
-  px <- sub.fspy.raw.data[, which(colnames(sub.fspy.raw.data) == "CD43")]
-  py <- sub.fspy.raw.data[, which(colnames(sub.fspy.raw.data) == "CD90")]
+  px <- log10(abs(sub.fspy.raw.data[, which(colnames(sub.fspy.raw.data) == "CD43")]))
+  py <- log10(abs(sub.fspy.raw.data[, which(colnames(sub.fspy.raw.data) == "CD90")]))
   heatscatter(px, py, cexplot = 0.3,
               xlim = c(0,5), ylim = c(0,5),
               main = day, xlab = "CD43", ylab = "CD90")
@@ -257,17 +260,24 @@ par(mfrow=c(1,1))
 
 ```
 
+<center> <img src="../man/figures/TimePoint.png" alt="Time Point" height=50% width=50% /> </center>
 
-``` {r create-object, eval = F}
+<center> **Heatscatter plot of CD43 and CD90 in each time point** </center>
 
+Then we can create an FSPY object and begin analysis workflow. 
 
-# create an FSPY object using fspy.meta.data and fspy.log.data
-object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
-                     meta.data = fspy.meta.data,
-                     log.transform = F)
+``` {r create-object, eval = T}
+
+# Set markers in the analysis wrokflow
+markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
+
+# create an FSPY object using fspy.meta.data and fspy.raw.data
+fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
+                   meta.data = fspy.meta.data,
+                   log.transform = T)
 
 # see information in object
-object
+fspy
 
 ```
 
@@ -276,155 +286,335 @@ object
 In the analysis of FSPY workflow, it is recommended to remove batch effects for each time point. Batch effects in FCS data were usually caused by unstable voltage. In the example dataset, we collected cell sample at a specific time of each two days to make sure interval between every time point was equal. But batch effect is ineluctable. You can choose to use built-in function `correctBatchFSPY` provided in `flowSpy` packages, or you can choose to use other method before building an FSPY object. 
 The methology of removing batch effects in `flowSpy` refers to `ComBat` function in  [`sva`](https://bioconductor.org/packages/release/bioc/html/sva.html) package. 
 
-
 ### 3.4 Classifying cells
 
-``` {r run-knn, eval = F}
+Four cluster methods are provided in `flowSpy`: [`FlowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html), [`hclust`](https://www.rdocumentation.org/packages/stats/versions/3.6.0), [`kmeans`](https://www.rdocumentation.org/packages/stats/versions/3.6.0), and  [`mclust`](https://cran.r-project.org/web/packages/mclust/index.html). By default is `som` (FlowSOM) with both width and height of the grid is 6. `FlowSOM` is a package that can perform self-organizing maps for visualization and interpretation of cytometry data. Other clustering method will be added into flowSpy pacakages in the follow-up development. After running `runCluster` using default paramters, the log-transformed FCS data in FSPY will be divided into 36 clusters.
 
-object <- runKNN(object, knn = 30)
+``` {r run-knn, eval = FALSE}
 
+# Set knn 30
+fspy <- runKNN(fspy, knn = 30)
+
+# Set random seeds to ensure the results repeatably
 set.seed(1)
-object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6)
+fspy <- runCluster(fspy, cluster.method = "som")
 
 ```
-
 
 ### 3.5 Reducing dimensionality
 
-``` {r run-pca, eval = F, fig.width = 5, fig.height = 4}
+In `flowSpy` package, four methods are provided: Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP). You can use `runFastPCA` to run PCA, `runTSNE` to run tSNE, `runDiffusionMap` to run Diffusion Map, and `runUMAP` to run UMAP. Each function are relatively independent. Before run reducing dimensionality, the `runKNN` is required to be run first.
 
-object <- runFastPCA(object)
+PCA in `flowSpy` is base on `fast.prcomp` in [gmodels](https://cran.r-project.org/web/packages/gmodels/index.html) package. You can use `?runFastPCA` to get more information.
 
-plot2D(object, item.use = c("PC1", "PC2"), color.by = "som.id", 
-       alpha = 0.7, main = "PCA", show.cluser.id = T)
+``` {r run-pca, eval = FALSE}
 
-plot2D(object, item.use = c("PC1", "PC2"), color.by = "stage", 
-       alpha = 0.7, main = "PCA", show.cluser.id = T)
+# run PCA
+fspy <- runFastPCA(fspy)
 
+# Visualize first two PCs and colored by cluster
+plot2D(fspy, item.use = c("PC1", "PC2"), color.by = "cluster.id", 
+       alpha = 0.7, main = "PCA colored by cluster.id")
 ```
 
-``` {r run-pca-3d, eval = F, fig.width = 5, fig.height = 5}
+<center> <img src="../man/figures/PCA-cluster-1.png" alt="PCA-cluster" height=50% width=50% /> </center>
 
-plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage", main = "PCA")
-
-```
+<center> **PCA plot colored by cluster.id** </center>
 
 
-``` {r run-tsne, eval = F, fig.width = 5, fig.height = 4}
+``` {r plot-pca-stage, eval = FALSE}
 
-object <- runTSNE(object)
-
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "som.id", 
-       alpha = 0.7, main = "tSNE", show.cluser.id = T)
-
-plot2D(object, item.use = c("tSNE1", "tSNE2"), color.by = "stage", 
-       alpha = 0.7, main = "tSNE", show.cluser.id = T)
+# Visualize first two PCs and colored by stage
+plot2D(fspy, item.use = c("PC1", "PC2"), color.by = "stage", 
+       alpha = 0.7, main = "PCA colored by stage")
 
 ```
 
 
-``` {r run-destiny, eval = F, fig.width = 5, fig.height = 4}
+<center> <img src="../man/figures/PCA-stage-1.png" alt="PCA-stage" height=50% width=50% /> </center>
 
-object <- runDiffusionMap(object)
+<center> **PCA plot colored by stage** </center>
 
-plot2D(object, item.use = c("DC1", "DC2"), color.by = "som.id", 
-       alpha = 0.7, main = "DiffusionMap", show.cluser.id = T)
+`flowSpy` also provide three dimension plot, you can specify your axis using `item.use` in `plot3D`.
 
-plot2D(object, item.use = c("DC1", "DC2"), color.by = "stage", 
-       alpha = 0.7, main = "DiffusionMap", show.cluser.id = T)
-```
+``` {r run-pca-3d, eval = FALSE}
 
-``` {r run-destiny-3d, eval = F, fig.width = 5, fig.height = 5}
-
-plot3D(object, item.use = c("DC1", "DC2", "DC3"), color.by = "stage", main = "DiffusionMap")
+# 3D plot
+plot3D(fspy, item.use = c("PC1", "PC2", "PC3"), color.by = "stage", main = "PCA")
 
 ```
 
+<center> <img src="../man/figures/3D-plot-PCA.png" alt="3D-PCA-stage" height=50% width=50% /> </center>
 
-``` {r run-umap, eval = F, fig.width = 5, fig.height = 4}
+<center> **3D PCA plot colored by stage** </center>
 
-object <- runUMAP(object)
+t-SNE is an algorithm for dimensionality reduction that is well-suited to visualizing high-dimensional data. In `flowSpy`, you can use `runTSNE` function to run tSNE, and show the cluster id by setting `show.cluser.id = TRUE`. Also, perplexity parameter can be set by `perplexity = 20`, by default is 30. This function is developed based on `Rtsne` function in [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) package. You can use `?runTSNE` or `?Rtsne` to get more information.
 
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", 
-       alpha = 0.7, main = "UMAP", show.cluser.id = T)
+``` {r run-tsne, eval = FALSE}
 
-plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "stage", 
-       alpha = 0.7, main = "UMAP", show.cluser.id = F)
+# Run tNE
+fspy <- runTSNE(fspy)
+
+plot2D(fspy, item.use = c("tSNE1", "tSNE2"), color.by = "cluster.id", 
+       alpha = 1, main = "tSNE plot colored by cluster.id", show.cluser.id = T)
 
 ```
+
+<center> <img src="../man/figures/tSNE-cluster.png" alt="tSNE-cluster" height=50% width=50% /> </center>
+
+<center> **tSNE plot colored by cluser.id** </center>
+
+Diffusion maps is a dimensionality reduction algorithm, it computes a family of embeddings of a data set into Euclidean space. In `flowSpy`, Diffusion map of FCS data can be calculated using `runDiffusionMap` function, and this function is based on `DiffusionMap` in [destiny](https://bioconductor.org/packages/release/bioc/html/destiny.html) package.
+
+``` {r run-destiny, eval = FALSE}
+
+# Run Diffusion map
+fspy <- runDiffusionMap(fspy)
+
+plot2D(fspy, item.use = c("DC1", "DC2"), color.by = "stage", 
+       alpha = 1, main = "DiffusionMap plot colored by stage")
+```
+
+<center> <img src="../man/figures/DiffusionMap-stage.png" alt="diffusion-map-stage" height=50% width=50% /> </center>
+
+<center> **DiffusionMap plot colored by stage** </center>
+
+Also, 3D plot of first three DCs in Diffusion map can be visualized by `plot3D` function.
+
+``` {r run-destiny-3d, eval = FALSE}
+
+plot3D(fspy, item.use = c("DC1", "DC2", "DC3"), color.by = "stage",
+       main = "3D DiffusionMap plot colored by stage")
+
+```
+
+<center> <img src="../man/figures/3D-DiffusionMap-stage.png" alt="diffusion-map-stage" height=50% width=50% /> </center>
+
+<center> **3D DiffusionMap plot colored by stage** </center>
+
+Uniform Manifold Approximation and Projection (UMAP) is a dimension reduction technique that can be used for visualisation similarly to t-SNE, but also for general non-linear dimension reduction. You can use `runUMAP` function to run UMAP. This function is developed based on `umap` in [umap](https://github.com/lmcinnes/umap) package.
+
+``` {r run-umap, eval = FALSE}
+
+# Run UMAP
+fspy <- runUMAP(fspy)
+
+# Color by cluster
+plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "cluster.id", 
+       alpha = 0.7, main = "UMAP plot colored by cluster", show.cluser.id = T)
+
+# Color by stage
+plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "stage", 
+       alpha = 0.7, main = "UMAP plot colored by stage", show.cluser.id = F)
+
+```
+
+<center> <img src="../man/figures/UMAP-cluster.png" alt="umap-cluster" height=50% width=50% /> </center>
+
+<center> **UMAP plot colored by cluster** </center>
+
+<center> <img src="../man/figures/UMAP-stage.png" alt="umap-stage" height=50% width=50% /> </center>
+
+<center> **UMAP plot colored by stage** </center>
+
 
 ### 3.6 Build tree
 
-``` {r build-tree, eval = F, fig.width = 6, fig.height = 4}
-object <- buildTree(object, cluster.type = "som", dim.type = "umap")
+During development, Human embryonic stem cells were induced into Hematopoietic Stem/Progenitor cells in response to stimuli. Surface cellular markers transformed from one "states" to another. Cells in different states expressed different sets of genes, and their surface markers continuous changed during the induction. As cells moving between different states, construction of development tree could help us see the induction process more intuitively. In `flowSpy`, Minimum Spanning Tree is used to construct tree of different cluster of cells. 
 
-p <- plotTree(object, color.by = "CD34", show.node.name = T) 
+``` {r build-tree, eval = F, fig.width = 6, fig.height = 4}
+
+# Build Minimum Spanning Tree base on som cluster and umap
+fspy <- buildTree(fspy, cluster.type = "som", dim.type = "umap")
+
+# Plot MST
+p <- plotTree(fspy, color.by = "D0.percent.stage", show.node.name = T) 
 p + scale_colour_gradientn(colors = c("blue", "red"))
 
 ```
 
+<center> <img src="../man/figures/Tree.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Tree plot color by cell percentage in D0** </center>
 
 ### 3.7 Pseudotime calculation
 
-``` {r pseudotime, eval = F, fig.width = 6, fig.height = 4}
+From the tree, you can see cell percentage in D0 are concentrated at node 34 and 32, so we can suggest node 34 is the initial state of all cell clusters. Cell in node 34 are defined as root cells using function `defRootCells`. And then you can caluclate pseudotime using `runPseudotime` function.
 
-object <- defRootCells(object, root.cells = c(24))
+``` {r pseudotime, eval = FALSE}
 
-object <- runPseudotime(object)
+# Define root cells
+fspy <- defRootCells(fspy, root.cells = c(34))
 
-plotPseudotimeDensity(object)
+# Calculate pseudotime
+fspy <- runPseudotime(fspy)
 
-p <- plotTree(object, color.by = "CD34", show.node.name = T, 
-              as.tree = T, root.id = 24) 
+# Visualize pseudotime density in each time point
+plotPseudotimeDensity(fspy)
+
+```
+
+<center> <img src="../man/figures/Pseudotime-density-states.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Pseudotime density in each time point** </center>
+
+You can also visualize pseudotime using `color.by = "pseudotime"`. Pseudotime in each node is caluclate from mean value of persudotime in each cell of this node.
+
+``` {r pseudotime-tree, eval = FALSE}
+
+# Pseudotime in umap
+p <- plotTree(fspy, color.by = "pseudotime", show.node.name = T, 
+              as.tree = T, root.id = 34) 
 p + scale_colour_gradientn(colors = c("blue", "red"))
 
 ```
 
+<center> <img src="../man/figures/Pseudotime-density-tree.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Pseudotime visualized in tree** </center>
+
+You can also visualize pseudotime in 2D or 3D plot.
+
+``` {r pseudotime-umap, eval = FALSE}
+
+# Pseudotime in each cluster
+p <- plot2D(fspy, item.use = c("UMAP1", "UMAP2"), 
+            color.by = "pseudotime", alpha = 1,
+            main = "Pseudotime in UMAP")
+p + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+```
+
+<center> <img src="../man/figures/Pseudotime-umap.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Pseudotime visualized in UMAP** </center>
+
+``` {r pseudotime-diffusion-map, eval = FALSE}
+
+# Pseudotime in diffusion map
+plot3D(fspy, item.use = c("pseudotime", "DC1", "DC2"), 
+       color.by = "pseudotime", size = 0.5)
+
+```
+
+<center> <img src="../man/figures/Pseudotime-diffusion-map.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Pseudotime visualized in 3D plot using DC1 and DC2** </center>
 
 
 ### 3.8 Trajectory inference
 
-``` {r Trajectory, eval = F, fig.width = 10, fig.height = 10}
+Before running trajectory inference in `flowSpy`, you need to specify leaf cells first. Leaf cells in trajectory inference represent terminal state of development. In this experiment, Hematopoietic Stem/Progenitor cells generated in Day 8 shows CD43+CD34+CD38-CD45RA-CD90+ surface marker character, which present in node 4, 9 and 29. So we set node 4, 9 and 39 as leaf cells.
 
-object <- defLeafCells(object, leaf.cells = c(6,35), pseudotime.cutoff = 0.5)
+``` {r Trajectory, eval = FALSE}
 
-object <- runWalk(object)
+# Define leaf cells
+fspy <- defLeafCells(fspy, leaf.cells = c(4,9,29))
 
-plotPseudotimeTraj(object, cutoff = -1, var.cols = T) + scale_colour_gradientn(colors = c("blue", "red"))
+# run walks between root cells and leaf cells
+fspy <- runWalk(fspy)
 
-plotPseudotimeTraj(object, cutoff = 0.2, var.cols = T) + scale_colour_gradientn(colors = c("blue", "red"))
-
+# show pseudotime trajectory of all cells
+p <- plotPseudotimeTraj(fspy, cutoff = -1, var.cols = T)
+p + scale_colour_gradientn(colors = c("#00599F","#0B85E2","#EEEEEE","#FC6055","#FF3222"))
 
 ```
 
+<center> <img src="../man/figures/Traj-0.png" alt="tree" height=80% width=80% /> </center>
+
+<center> **Trajectory plot using all cells** </center>
+
+``` {r Trajectory-traj.value, eval = FALSE}
+
+# show pseudotime trajectory with trajectory value over 0.1
+p <- plotPseudotimeTraj(fspy, cutoff = 0.2, var.cols = T)
+p + scale_colour_gradientn(colors = c("#00599F","#0B85E2","#EEEEEE","#FC6055","#FF3222"))
+
+```
+
+<center> <img src="../man/figures/Traj-0.2.png" alt="tree" height=80% width=80% /> </center>
+
+<center> **Trajectory plot using cells with log.traj.value over 0.2** </center>
+
+You can use plot2D to visualize distribution of log trajectory value.
+
+``` {r Trajectory-traj.value-distribution, eval = FALSE}
+
+plot2D(fspy, item.use = c("pseudotime", "traj.value.log"), color.by = "stage")
+
+```
+
+<center> <img src="../man/figures/Traj-distribution.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Distribution of tajectroy value** </center>
+
+``` {r Trajectory-heatmap, eval = FALSE}
+
+library(pheatmap)
+
+# Fetching meta.data from fspy
+plot.info <- fetchPlotMeta(fspy)
+
+plot.info <- plot.info[, c(markers, "pseudotime")]
+plot.info <- plot.info[order(plot.info$pseudotime), ]
+plot.info <- plot.info[, match(c("CD34", "CD43","CD31","CD45RA","CD38",
+                                 "CD49f","CD90","FLK1","CD73"), colnames(plot.info))]
+pheatmap(t(plot.info),
+         color = colorRampPalette(c(rep("#00599F",3),"#FFFFFF",rep("#FF3222",3)))(100),
+         cluster_rows = F, cluster_cols = F, scale = "row", fontsize_col = 0.01)
+
+```
+
+<center> <img src="../man/figures/Heatmap.png" alt="tree" height=90% width=90% /> </center>
+
+<center> **Heatmap of markers order by pseudotime** </center>
+
 ### 3.9 Define intermediate states
 
+Cells in intermediate stats plays an key role in cell development and stats transition. Cell with higher trajectory value may present the higher probility to be treated as an intermediate stat cell.
 
+``` {r subset, eval = FALSE}
+
+# fetch cell with traj.value.log > 0.2 or root or leaf cells
+fetch.cells <- fetchCell(fspy, traj.value.log = 0.2, is.root.cells = 1, is.leaf.cells = 1)
+
+# 1877 cell will be fetched
+sub.fspy <- subsetFSPY(fspy, cells = fetch.cells)
+
+```
+
+Then you can do clustering and dimensionality reduction to visualize the trajectory of the filtered cells.
 
 ### 3.10 Save object
 
+Saving fspy object in `Robj` format.
 
 ``` {r save-object, eval = FALSE}
 
 # save FSPY object
-save(object, file = "your.fspy.Robj")
+save(fspy, file = "path to your fspy.Robj")
 
 ```
 
 ## 4 Advanced usage
 
-
 ### 4.1 The FSPY class
 
+<center> **Structure of FSPY object** </center>
 
-### 4.2 Clustering methods
+<center> <img src="../man/figures/Structure.png" alt="tree" height=70% width=70% /> </center>
 
+### 4.2 Pseudotime algorithm
 
-### 4.3 Reducing dimensions
+<center> <img src="../man/figures/Pseudotime-method.png" alt="tree" height=50% width=50% /> </center>
 
+<center> **Algorithm of pseudotime** </center>
 
-### 4.4 Trajectory inference algorithm
+### 4.3 Trajectory inference algorithm
 
+<center> <img src="../man/figures/Trajectory-method.png" alt="tree" height=50% width=50% /> </center>
+
+<center> **Algorithm of trajectory inference** </center>
 
 ## Session info 
 

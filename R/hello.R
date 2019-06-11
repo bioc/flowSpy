@@ -110,13 +110,13 @@ plot3D(object, item.use = c("UMAP1", "UMAP2", "pseudotime"), color.by = "stage")
 
 plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "CD49f", alpha = 1, main = "PCA") + scale_colour_gradientn(colors = c("blue", "blue", "white", "red"))
 
-plot2D(object, item.use = c("pseudotime", "traj.value.log"), color.by = "stage")
+plot2D(fspy, item.use = c("pseudotime", "traj.value.log"), color.by = "stage")
 
 plotTree(object, show.node.name = T, cex.size = 2) + scale_colour_gradientn(colors = "#666666")
 
 plotTree(object, color.by = "pseudotime", as.tree = T, show.node.name = T, root.id = 24)  + scale_colour_gradientn(colors = c("#00599F", "#00599F","#EEEEEE", "#FF3222","#FF3222"))
 
-plot.info <- fetchPlotMeta(object, verbose = F)
+plot.info <- fetchPlotMeta(fspy, verbose = F)
 ggplot(plot.info, aes(x=traj.value.log, colour = stage)) + geom_density() + theme_bw()
 
 pdata <- aggregate(plot.info[, c(markers, "pseudotime")], list(id = plot.info$som.id), mean)
@@ -127,9 +127,9 @@ pdata <- pdata[order(pdata$pseudotime), ]
 plot.info.sub <- plot.info[, c(markers, "pseudotime")]
 plot.info.sub <- plot.info.sub[order(plot.info.sub$pseudotime), ]
 plot.info.sub <- plot.info.sub[, match(c("CD34", "CD43","CD31","CD45RA","CD38","CD49f","CD90","FLK1","CD73"), colnames(plot.info.sub))]
-pheatmap(plot.info.sub,
+pheatmap(t(plot.info.sub),
          color = colorRampPalette(c("#00599F", "#00599F", "#FFFFFF", "#FF3222", "#FF3222"))(100),
-         cluster_rows = F, cluster_cols = F, scale = "column", fontsize_row = 0.01)
+         cluster_rows = F, cluster_cols = F, scale = "row", fontsize_col = 0.01)
 
 
 plot.info.sub <- plot.info[, c("pseudotime", "traj.value.log")]
