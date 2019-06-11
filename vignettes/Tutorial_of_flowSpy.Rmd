@@ -25,22 +25,22 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
 ## Abstract
 
 High throughput cell-based assays with flow cytometric signals enable ones to analyze multiple single-cell parameters and identify cellular populations. 
-Based on classical software for analyzing flow cytometry (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for inferencing cellular trajectory during a biological process are very important. 
-To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of flow cytometry data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. The dataset is about directional induced differentiation of Human embryonic stem cell line HUES 9 (HUES9). 9 surface markers were detected during the experiment to track the trajectory when HUES9 was induced into mesodermal cells, hemogenic endothelium and hematopoietic stem/progenitor cells in succession. FSC data were collected for every two days.
+Based on classical software for analyzing [Flow Cytometry Standard](https://en.wikipedia.org/wiki/Flow_Cytometry_Standard) (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for inferencing cellular trajectory during a biological process are very important. 
+To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of FCS data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. The dataset is from directional induced differentiation of Human embryonic stem cell line HUES 9 (HUES9). During the experiment 9 surface markers were detected to track the trajectory when HUES9 was diretctly induced into mesodermal cells, hemogenic endothelium and hematopoietic stem/progenitor cells in succession. FSC data were collected for every two days. Time between two samples is equal.
 
 ## 1 Introduction
 
-The `flowSpy` package provides an analysis toolkit for flow cytometry data. This vignette presents an overview of time courses flow cytometry data analysis workflow with `flowSpy`. `flowSpy` was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. Besides trajectory inference, it also supports other experimental workflows such as gating and subpopulation identification from cancer tissues.
+The `flowSpy` package provides an analysis toolkit for FCS data. This vignette presents an overview of time courses flow cytometry data analysis workflow with `flowSpy`. `flowSpy` was developed to analyze cellular population and inference differential trajectory based on a series of algorithms. Besides trajectory inference, it also supports other experimental workflows such as gating and subpopulation identification from cancer tissues.
 
 `flowSpy` can help you to perform four main types of analysis:
 
 - Clustering. `flowSpy` can help you to discover and identify subtypes of cells. 
 
-- Reducing Dimensions. Several dimensionality reduction methods are provided in `flowSpy` package such as principal components analysis (PCA) and t-distributed stochastic neighbor embedding (tSNE).
+- Reducing Dimensions. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP).
 
-- Pseudotime and Trajectory Inference. `flowSpy` can help you to construct the cellular differential based on minimum spanning tree.
+- Pseudotime and Trajectory Inference. `flowSpy` can help you to construct the cellular differential based on Minimum Spanning Tree (MST) algorithm. The root cells need to be defined by users. Trajctroy value will be calculated based on Shortest Path from root cells and leaf cells using R `igraph` package.
 
-- Intermediate cell fate definition. Subset FCS data set in `flowSpy` and find the key intermediate cell states.
+- Intermediate cell fate definition. Subset FCS data set in `flowSpy` and find the key intermediate cell states based on trajectory value.
 
 <center> <img src="../man/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
@@ -54,7 +54,7 @@ The `flowSpy` package provides an analysis toolkit for flow cytometry data. This
 
 The `flowSpy` package is not uploaded to Bioconductor server yet, so now you can only download it through Github.
 
-`flowSpy` runs in the [R statistical computing environment](https://www.r-project.org/). You will need R version 3.4 or higher to have access to the latest features. 
+`flowSpy` runs in the [R statistical computing environment](https://www.r-project.org/). You will need R version 3.5 or higher to have access to the latest features. 
 
 ``` {r install-bioconductor, eval = FALSE}
 
