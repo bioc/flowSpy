@@ -187,7 +187,7 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 #' @export
 #'
-#' @importFrom mclust Mclust
+#' @importFrom mclust Mclust mclustBIC
 #'
 #'
 runMclust <- function(object, scale = F,

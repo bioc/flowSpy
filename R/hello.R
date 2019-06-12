@@ -66,7 +66,7 @@ fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
 fspy <- runKNN(fspy, knn = 30, verbose = T)
 
 set.seed(1)
-fspy <- runCluster(fspy, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "hclust", k = 20, verbose = T)
 table(fspy@meta.data$cluster.id)
 
 fspy <- runFastPCA(fspy, verbose = T)
