@@ -22,14 +22,13 @@ roxygenize()
 
 
 verbose = T
-cell.number = 10000
+cell.number = 2000
 
 sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
 raw <- NULL
 for (i in 1:length(sample.list)) {
   sub <- read.table(paste0("../dataset/", sample.list[i], ".sub", cell.number, ".txt"), header = T, stringsAsFactors = F)
   sub$sample <- sample.list[i]
-  sub <- sub[sample(1:dim(sub)[1], 8000), ]
   raw <- rbind(raw, sub)
 }
 raw$sample <- factor(as.character(raw$sample), levels = sample.list)
@@ -53,8 +52,9 @@ batch <- factor(fspy.meta.data$stage, labels = 1:length(unique(raw$sample)))
 
 
 ###################################
-
-#data("FSPYdata")
+library(ggplot2)
+library(flowSpy)
+data("FSPYdata")
 
 markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
 
