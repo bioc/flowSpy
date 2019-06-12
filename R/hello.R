@@ -66,7 +66,7 @@ fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
 fspy <- runKNN(fspy, knn = 30, verbose = T)
 
 set.seed(1)
-fspy <- runCluster(fspy, cluster.method = "hclust", k = 20, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
 table(fspy@meta.data$cluster.id)
 
 fspy <- runFastPCA(fspy, verbose = T)
@@ -111,7 +111,8 @@ plot(fspy@network$mst)
 
 plot2D(fspy, item.use = c("DC1", "DC2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plotTree(fspy, color.by = "D10.percent.stage", show.node.name = T, cex.size = 1.5) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+#D10.percent.stage
+plotTree(fspy, color.by = "D0.percent.stage", show.node.name = F, cex.size = 1.5) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 plotTree(fspy, color.by = "pseudotime", show.node.name = T, cex.size = 1, root.id = 34, as.tree = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
