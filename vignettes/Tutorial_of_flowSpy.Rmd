@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
 
 High throughput cell-based assays with flow cytometric signals enable ones to analyze multiple single-cell parameters and identify cellular populations. 
 Based on classical software for analyzing [Flow Cytometry Standard](https://en.wikipedia.org/wiki/Flow_Cytometry_Standard) (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for inferencing cellular trajectory during a biological process are very important. 
-To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of FCS data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. The dataset is from directional induced differentiation of Human embryonic stem cell line HUES 9 (HUES9). During the experiment 9 surface markers were detected to track the trajectory when HUES9 was diretctly induced into mesodermal cells, hemogenic endothelium and hematopoietic stem/progenitor cells in succession. FSC data were collected for every two days. Time between two samples is equal.
+To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of FCS data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. The dataset is from directional induced differentiation of Human embryonic stem cell line HUES9. During the experiment 9 surface markers were detected to track the trajectory when HUES9 was diretctly induced into mesodermal cells, hemogenic endothelium and hematopoietic stem/progenitor cells in succession. FSC data were collected for every two days. Time between two samples is equal.
 
 ## 1 Introduction
 
@@ -34,13 +34,13 @@ The `flowSpy` package provides an analysis toolkit for FCS data. This vignette p
 
 `flowSpy` can help you to perform four main types of analysis:
 
-- Clustering. `flowSpy` can help you to discover and identify subtypes of cells. 
+- **Clustering**. `flowSpy` can help you to discover and identify subtypes of cells. 
 
-- Reducing Dimensions. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP).
+- **Reducing Dimensions**. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP).
 
-- Pseudotime and Trajectory Inference. `flowSpy` can help you to construct the cellular differential based on Minimum Spanning Tree (MST) algorithm. The root cells need to be defined by users. Trajctroy value will be calculated based on Shortest Path from root cells and leaf cells using R `igraph` package.
+- **Pseudotime and Trajectory Inference**. `flowSpy` can help you to construct the cellular differential based on Minimum Spanning Tree (MST) algorithm. The root cells need to be defined by users. Trajctroy value will be calculated based on Shortest Path from root cells and leaf cells using R `igraph` package.
 
-- Intermediate cell fate definition. Subset FCS data set in `flowSpy` and find the key intermediate cell states based on trajectory value.
+- **Intermediate cell fate definition**. Subset FCS data set in `flowSpy` and find the key intermediate cell states based on trajectory value.
 
 <center> <img src="../man/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
@@ -86,9 +86,9 @@ library(flowSpy)
 
 The [datasets](https://github.com/ytdai/flowSpy-dataset) analyzed in this study are available from the GitHub repository (https://github.com/ytdai/flowSpy-dataset). It can be downloaded through [git](https://git-scm.com/) `git clone https://github.com/ytdai/flowSpy-dataset.git`, or via web page. 
 
-This dataset was generated based on an in-house induced differentiation protocol of human embryonic stem cells. Nine cellular surface markers were evaluated during the experiment: CD34, CD43, CD38, CD90, CD49f, CD31, CD45RA, FLK1 and CD73. By add different cytokine combinations in differen days, Human embryonic stem cell line HUES 9 (HUES9) were directional differentiated into mesodermal cells (Day 4), hemogenic endothelium (Day 6) and Hematopoietic Stem/Progenitor cells (HSPC, Day 8) in succession. Cellular surface markers were continuous changes during the induction process.
+This dataset was generated based on an in-house induced differentiation protocol of human embryonic stem cells. Nine cellular surface markers were evaluated during the experiment: CD34, CD43, CD38, CD90, CD49f, CD31, CD45RA, FLK1 and CD73. By add different cytokine combinations in differen days, Human embryonic stem cell line HUES9 were directional differentiated into mesodermal cells (Day 4), hemogenic endothelium (Day 6) and Hematopoietic Stem/Progenitor cells (HSPC, Day 8) in succession. Cellular surface markers were continuous changes during the induction process.
 
-The main goal of this workflow was to identify cell subtypes in each time point. Tracking the differential trajctory of cell populations, calculation pseudotime of each cell and filteration of cells which may play an key role in the biological progress.
+The main goal of this workflow was to identify cell subtypes in each time point. Tracking the differential trajctory of cell populations and calculating pseudotime of each cell and filteration of cells may play an key role in the biological progress.
 
 ### 3.1 Preprocessing
 
@@ -281,12 +281,10 @@ fspy
 
 ```
 
-### 3.3 Batch effects
-
 In the analysis of FSPY workflow, it is recommended to remove batch effects for each time point. Batch effects in FCS data were usually caused by unstable voltage. In the example dataset, we collected cell sample at a specific time of each two days to make sure interval between every time point was equal. But batch effect is ineluctable. You can choose to use built-in function `correctBatchFSPY` provided in `flowSpy` packages, or you can choose to use other method before building an FSPY object. 
 The methology of removing batch effects in `flowSpy` refers to `ComBat` function in  [`sva`](https://bioconductor.org/packages/release/bioc/html/sva.html) package. 
 
-### 3.4 Classifying cells
+### 3.3 Classifying cells
 
 Four cluster methods are provided in `flowSpy`: [`FlowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html), [`hclust`](https://www.rdocumentation.org/packages/stats/versions/3.6.0), [`kmeans`](https://www.rdocumentation.org/packages/stats/versions/3.6.0), and  [`mclust`](https://cran.r-project.org/web/packages/mclust/index.html). By default is `som` (FlowSOM) with both width and height of the grid is 6. `FlowSOM` is a package that can perform self-organizing maps for visualization and interpretation of cytometry data. Other clustering method will be added into flowSpy pacakages in the follow-up development. After running `runCluster` using default paramters, the log-transformed FCS data in FSPY will be divided into 36 clusters.
 
@@ -301,7 +299,7 @@ fspy <- runCluster(fspy, cluster.method = "som")
 
 ```
 
-### 3.5 Reducing dimensionality
+### 3.4 Reducing dimensionality
 
 In `flowSpy` package, four methods are provided: Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP). You can use `runFastPCA` to run PCA, `runTSNE` to run tSNE, `runDiffusionMap` to run Diffusion Map, and `runUMAP` to run UMAP. Each function are relatively independent. Before run reducing dimensionality, the `runKNN` is required to be run first.
 
@@ -418,7 +416,7 @@ plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "stage",
 <center> **UMAP plot colored by stage** </center>
 
 
-### 3.6 Build tree
+### 3.5 Build tree
 
 During development, Human embryonic stem cells were induced into Hematopoietic Stem/Progenitor cells in response to stimuli. Surface cellular markers transformed from one "states" to another. Cells in different states expressed different sets of genes, and their surface markers continuous changed during the induction. As cells moving between different states, construction of development tree could help us see the induction process more intuitively. In `flowSpy`, Minimum Spanning Tree is used to construct tree of different cluster of cells. 
 
@@ -437,7 +435,7 @@ p + scale_colour_gradientn(colors = c("blue", "red"))
 
 <center> **Tree plot color by cell percentage in D0** </center>
 
-### 3.7 Pseudotime calculation
+### 3.6 Pseudotime calculation
 
 From the tree, you can see cell percentage in D0 are concentrated at node 34 and 32, so we can suggest node 34 is the initial state of all cell clusters. Cell in node 34 are defined as root cells using function `defRootCells`. And then you can caluclate pseudotime using `runPseudotime` function.
 
@@ -502,7 +500,7 @@ plot3D(fspy, item.use = c("pseudotime", "DC1", "DC2"),
 <center> **Pseudotime visualized in 3D plot using DC1 and DC2** </center>
 
 
-### 3.8 Trajectory inference
+### 3.7 Trajectory inference
 
 Before running trajectory inference in `flowSpy`, you need to specify leaf cells first. Leaf cells in trajectory inference represent terminal state of development. In this experiment, Hematopoietic Stem/Progenitor cells generated in Day 8 shows CD43+CD34+CD38-CD45RA-CD90+ surface marker character, which present in node 4, 9 and 29. So we set node 4, 9 and 39 as leaf cells.
 
@@ -569,7 +567,7 @@ pheatmap(t(plot.info),
 
 <center> **Heatmap of markers order by pseudotime** </center>
 
-### 3.9 Define intermediate states
+### 3.8 Define intermediate states
 
 Cells in intermediate stats plays an key role in cell development and stats transition. Cell with higher trajectory value may present the higher probility to be treated as an intermediate stat cell.
 
@@ -585,9 +583,9 @@ sub.fspy <- subsetFSPY(fspy, cells = fetch.cells)
 
 Then you can do clustering and dimensionality reduction to visualize the trajectory of the filtered cells.
 
-### 3.10 Save object
+### 3.9 Save object
 
-Saving fspy object in `Robj` format.
+Saving FSPY object in `Robj` format.
 
 ``` {r save-object, eval = FALSE}
 
@@ -622,6 +620,8 @@ save(fspy, file = "path to your fspy.Robj")
 sessionInfo()
 ```
 
+## Acknowledgments
+This work was supported by National Natural Science Foundation of China (Grants 81570122 and 81770205).
 
 ## References
 [1] Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2019). FlowSOM: Using

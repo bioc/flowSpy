@@ -22,9 +22,9 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-This tutorial contains key steps of flowSpy workflow, including how to build an FSPY object, how to run clustering and dimension reduction, how to build a [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) tree, how to run pseudotime and how to inference trajectory. It took about four minutes to run the complete analysis workflow with 12000 cells and 9 markers. 
+This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run clustering and dimension reduction, how to build a [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm, how to run pseudotime and how to inference trajectory. It took about four minutes to run the complete analysis workflow with 12000 cells and 9 markers.
 
-If you want to see the detailed information of flowSpy workflow, please see the vignette **Tutorial of flowSpy**.
+If you want to see the detailed information of flowSpy workflow, please see the vignette **Tutorial of flowSpy** using `vignette("Tutorial_of_flowSpy", package = "flowSpy")`.
 
 
 ``` {r quick-build, eval = FALSE}
@@ -86,9 +86,6 @@ fspy <- defLeafCells(fspy, leaf.cells = c(4,9,29), pseudotime.cutoff = 0.5)
 
 # Run walk from root cells to leaf cells
 fspy <- runWalk(fspy)
-
-# Show time point when the whole workflow is finished
-Sys.time()
 
 # Save object
 save(fspy, file = "Path to you output directory")

@@ -20,7 +20,7 @@ defRootCells <- function(object, root.cells = NULL, verbose = F) {
   if (!is.vector(root.cells)) stop(Sys.time(), " [ERROR] root.cells must be a vector")
 
   if (is.character(root.cells)) {
-    root.cells <- root.cells[leaf.cells %in% object@meta.data$cell]
+    root.cells <- root.cells[root.cells %in% object@meta.data$cell]
   } else if (is.numeric(root.cells)) {
     root.cells <- object@meta.data$cell[object@meta.data$cluster.id %in% root.cells]
   } else {

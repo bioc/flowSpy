@@ -132,6 +132,80 @@ plotPseudotimeTraj <- function(object,
 
 
 #'
+#' plotMarkerDensity
+#'
+#' @name plotMarkerDensity
+#'
+#' @param object An FSPY object
+#' @param markers character. Markers used in the calculation progress
+#' @param cutoff numeric. Cutoff of trajectory value
+#' @param adjust numeric. Transparency (0-1) of the dot, default is 1.
+#' @param var.cols logical. Whether to plot stage
+#' @param plot.theme themes from \code{ggplot2}
+#'
+#' @importFrom stats predict
+#'
+#' @export
+#'
+plotMarkerDensity <- function(object,
+                              cutoff = -1,
+                              markers = NULL,
+                              adjust = 0.5,
+                              var.cols = T,
+                              plot.theme = theme_bw()) {
+
+  if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
+  object <- updatePlotMeta(object, verbose = F)
+
+  # checking items
+  if (cutoff > 0) {
+    if ( !all(c("traj.value","traj.value.log") %in% colnames(object@plot.meta)) ) {
+      message(Sys.time(), " [INFO] traj.value is not in plot.meta of FSPY, please run runWalk first.")
+    }
+  }
+  if (is.null(markers)) markers <- object@markers
+
+  plot.data <- NULL
+  plot.meta <- object@plot.meta
+  for (i in 1:length(markers)) {
+    sub <- data.frame(Pseudotime = plot.meta$pseudotime,
+                      IsRoot = plot.meta$is.root.cells,
+                      IsLeaf = plot.meta$is.leaf.cells,
+                      Marker = markers[i],
+                      Signal = plot.meta[, colnames(plot.meta) %in% markers[i]],
+                      Stage = plot.meta$stage,
+                      TrajValue = plot.meta$traj.value,
+                      LogTrajValue = plot.meta$traj.value.log)
+    idx <- which( (sub$LogTrajValue > cutoff)  )
+    if (sum(sub$IsRoot == 1) > 0) {
+      idx.2 <- which(sub$IsRoot == 1)
+    } else {
+      idx.2 <- NULL
+    }
+    idx <- union(idx, idx.2)
+    if (sum(sub$IsLeaf == 1) > 0) {
+      idx.3 <- which(sub$IsLeaf == 1)
+    } else {
+      idx.3 <- NULL
+    }
+    idx <- union(idx, idx.3)
+    sub <- sub[idx, ]
+    plot.data <- rbind(plot.data, sub)
+  }
+
+  gg <- ggplot(plot.data, aes(x=Signal, color = Marker)) + geom_density(adjust = adjust)
+  gg <- gg + plot.theme
+
+  if (var.cols) {
+    gg <- gg + facet_grid(rows = vars(Marker), cols = vars(Stage))
+  } else {
+    gg <- gg + facet_grid(rows = vars(Marker))
+  }
+  return(gg)
+}
+
+
+#'
 #' plot MST of FSPY
 #'
 #' @name plotTree
