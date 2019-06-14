@@ -140,7 +140,6 @@ plotPseudotimeTraj <- function(object,
 #' @param markers character. Markers used in the calculation progress
 #' @param cutoff numeric. Cutoff of trajectory value
 #' @param adjust numeric. Transparency (0-1) of the dot, default is 1.
-#' @param var.cols logical. Whether to plot stage
 #' @param plot.theme themes from \code{ggplot2}
 #'
 #' @importFrom stats predict
@@ -151,7 +150,6 @@ plotMarkerDensity <- function(object,
                               cutoff = -1,
                               markers = NULL,
                               adjust = 0.5,
-                              var.cols = T,
                               plot.theme = theme_bw()) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
@@ -172,7 +170,7 @@ plotMarkerDensity <- function(object,
                       IsRoot = plot.meta$is.root.cells,
                       IsLeaf = plot.meta$is.leaf.cells,
                       Marker = markers[i],
-                      Signal = plot.meta[, colnames(plot.meta) %in% markers[i]],
+                      Signal = plot.meta[, markers[i]],
                       Stage = plot.meta$stage,
                       TrajValue = plot.meta$traj.value,
                       LogTrajValue = plot.meta$traj.value.log)
@@ -195,12 +193,7 @@ plotMarkerDensity <- function(object,
 
   gg <- ggplot(plot.data, aes(x=Signal, color = Marker)) + geom_density(adjust = adjust)
   gg <- gg + plot.theme
-
-  if (var.cols) {
-    gg <- gg + facet_grid(rows = vars(Marker), cols = vars(Stage))
-  } else {
-    gg <- gg + facet_grid(rows = vars(Marker))
-  }
+  gg <- gg + facet_grid(rows = vars(Stage), cols = vars(Marker))
   return(gg)
 }
 

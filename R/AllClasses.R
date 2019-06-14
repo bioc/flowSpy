@@ -206,6 +206,9 @@ createFSPY <- function(raw.data, markers, meta.data,
   }
 
   object@plot.meta <- data.frame(row.names = object@meta.data$cell)
+  object@meta.data$pseudotime <- 0
+  object@meta.data$traj.value <- 0
+  object@meta.data$traj.value.log <- 0
   object@meta.data$is.root.cells <- 0
   object@meta.data$is.leaf.cells <- 0
 

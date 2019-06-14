@@ -56,7 +56,7 @@ library(ggplot2)
 library(flowSpy)
 data("FSPYdata")
 
-markers <- c("CD34", "CD43", "CD38", "CD90", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
+markers <- c("CD34", "CD43", "CD90", "CD38", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
 
 fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
                    meta.data = fspy.meta.data,
@@ -64,10 +64,6 @@ fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
                    verbose = T)
 
 fspy <- runKNN(fspy, knn = 30, verbose = T)
-
-set.seed(1)
-fspy <- runCluster(fspy, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
-table(fspy@meta.data$cluster.id)
 
 fspy <- runFastPCA(fspy, verbose = T)
 
@@ -77,9 +73,12 @@ fspy <- runDiffusionMap(fspy, verbose = T)
 
 fspy <- runUMAP(fspy, verbose = T)
 
-fspy <- updatePlotMeta(fspy, verbose = T)
+set.seed(1)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
+table(fspy@meta.data$cluster.id)
 
-fspy <- buildTree(fspy, cluster.type = "som", dim.type = "umap", verbose = T)
+
+fspy <- buildTree(fspy, cluster.type = "som", dim.type = "dm", dim.use = 1:4, verbose = T)
 
 ##########
 plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
@@ -88,14 +87,11 @@ plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, mai
 
 
 # pseudotime
-root.cells <- fspy@meta.data$cell[which(fspy@meta.data$cluster.id == 36)]
-root.cells <- root.cells[sample(1:length(root.cells), 500)]
-fspy <- defRootCells(fspy, root.cells = as.character(root.cells), verbose = T)
-
+fspy <- defRootCells(fspy, root.cells = c(34), verbose = T)
 
 fspy <- runPseudotime(fspy, verbose = T)
 
-fspy <- defLeafCells(fspy, leaf.cells = c(2,30,12), pseudotime.cutoff = 0.5, verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = c(10,9,4,19), pseudotime.cutoff = 0.5, verbose = T)
 
 fspy <- runWalk(fspy, verbose = T)
 
@@ -106,13 +102,13 @@ sub.obj <- subsetFSPY(fspy, cells = fetch.cells)
 
 plot(fspy@network$mst)
 
-
+plotMarkerDensity(fspy)
 
 
 plot2D(fspy, item.use = c("DC1", "DC2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 #D10.percent.stage
-plotTree(fspy, color.by = "D0.percent.stage", show.node.name = F, cex.size = 1.5) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+plotTree(fspy, color.by = "D4.percent.stage", show.node.name = T, cex.size = 1.5) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 plotTree(fspy, color.by = "pseudotime", show.node.name = T, cex.size = 1, root.id = 34, as.tree = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 

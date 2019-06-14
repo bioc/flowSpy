@@ -5,7 +5,7 @@
 \title{plotMarkerDensity}
 \usage{
 plotMarkerDensity(object, cutoff = -1, markers = NULL, adjust = 0.5,
-  var.cols = T, plot.theme = theme_bw())
+  plot.theme = theme_bw())
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -15,8 +15,6 @@ plotMarkerDensity(object, cutoff = -1, markers = NULL, adjust = 0.5,
 \item{markers}{character. Markers used in the calculation progress}
 
 \item{adjust}{numeric. Transparency (0-1) of the dot, default is 1.}
-
-\item{var.cols}{logical. Whether to plot stage}
 
 \item{plot.theme}{themes from \code{ggplot2}}
 }
