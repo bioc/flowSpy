@@ -230,11 +230,15 @@ plotTree <- function(object,
   # update plot meta information
   plot.data <- fetchPlotMeta(object, verbose = F)
 
+
   cell.count <- table(plot.data[, match(c("cluster.id", "stage"), colnames(plot.data)) ])
   cell.percent <- sapply(1:dim(cell.count)[2], function(x) cell.count[,x]/sum(cell.count[,x]) )
   colnames(cell.percent) <- paste0(colnames(cell.count), ".percent")
-  cell.percent.stage <- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x,]/sum(cell.count[x,]) ))
-  colnames(cell.percent.stage) <- paste0(colnames(cell.count), ".percent.stage")
+  if (length(unique(plot.data$stage)) > 1) {
+    cell.percent.stage <- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x,]/sum(cell.count[x,]) ))
+    colnames(cell.percent.stage) <- paste0(colnames(cell.count), ".percent.stage")
+  }
+
 
   for (i in length(plot.data):1) {
     if (!is.numeric(plot.data[, i])) {

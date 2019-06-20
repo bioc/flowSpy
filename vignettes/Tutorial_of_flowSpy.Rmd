@@ -182,7 +182,7 @@ lower.gate <- c(FSC_A = 55000, SSC_A = 30000,
                 SSC_H = 20000, SSC_W = 60000)
 upper.gate <- c(FSC_A = 200000, SSC_A = 150000,
                 FSC_H = 120000, FSC_W = 120000,
-                FSC_H = 130000, FSC_W = 110000)
+                SSC_H = 130000, SSC_W = 110000)
 
 fcs.d0.filter <- gatingMatrix(fcs.d0, lower.gate = lower.gate, upper.gate = upper.gate)
 
