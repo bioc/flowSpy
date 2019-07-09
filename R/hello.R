@@ -109,7 +109,9 @@ plotTree(object, color.by = "D6.percent", show.node.name = T, cex.size = 1.5) + 
 
 plotPieTree(object, cex.size = 1, size.by.cell.number = F) + scale_fill_manual(values = c("#00599F", "#33CC33", "#FF3222", "#F4D31D", "#FF3222","#7a06a0"))
 
-plotPie2D(object, item.use = c("PC_1", "PC_2"), cex.size = 0.5)
+plotPieCluster(object, item.use = c("PC_1", "PC_2"), cex.size = 0.5)
+plotCluster(object, item.use = c("PC_1", "PC_2"), size = 10)
+
 
 plotTree(object, color.by = "pseudotime", show.node.name = T, cex.size = 1, root.id = 34, as.tree = T) + scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
 
