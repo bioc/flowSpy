@@ -30,6 +30,8 @@ runFastPCA <- function(object, center = FALSE, scale. = TRUE,
   object@pca.value <- pca.obj$rotation
   object@pca.scores <- pca.obj$x
 
+  colnames(object@pca.value) <- paste0("PC_", 1:ncol(object@pca.value))
+
   if (verbose) message(Sys.time(), " [INFO] Calculating PCA completed. ")
 
   return(object)

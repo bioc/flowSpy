@@ -9,6 +9,7 @@
 #' @import flowUtils
 #' @import umap
 #' @import prettydoc
+#' @import scatterpie
 NULL
 
 #' flowSpy class
@@ -30,9 +31,6 @@ NULL
 #'     in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
 #'     And each row of the \code{knn.distance} contains the distance of its nearest neighbors.
 #' @slot som list. Store som network information calculated using \code{\link[FlowSOM]{FlowSOM}}.
-#' @slot hclust list. Hierarchical cluster analysis on a merged flow cytometry data set. See \code{\link[hclust]{stats}}
-#' @slot mclust list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}
-#' @slot kmeans list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}
 #' @slot pca.sdev,pca.value,pca.scores PCA information of FSPY object which are
 #'     generated from \code{\link[gmodels]{fast.prcomp}}.
 #' @slot tsne.value matrix. tSNE coordinates information. See \code{\link[Rtsne]{Rtsne}}.
@@ -70,14 +68,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
   # som network
   som = "list",
 
-  # hclust network
-  hclust = "list",
-
-  # mclust network
-  mclust = "list",
-
-  # kmeans network
-  kmeans = "list",
+  # cluster information
+  cluster = "data.frame",
 
   # pca information
   pca.sdev = "vector",
@@ -100,12 +92,11 @@ FSPY <- methods::setClass("FSPY", slots = c(
 
   # trajectory analysis
   walk = "list",
-  diff.tree = "list",
   diff.traj = "list",
 
   # for visualization
   plot.meta = "data.frame",
-  add.meta = "list"
+  tree.meta = "data.frame"
   )
 )
 
@@ -120,7 +111,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' @param raw.data matrix. Raw data read from FCS file after perform preprocessing.
 #' @param markers vector. Detailed marker information in the gate of flow cytometer.
 #' @param meta.data data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.
-#' @param log.transform logical. Whether to log transformed raw.data. If FALSE, it's better
+#' @param normalization.method character. Normalization and transformation method.
+#'    Whether to log transformed raw.data. If FALSE, it's better
 #'    to perform transformation using \code{\link[transformation]{flowCore}} before creating FSPY
 #'    object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
 #'    scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
@@ -133,12 +125,16 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' @return An FSPY object with raw.data and markers and meta.data
 #'
 #' @examples
+#' # See vignette tutorial
+#' vignette(package = "flowSpy")
+#' vignette("Quick_start", package = "flowSpy")
+#' vignette("Tutorial_of_flowSpy", package = "flowSpy")
 #'
 #'
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = FALSE,
-                       log.transform = TRUE, verbose = FALSE, ...) {
+                       normalization.method = "log", verbose = FALSE, ...) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {
@@ -172,6 +168,8 @@ createFSPY <- function(raw.data, markers, meta.data,
     warning(Sys.time(), " [WARNING] markers must be a vector")
     markers <- as.vector(markers)
   }
+
+  # check markers' index in raw.data
   markers.idx <- match(markers, colnames(raw.data))
   if (verbose) message(Sys.time(), " [INFO] Index of markers in processing")
   if (any(is.na(markers.idx))) {
@@ -187,12 +185,19 @@ createFSPY <- function(raw.data, markers, meta.data,
   object <- new("FSPY", raw.data = raw.data, meta.data = meta.data,
                 markers = markers, markers.idx = markers.idx)
 
-  # log transfromed using base 10
-  if (log.transform) {
-    if (verbose) message(Sys.time(), " [INFO] Log transformed ")
-    object@log.data <- log10(abs(raw.data[, markers.idx]) + 1)
+  # normalization and Log-normalize the data
+  if (normalization.method == "log") {
+    if (verbose) message(paste0(Sys.time(), " [INFO] Determining normalization factors"))
+    cs <- apply(raw.data[, markers.idx], 2, sum)
+    norm_factors <- (10**ceiling(log10(median(cs))))/cs
+    # Log-normalize the data
+    if (verbose) message(paste0(Sys.time(), " [INFO] Normalization and log-transformation."))
+    object@log.data <- round(log10(sweep(abs(raw.data[,markers.idx]), 2, norm_factors, "*")+1), digits=3)
+  } else if (normalization.method == "none") {
+    if (verbose) message(Sys.time(), " [INFO] No normalization and transformation ")
+    object@log.data <- raw.data[, markers.idx]
   } else {
-    if (verbose) message(Sys.time(), " [INFO] No log transformed ")
+    if (verbose) message(Sys.time(), " [INFO] No normalization and transformation ")
     object@log.data <- raw.data[, markers.idx]
   }
 

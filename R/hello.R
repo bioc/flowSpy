@@ -20,9 +20,8 @@ rm(list = ls())
 library(roxygen2)
 roxygenize()
 
-
 verbose = T
-cell.number = 2000
+cell.number = 500
 
 sample.list <- paste0("D", c(0, 2, 4, 6, 8, 10))
 raw <- NULL
@@ -44,97 +43,99 @@ meta.data <- data.frame(cell = paste0(raw$sample, "_", 1:length(raw$sample)),
 
 fspy.meta.data <- meta.data
 fspy.raw.data <- raw.data
-
 #save(fspy.meta.data, fspy.raw.data, file = "data/FSPYdata.rda")
-
 batch <- factor(fspy.meta.data$stage, labels = 1:length(unique(raw$sample)))
 
 
 
 ###################################
 library(ggplot2)
-library(flowSpy)
-data("FSPYdata")
+#library(flowSpy)
+#data("FSPYdata")
 
 markers <- c("CD34", "CD43", "CD90", "CD38", "CD49f", "CD31", "CD45RA", "FLK1", "CD73")
 
-fspy <- createFSPY(raw.data = fspy.raw.data, markers = markers,
-                   meta.data = fspy.meta.data,
-                   log.transform = T,
-                   verbose = T)
 
-fspy <- runKNN(fspy, knn = 30, verbose = T)
+object <- createFSPY(raw.data = fspy.raw.data, markers = markers,
+                     meta.data = fspy.meta.data,
+                     normalization.method = "log",
+                     verbose = T)
 
-fspy <- runFastPCA(fspy, verbose = T)
+object <- runKNN(object, knn = 30, verbose = T)
 
-fspy <- runTSNE(fspy, verbose = T)
+object <- runFastPCA(object, verbose = T)
 
-fspy <- runDiffusionMap(fspy, verbose = T)
+object <- runTSNE(object, verbose = T)
 
-fspy <- runUMAP(fspy, verbose = T)
+object <- runDiffusionMap(object, verbose = T)
+
+object <- runUMAP(object, verbose = T)
 
 set.seed(1)
-fspy <- runCluster(fspy, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
-table(fspy@meta.data$cluster.id)
+object <- runCluster(object, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
+table(object@meta.data$cluster.id)
+object <- processingCluster(object)
 
+object <- buildTree(object, dim.type = "dm", dim.use = 1:4, verbose = T)
 
-fspy <- buildTree(fspy, cluster.type = "som", dim.type = "dm", dim.use = 1:4, verbose = T)
 
 ##########
-plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+plot2D(object, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+plot2D(object, item.use = c("UMAP_1", "UMAP_2"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 
 # pseudotime
-fspy <- defRootCells(fspy, root.cells = c(34), verbose = T)
+object <- defRootCells(object, root.cells = c(34), verbose = T)
 
-fspy <- runPseudotime(fspy, verbose = T)
+object <- runPseudotime(object, verbose = T)
 
-fspy <- defLeafCells(fspy, leaf.cells = c(10,9,4,19), pseudotime.cutoff = 0.5, verbose = T)
+object <- defLeafCells(object, leaf.cells = c(9,2,4,19), verbose = T)
 
-fspy <- runWalk(fspy, verbose = T)
+object <- runWalk(object, verbose = T)
 
-fetch.cells <- fetchCell(fspy, traj.value.log = 0.1, is.root.cells = 1, is.leaf.cells = 1)
-sub.obj <- subsetFSPY(fspy, cells = fetch.cells)
+fetch.cells <- fetchCell(object, traj.value.log = 0.1, is.root.cells = 1, is.leaf.cells = 1)
+sub.obj <- subsetFSPY(object, cells = fetch.cells)
 
 # 4,29,9,19
 
-plot(fspy@network$mst)
-
-plotMarkerDensity(fspy)
+plotMarkerDensity(object)
 
 
-plot2D(fspy, item.use = c("DC1", "DC2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+plot2D(object, item.use = c("DC_1", "DC_2"), color.by = "stage", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
 #D10.percent.stage
-plotTree(fspy, color.by = "D4.percent.stage", show.node.name = T, cex.size = 1.5) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+plotTree(object, color.by = "D6.percent", show.node.name = T, cex.size = 1.5) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222", "#FF3222"))
 
-plotTree(fspy, color.by = "pseudotime", show.node.name = T, cex.size = 1, root.id = 34, as.tree = T) + scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+plotPieTree(object, cex.size = 1, size.by.cell.number = F) + scale_fill_manual(values = c("#00599F", "#33CC33", "#FF3222", "#F4D31D", "#FF3222","#7a06a0"))
+
+plotPie2D(object, item.use = c("PC_1", "PC_2"), cex.size = 0.5)
+
+plotTree(object, color.by = "pseudotime", show.node.name = T, cex.size = 1, root.id = 34, as.tree = T) + scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
 
 
 
-plotPseudotimeDensity(fspy)
-plotPseudotimeTraj(fspy, var.cols = T) + scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
-plotPseudotimeTraj(fspy, cutoff = 0.1, var.cols = T) + scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
+plotPseudotimeDensity(object)
+plotPseudotimeTraj(object, var.cols = T) + scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
+plotPseudotimeTraj(object, cutoff = 0.1, var.cols = T) + scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
 
-plot2D(fspy, item.use = c("pseudotime", "CD43"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+plot2D(object, item.use = c("pseudotime", "CD43"), color.by = "som.id", alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
 
-plot2D(fspy, item.use = c("CD43", "CD34"), color.by = "stage", alpha = 1, main = "PCA")
+plot2D(object, item.use = c("CD43", "CD34"), color.by = "stage", alpha = 1, main = "PCA")
 
-plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "traj.value.log", alpha = 0.5, main = "PCA", category = "numeric") + scale_colour_gradientn(colors = c("#FFFFCC", "red", "red", "red"))
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "traj.value.log", alpha = 0.5, main = "PCA", category = "numeric") + scale_colour_gradientn(colors = c("#FFFFCC", "red", "red", "red"))
 
-plot3D(fspy, item.use = c("PC1", "PC2", "PC3"), color.by = "CD43")
+plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "CD43")
 
-plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "CD49f", alpha = 1, main = "PCA") + scale_colour_gradientn(colors = c("blue", "blue", "white", "red"))
+plot2D(object, item.use = c("UMAP1", "UMAP2"), color.by = "CD49f", alpha = 1, main = "PCA") + scale_colour_gradientn(colors = c("blue", "blue", "white", "red"))
 
-plot2D(fspy, item.use = c("pseudotime", "traj.value.log"), color.by = "stage")
+plot2D(object, item.use = c("pseudotime", "traj.value.log"), color.by = "stage")
 
-plotTree(fspy, show.node.name = T, cex.size = 2) + scale_colour_gradientn(colors = "#666666")
+plotTree(object, show.node.name = T, cex.size = 2) + scale_colour_gradientn(colors = "#666666")
 
-plotTree(fspy, color.by = "pseudotime", as.tree = T, show.node.name = T, root.id = 24)  + scale_colour_gradientn(colors = c("#00599F", "#00599F","#EEEEEE", "#FF3222","#FF3222"))
+plotTree(object, color.by = "pseudotime", as.tree = T, show.node.name = T, root.id = 24)  + scale_colour_gradientn(colors = c("#00599F", "#00599F","#EEEEEE", "#FF3222","#FF3222"))
 
-plot.info <- fetchPlotMeta(fspy, verbose = F)
+plot.info <- fetchPlotMeta(object, verbose = F)
 ggplot(plot.info, aes(x=traj.value.log, colour = stage)) + geom_density() + theme_bw()
 
 pdata <- aggregate(plot.info[, c(markers, "pseudotime")], list(id = plot.info$som.id), mean)

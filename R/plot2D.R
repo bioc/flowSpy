@@ -99,4 +99,71 @@ plot2D <- function(object,
 }
 
 
+#'
+#' Visualization pie plot of 2D data of FSPY
+#'
+#' @name plotPie2D
+#'
+#' @param object An FSPY object
+#' @param item.use character. Items use to 2D plot, axes x and y must be numeric.
+#' @param color.by character. Dot or mesh color by which character. It can be one of the column
+#'     of plot.meta, or it can be just "density" (the default value).
+#' @param order.by vector. Order of color theme.
+#' @param size numeric. Size of the dot
+#' @param alpha numberic. Transparency (0-1) of the dot, default is 1.
+#' @param category character. numeric or categorical
+#' @param show.cluser.id logical. Whether to show cluster id in the plot.
+#' @param show.cluser.id.size numeric. Size of the cluster id.
+#' @param main character. Title of the plot.
+#' @param plot.theme themes from \code{ggplot2}
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#' @examples
+#'
+plotPie2D <- function(object,
+                      item.use = c("PC_1", "PC_2"),
+                      cex.size = 1,
+                      size.by.cell.number = T,
+                      main = "2D pie plot of FSPY",
+                      plot.theme = theme_bw()) {
+
+  # update plot meta information
+  plot.data <- fetchClustMeta(object, verbose = F)
+
+  # check item.use parameter in cluster data.frame
+  if ( !all(item.use %in% colnames(object@cluster)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
+
+  if (length(item.use) < 2) stop(Sys.time(), " [ERROR] item.use is less than two elements.")
+  if (length(item.use) > 2) {
+    warning(Sys.time(), " [WARNING] item.use has more than two elements. Only the first two will be used")
+    item.use <- item.use[1:2]
+  }
+  item.use.idx <- match(item.use, colnames(object@cluster))
+
+  plot.cols <- paste0(unique(object@meta.data$stage), ".percent")
+
+  plot.data <- data.frame(plot.data,
+                          pos.x = object@cluster[, item.use.idx[1]],
+                          pos.y = object@cluster[, item.use.idx[2]])
+
+  gg <- ggplot()
+  if (size.by.cell.number) {
+    gg <- gg + geom_scatterpie(aes(x = pos.x, y = pos.y, group = cluster, r = cell.number.percent*cex.size),
+                               data = plot.data, cols = plot.cols, color=NA) + coord_equal()
+  } else {
+    gg <- gg + geom_scatterpie(aes(x = pos.x, y = pos.y, group = cluster, r = 0.1*cex.size),
+                               data = plot.data, cols = plot.cols, color=NA) + coord_equal()
+  }
+
+  gg <- gg + plot.theme
+  gg <- gg + labs(x = "", y = "", title = main)
+
+  return(gg)
+
+}
+
+
 

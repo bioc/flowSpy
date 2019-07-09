@@ -46,7 +46,7 @@ runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     ...)
 
   object@tsne.value <- tsne.obj$Y
-  colnames(object@tsne.value) <- paste0("tSNE", 1:ncol(tsne.obj$Y))
+  colnames(object@tsne.value) <- paste0("tSNE_", 1:ncol(tsne.obj$Y))
   rownames(object@tsne.value) <- rownames(object@log.data)
 
   if (verbose) message(Sys.time(), " [INFO] Calculating tSNE completed. ")

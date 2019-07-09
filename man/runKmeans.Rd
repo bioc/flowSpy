@@ -21,7 +21,7 @@ runKmeans(object, k = 25, iter.max = 10, nstart = 1,
 
 \item{trace}{logical or integer number.}
 
-\item{scale}{logical. Whether to use scales data in hclust.}
+\item{scale}{logical. Whether to use scaled data in kmeans.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 

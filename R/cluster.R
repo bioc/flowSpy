@@ -5,16 +5,16 @@
 #'
 #' @description Compute a specific clustering using the combined flow
 #'    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
-#'    "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[stats]{kmeans}} are
+#'    "clara" \code{\link[cluster]{clara}}, "kmeans" \code{\link[stats]{kmeans}} are
 #'    provided.
 #'
 #' @param object an FSPY object
-#' @param cluster.method character. Four clustering method are provided: som, hclust, mclust, kmeans.
+#' @param cluster.method character. Four clustering method are provided: som, hclust, clara, kmeans.
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the clustering functions.
 #'
 #' @seealso Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
-#'    \code{\link[mclust]{mlcust}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
+#'    \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
 #'    \code{runMclust} and \code{runKmeans} to run clustering respectively.
 #'
 #' @return An FSPY object with cluster.id in meta.data
@@ -35,14 +35,74 @@ runCluster <- function(object, cluster.method = "som", verbose = F, ...) {
     object <- runHclust(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$hclust.id
   } else if (cluster.method == "mclust") {
-    object <- runMclust(object, verbose = verbose, ...)
-    object@meta.data$cluster.id <- object@meta.data$mclust.id
+    warning(Sys.time(), " [WARNING] mclust method is not recommended ")
+    #object <- runMclust(object, verbose = verbose, ...)
+    #object@meta.data$cluster.id <- object@meta.data$mclust.id
+  } else if (cluster.method == "clara") {
+    object <- runClara(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$clara.id
   } else if (cluster.method == "kmeans") {
     object <- runKmeans(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$kmeans.id
   } else {
     warning(Sys.time(), " [WARNING] Invalid cluster.method parameter ")
   }
+
+  return(object)
+
+}
+
+#'
+#' processingCluster
+#'
+#' @name processingCluster
+#'
+#' @description Compute a specific clustering using the combined flow
+#'    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
+#'    "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[stats]{kmeans}} are
+#'    provided.
+#'
+#' @param object an FSPY object
+#' @param verbose logic. Whether to print calculation progress.
+#' @param ... options to pass on to the clustering functions.
+#'
+#' @seealso Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+#'    \code{\link[mclust]{mlcust}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
+#'    \code{runMclust} and \code{runKmeans} to run clustering respectively.
+#'
+#' @return An FSPY object with cluster.id in meta.data
+#'
+#' @export
+#'
+#'
+processingCluster <- function(object, perplexity = 5, k = 5,
+                              umap.config = umap.defaults, verbose = F, ...) {
+
+  if (missing(object)) {
+    stop(Sys.time(), " [ERROR] FSPY object is missing ")
+  }
+
+  # checking index of markers in cluster
+  cluster.meta <- fetchClustMeta(object, verbose = F)
+  cluster.mat <- cluster.meta[, match(object@markers, colnames(cluster.meta))]
+
+  # run PCA
+  if (verbose) message(Sys.time(), " [INFO] Calculating PCA")
+  pca.info <- fast.prcomp( t(cluster.mat), ...)
+  colnames(pca.info$rotation) <- paste0("PC_", 1:ncol(pca.info$rotation))
+  if (verbose) message(Sys.time(), " [INFO] Calculating tSNE")
+  tsne.info <- Rtsne(as.matrix(cluster.mat), perplexity = perplexity, ...)
+  colnames(tsne.info$Y) <- paste0("tSNE_", 1:ncol(tsne.info$Y))
+  if (verbose) message(Sys.time(), " [INFO] Calculating Diffusion Map")
+  dm.info <- DiffusionMap(cluster.mat, k=5, ...)
+  colnames(dm.info@eigenvectors) <- paste0("DC_", 1:ncol(dm.info@eigenvectors))
+  if (verbose) message(Sys.time(), " [INFO] Calculating UMAP")
+  umap.config$n_neighbors <- k
+  umap.info <- umap(cluster.mat, config = umap.config, ...)
+  colnames(umap.info$layout) <- paste0("UMAP_", 1:ncol(umap.info$layout))
+
+  object@cluster <- data.frame(pca.info$rotation, tsne.info$Y, dm.info@eigenvectors, umap.info$layout)
+  rownames(object@cluster) <- rownames(object@tree.meta$cluster)
 
   return(object)
 
@@ -108,11 +168,6 @@ runHclust <- function(object, k = 25,
 
   object@meta.data$hclust.id <- hc.tree
 
-  object@hclust <- list(k = k,
-                        d = d,
-                        hc = hc,
-                        value = aggregate(object@log.data, list(cluster = object@meta.data$hclust.id), mean))
-
   if (verbose) message(Sys.time(), " [INFO] Calculating Hclust completed.")
   return(object)
 }
@@ -132,7 +187,7 @@ runHclust <- function(object, k = 25,
 #' @param nstart numeric. If k is a number, how many random sets should be chosen.
 #' @param algorithm numeric.
 #' @param trace logical or integer number.
-#' @param scale logical. Whether to use scales data in hclust.
+#' @param scale logical. Whether to use scaled data in kmeans.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to \code{\link[stats]{kmeans}} function
 #'
@@ -159,13 +214,59 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 
   object@meta.data$kmeans.id <- kmeans.info$cluster
 
-  object@kmeans <- list(k = k,
-                        centers = kmeans.info$centers)
-
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans completed.")
   return(object)
 }
 
+
+#'
+#' runClara
+#'
+#' @name runClara
+#'
+#' @description Perform k-means clustering on a data matrix.
+#'
+#' @param object  an FSPY object
+#' @param k numeric. The number of clusters. It is required that
+#'    0 < k < n where n is the number of observations (i.e., n = nrow(x)).
+#' @param metric character. string specifying the metric to be used for
+#'    calculating dissimilarities between observations.
+#' @param stand logical. Indicating if the measurements in x are
+#'    standardized before calculating the dissimilarities.
+#' @param samples numeric. Say N, the number of samples to be drawn from the dataset.
+#'    The default is N = 5,
+#' @param trace numberic. Indicating a trace level for diagnostic output during the algorithm
+#' @param sampsize numberic. Say j, the number of observations in each sample.
+#'    Sampsize should be higher than the number of clusters (k) and at most
+#'    the number of observations (n = nrow(x))
+#' @param scale logical. Whether to use scaled data in kmeans.
+#' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[cluster]{clara}} function
+#'
+#' @return an FSPY object with clara.id in meta.data
+#'
+#' @seealso \code{\link[cluster]{clara}}
+#'
+#' @importFrom cluster clara
+#' @export
+#'
+#'
+runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jaccard"),
+                     stand = FALSE, samples = 5, scale = T,
+                     sampsize = min(n, 40 + 2 * k), trace = 0, verbose = F, ...) {
+
+  if (verbose) message(Sys.time(), " [INFO] Calculating Clara")
+
+  if (scale) clara.data <- scale(object@log.data) else clara.data = object@log.data
+
+  clara.info <- clara(clara.data, k = k, metric = metric, stand = stand, samples = samples,
+                      sampsize = sampsize, trace = trace, ...)
+
+  object@meta.data$clara.id <- clara.info$clustering
+
+  if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans completed.")
+  return(object)
+}
 
 #'
 #' runMclust
@@ -200,10 +301,6 @@ runMclust <- function(object, scale = F,
   mod <- Mclust(mclust.data, ...)
 
   object@meta.data$mclust.id <- mod$classification
-
-  object@mclust <- list(data = mod$data,
-                        BIC = mod$BIC,
-                        z =  mod$z)
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Mclust completed.")
   return(object)
@@ -275,7 +372,6 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
   if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM completed.")
   return(object)
 }
-
 
 
 

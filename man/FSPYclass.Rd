@@ -33,12 +33,6 @@ And each row of the \code{knn.distance} contains the distance of its nearest nei
 
 \item{\code{som}}{list. Store som network information calculated using \code{\link[FlowSOM]{FlowSOM}}.}
 
-\item{\code{hclust}}{list. Hierarchical cluster analysis on a merged flow cytometry data set. See \code{\link[hclust]{stats}}}
-
-\item{\code{mclust}}{list. Gaussian mixture modelling for classfication. See \code{\link[mclust]{mclust}}}
-
-\item{\code{kmeans}}{list. Perform k-means clustering on the merged flow cytometry data set. See \code{\link[kmeans]{stats}}}
-
 \item{\code{pca.sdev,pca.value,pca.scores}}{PCA information of FSPY object which are
 generated from \code{\link[gmodels]{fast.prcomp}}.}
 

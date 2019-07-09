@@ -24,7 +24,7 @@ runUMAP <- function(object, umap.config = umap.defaults, dim = 2, verbose = F, .
   umap.config$n_components <- dim
   umap.out <- umap(object@log.data, config = umap.config, ...)
   object@umap.value <- umap.out$layout
-  colnames(object@umap.value) <- paste0("UMAP", 1:ncol(umap.out$layout))
+  colnames(object@umap.value) <- paste0("UMAP_", 1:ncol(umap.out$layout))
   rownames(object@umap.value) <- rownames(object@log.data)
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Umap.")

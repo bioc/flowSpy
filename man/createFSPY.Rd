@@ -5,7 +5,8 @@
 \title{create an FSPY object}
 \usage{
 createFSPY(raw.data, markers, meta.data, batch = NULL,
-  batch.correct = FALSE, log.transform = TRUE, verbose = FALSE, ...)
+  batch.correct = FALSE, normalization.method = "log",
+  verbose = FALSE, ...)
 }
 \arguments{
 \item{raw.data}{matrix. Raw data read from FCS file after perform preprocessing.}
@@ -14,7 +15,8 @@ createFSPY(raw.data, markers, meta.data, batch = NULL,
 
 \item{meta.data}{data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.}
 
-\item{log.transform}{logical. Whether to log transformed raw.data. If FALSE, it's better
+\item{normalization.method}{character. Normalization and transformation method.
+Whether to log transformed raw.data. If FALSE, it's better
 to perform transformation using \code{\link[transformation]{flowCore}} before creating FSPY
 object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
 scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
@@ -32,6 +34,10 @@ This function include all information used in flow cytometry data
 processing.
 }
 \examples{
+# See vignette tutorial
+vignette(package = "flowSpy")
+vignette("Quick_start", package = "flowSpy")
+vignette("Tutorial_of_flowSpy", package = "flowSpy")
 
 
 

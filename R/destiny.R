@@ -44,8 +44,10 @@ runDiffusionMap <- function(object, sigma.use = NULL,
   dm.obj <- DiffusionMap(dm.data, sigma=sigma.use, k=object@knn, density_norm = density.norm, distance=distance[1], ...)
 
   rownames(dm.obj@eigenvectors) <- rownames(dm.data)
+  colnames(dm.obj@eigenvectors) <- paste0("DC_", 1:ncol(dm.obj@eigenvectors))
   rownames(dm.obj@transitions) <- rownames(dm.data)
   colnames(dm.obj@transitions) <- rownames(dm.data)
+
 
   # Load diffusion map into the Dropseq object
   object@dm <- dm.obj

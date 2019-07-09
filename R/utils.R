@@ -1,5 +1,5 @@
 #'
-#' Update plot metadata of FSPY
+#' Update plot meta information of FSPY
 #'
 #' @name updatePlotMeta
 #'
@@ -35,6 +35,45 @@ updatePlotMeta <- function(object, verbose = TRUE) {
   return(object)
 }
 
+#'
+#' Update clusters' meta information of FSPY
+#'
+#' @name updateClustMeta
+#'
+#' @param object An FSPY object
+#' @param verbose logical. Whether to print calculation progress.
+#'
+#' @export
+#'
+#'
+updateClustMeta <- function(object, verbose = TRUE) {
+
+  # Generating tree meta information
+  plot.data <- fetchPlotMeta(object, verbose = F)
+
+  if (length(unique(plot.data$stage)) > 1) {
+    cell.count <- table(plot.data[, match(c("cluster.id", "stage"), colnames(plot.data)) ])
+    cell.count<- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x, ]))
+    cell.total.number <- rowSums(cell.count)
+    cell.total.number.percent <- cell.total.number/sum(cell.total.number)
+    cell.percent<- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x,]/sum(cell.count[x,]) ))
+    colnames(cell.percent) <- paste0(colnames(cell.count), ".percent")
+  }
+
+  idx.redim <- match(c(object@markers, "pseudotime", "traj.value", "traj.value.log"), colnames(plot.data))
+  idx.redim <- unique(idx.redim)
+  tree.meta <- aggregate(plot.data[, idx.redim], list(cluster = plot.data[, "cluster.id"]), mean)
+  tree.meta <- data.frame(tree.meta, cell.count,
+                          cell.number = cell.total.number,
+                          cell.number.percent = cell.total.number.percent,
+                          cell.percent)
+
+  object@tree.meta <- tree.meta
+  if (verbose) message(Sys.time(), " [INFO] Columns can be used in plotTree: ", paste(colnames(tree.meta), collapse = " "))
+
+  return(object)
+}
+
 
 #'
 #' Fetching plot metadata of FSPY
@@ -53,6 +92,25 @@ fetchPlotMeta <- function(object, verbose = F) {
 
   return(object@plot.meta)
 }
+
+#'
+#' Fetching clusters' metadata of FSPY
+#'
+#' @name fetchClustMeta
+#'
+#' @param object An FSPY object
+#' @param verbose logical. Whether to print calculation progress.
+#'
+#' @export
+#'
+#'
+fetchClustMeta <- function(object, verbose = F) {
+
+  object <- updateClustMeta(object, verbose = verbose)
+
+  return(object@tree.meta)
+}
+
 
 #'
 #' Fetching cellls of FSPY

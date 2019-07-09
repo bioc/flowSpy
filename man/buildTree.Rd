@@ -4,15 +4,13 @@
 \alias{buildTree}
 \title{buildTree}
 \usage{
-buildTree(object, method = "euclidean", cluster.type = "som",
-  dim.type = "tsne", dim.use = 1:2, verbose = F)
+buildTree(object, method = "euclidean", dim.type = "umap",
+  dim.use = 1:2, verbose = F)
 }
 \arguments{
 \item{object}{an FSPY object}
 
 \item{method}{character. Mehtod to build MST.}
-
-\item{cluster.type}{character.}
 
 \item{dim.type}{character.}
 
