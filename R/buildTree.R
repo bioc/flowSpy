@@ -21,16 +21,16 @@ buildTree <- function(object, method = "euclidean",
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree.")
   if (missing(object)) stop(Sys.time(), " [ERROR] FSPY object is missing.")
   if (dim.type %in% c("tsne", "tSNE", "TSNE", "t-SNE","t_SNE", "t") ) {
-    dim.name <- paste0("tSNE", dim.use)
+    dim.name <- paste0("tSNE_", dim.use)
     tree.mat <- object@tsne.value[, dim.name]
   } else if ( dim.type %in% c("PCA", "pca", "p") ) {
-    dim.name <- paste0("PC", dim.use)
+    dim.name <- paste0("PC_", dim.use)
     tree.mat <- object@pca.value[, dim.name]
   } else if (dim.type %in% c("dc", "diffusionmap", "diffusion-map", "destiny", "d")) {
-    dim.name <- paste0("DC", dim.use)
+    dim.name <- paste0("DC_", dim.use)
     tree.mat <- object@dm@eigenvectors[, dim.name]
   } else if (dim.type %in% c("umap", "UMAP", "u")) {
-    dim.name <- paste0("UMAP", dim.use)
+    dim.name <- paste0("UMAP_", dim.use)
     tree.mat <- object@umap.value[, dim.name]
   } else {
     if (verbose) message(Sys.time(), " [INFO] The log data will be used to calculate trajectory")

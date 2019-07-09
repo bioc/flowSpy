@@ -58,6 +58,16 @@ updateClustMeta <- function(object, verbose = TRUE) {
     cell.total.number.percent <- cell.total.number/sum(cell.total.number)
     cell.percent<- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x,]/sum(cell.count[x,]) ))
     colnames(cell.percent) <- paste0(colnames(cell.count), ".percent")
+  } else {
+    cell.count <- table(plot.data[, match(c("cluster.id", "stage"), colnames(plot.data)) ])
+    cell.count<- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x, ]))
+    cell.count <- as.data.frame(t(cell.count))
+    cell.total.number <- rowSums(cell.count)
+    cell.total.number.percent <- cell.total.number/sum(cell.total.number)
+    cell.percent<- t(sapply(1:dim(cell.count)[1], function(x) cell.count[x,]/sum(cell.count[x,]) ))
+    cell.percent <- as.data.frame(t(cell.percent))
+    colnames(cell.count) <- paste0(unique(plot.data$stage))
+    colnames(cell.percent) <- paste0(unique(plot.data$stage), ".percent")
   }
 
   idx.redim <- match(c(object@markers, "pseudotime", "traj.value", "traj.value.log"), colnames(plot.data))

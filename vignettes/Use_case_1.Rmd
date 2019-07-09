@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run dimensionality reduction and clustering, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm. This tutorial will take 
+This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run dimensionality reduction and clustering, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm. 
 
 
 ``` {r quick-build, eval = FALSE}
@@ -36,12 +36,19 @@ library(flowViz)
 library(flowSpy)
 })
 
-fcs.path <- "../../flowSpy-dataset/FCS/usecase1/"
-fcs.file <- paste0(fcs.path, "Lin-CB.fcs")
+#########################
+# down sampling
+#fcs.data <- flowCore::read.FCS(filename = "../../dataset/usecase1/Lin-CB.fcs")
+#fcs.data <- fcs.data[sample(1:dim(fcs.data)[1], 100000), ]
+#write.FCS(fcs.data, "../../flowSpy-dataset/CleanData/usecase1/Lin-CB-10w.fcs")
+
+fcs.path <- "../../flowSpy-dataset/CleanData/usecase1/"
+fcs.file <- paste0(fcs.path, "Lin-CB-10w.fcs")
 
 # Read flow cytomery data via flowCore::read.FCS
 fcs.data <- flowCore::read.FCS(filename = fcs.file)
 
+# Compensation
 fcs.data <- flowCore::compensate(fcs.data, spillover = fcs.data@description$SPILL)
 
 # Renames of colnames of fcs.data
@@ -53,64 +60,67 @@ colnames.mapping <- c(`FSC-A` = "FSC_A", `FSC-H` = "FSC_H", `FSC-W` = "FSC_W",
                       `PerCP-Cy5-5-A` = "PerCP_Cy5_5_A", `BV650-A` = "CD49f", 
                       `BV 785-A` = "BV_785_A",
                       `Time` = "Time")
-
+# fetch expression data
 fcs.exp <- fcs.data@exprs
 
+# rename colnames
 colnames(fcs.exp) <- colnames.mapping[match(colnames(fcs.data@exprs),
                                             names(colnames.mapping))]
 
-
-fcs.plot <- fcs.exp[sample(1:dim(fcs.exp)[1], 30000), ]
-heatscatter(fcs.plot[, "FSC_A"], fcs.plot[, "SSC_A"], 
+# plot FSC_A and SSC_A
+heatscatter(fcs.exp[, "FSC_A"], fcs.exp[, "SSC_A"], 
             cexplot = 0.3, main = "FCS all cells", 
             xlab = "FSC_A", ylab = "SSC_A",
             xlim = c(0,250000), ylim = c(0,250000))
 
-heatscatter(log10(abs(fcs.plot[, "CD34"])+1), log10(abs(fcs.plot[, "CD38"])+1), 
-            cexplot = 0.3, main = "FCS all cells", 
-            #xlab = "FSC_A", ylab = "SSC_A",
-            xlim = c(0,5), ylim = c(0,5))
-
-
 lower.gate <- c(FSC_A = 40000, SSC_A = 10000,
-                FSC_H = 40000, FSC_W = 60000,
-                SSC_H = 10000, SSC_W = 60000,
-                CD34 = 3162)
+                FSC_H = 20000, FSC_W = 60000,
+                SSC_H = 10000, SSC_W = 60000)
 upper.gate <- c(FSC_A = 200000, SSC_A = 250000,
-                FSC_H = 120000, FSC_W = 150000,
-                SSC_H = 130000, SSC_W = 100000,
-                CD34 = 100000)
+                FSC_H = 160000, FSC_W = 100000,
+                SSC_H = 200000, SSC_W = 100000)
 
+# gating matrix using gatingMatrix in flowSpy 
 fcs.exp.filter <- gatingMatrix(fcs.exp, lower.gate = lower.gate, upper.gate = upper.gate)
 
-fcs.exp.filter.plot <- fcs.exp.filter[sample(1:dim(fcs.exp.filter)[1], 10000), ]
-fcs.exp.filter.plot <- fcs.exp.filter.plot[which(log10(abs(fcs.exp.filter.plot[, "CD38"])+1)  < 3.1), ]
-fcs.exp.filter.plot <- fcs.exp.filter.plot[which(log10(abs(fcs.exp.filter.plot[, "CD45RA"])+1)  > 3), ]
-heatscatter(
-            log10(abs(fcs.exp.filter.plot[, "CD45RA"])+1), 
-            log10(abs(fcs.exp.filter.plot[, "CD90"])+1), 
+# plot FSC_A and CD34
+heatscatter(log10(abs(fcs.exp.filter[, "CD34"])+1), 
+            log10(abs(fcs.exp.filter[, "CD38"])+1), 
             cexplot = 0.3, main = "FCS all cells", 
-            #xlab = "FSC_A", ylab = "SSC_A",
-            ylim = c(0,5), xlim = c(0,5))
+            xlab = "CD34", ylab = "CD38",
+            xlim = c(0,5), ylim = c(0,5))
 
-sum(table(fspy@meta.data$cluster.id)[names(table(fspy@meta.data$cluster.id)) %in% c(22,1,15,25,8,9,2)]  )
+# filtering cells with CD34-
+lower.gate <- c(CD34 = 3162)
+upper.gate <- c(CD34 = 100000)
+fcs.exp.filter.cd34pos <- gatingMatrix(fcs.exp.filter, lower.gate = lower.gate, upper.gate = upper.gate)
 
-
-heatscatter(
-            log10(abs(fcs.exp.filter.plot[, "CD49f"])+1), 
-            fcs.exp.filter.plot[, "FSC_H"], 
+# plot CD45RA and CD90
+heatscatter(log10(abs(fcs.exp.filter.cd34pos[, "CD45RA"])+1), 
+            log10(abs(fcs.exp.filter.cd34pos[, "CD90"])+1), 
             cexplot = 0.3, main = "FCS all cells", 
-            #xlab = "FSC_A", ylab = "SSC_A",
-            ylim = c(40000,120000), xlim = c(1,4))
+            xlab = "CD45RA", ylab = "CD90",
+            xlim = c(0,5), ylim = c(0,5))
 
+# filtering cells with CD45RA- and CD90-
+lower.gate <- c(CD45RA = 0, CD90 = 0)
+upper.gate <- c(CD45RA = 6309, CD90 = 10000)
+fcs.exp.filter.2neg <- gatingMatrix(fcs.exp.filter.cd34pos, lower.gate = lower.gate, upper.gate = upper.gate)
 
+# plot FSC_A and CD34
+heatscatter(log10(abs(fcs.exp.filter.2neg[, "CD49f"])+1),
+            fcs.exp.filter.2neg[, "FSC_H"], 
+            cexplot = 0.3, main = "FCS all cells", 
+            xlab = "CD49f", ylab = "FSC_H")
 
-fcs.data.out <- fcs.data
-fcs.data.out@exprs <- fspy.raw.data
-write.FCS(fcs.data.out, filename = "../../usecase/LIN-CB.fcs")
+# filtering cells with CD45RA- and CD90-
+lower.gate <- c(CD49f = 1000)
+upper.gate <- c(CD49f = 100000)
+fcs.exp.filter.hsc <- gatingMatrix(fcs.exp.filter.2neg, lower.gate = lower.gate, upper.gate = upper.gate)
+
 
 markers <- c("CD34", "CD43", "CD90", "CD45RA", "CD235a", "CD38", "CD49f")
-fspy.raw.data <- fcs.exp.filter[sample(1:dim(fcs.exp.filter)[1], 50000), ]
+fspy.raw.data <- fcs.exp.filter.cd34pos
 fspy.meta.data <- data.frame(cell = paste0("C", 1:dim(fspy.raw.data)[1]),
                              stage = "D0")
 
@@ -118,7 +128,7 @@ fspy.meta.data <- data.frame(cell = paste0("C", 1:dim(fspy.raw.data)[1]),
 fspy <- createFSPY(raw.data = fspy.raw.data, 
                    markers = markers,
                    meta.data = fspy.meta.data,
-                   log.transform = T)
+                   normalization.method = "log")
 
 # See information in object
 fspy
@@ -139,43 +149,36 @@ fspy <- runDiffusionMap(fspy)
 fspy <- runUMAP(fspy)
 
 # Run cluster based on SOM 
-set.seed(11)
+set.seed(1)
 fspy <- runCluster(fspy, xdim = 5, ydim = 5)
 
 # Build Trees using Minimum Spanning Tree (MST) 
-fspy <- buildTree(fspy, cluster.type = "som", dim.type = "umap")
+fspy <- buildTree(fspy, dim.type = "umap")
 
-plot2D(fspy, item.use = c("PC1", "PC2"), color.by = "cluster.id", 
+plot2D(fspy, item.use = c("PC_1", "PC_2"), color.by = "cluster.id", 
        alpha = 1, main = "PCA colored by cluster.id")
 
-plot2D(fspy, item.use = c("tSNE1", "tSNE2"), color.by = "cluster.id", 
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id", 
        alpha = 1, main = "Diffusion Map colored by cluster.id")
 
-plot2D(fspy, item.use = c("DC1", "DC2"), color.by = "cluster.id", 
+plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "cluster.id", 
        alpha = 1, main = "Diffusion Map colored by cluster.id")
 
-plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "cluster.id", 
-       alpha = 1, main = "UMAP colored by cluster.id")
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id", 
+       alpha = 1, main = "UMAP colored by cluster.id",
+       show.cluser.id = T)
 
 # Visualize Tree
-p <- plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "cluster.id", 
-       alpha = 1, main = "UMAP colored by cluster.id", show.cluser.id = T)
-ggsave(paste0("../../usecase/1/UMAP.pdf" ), p,  width = 10, height = 8)
-
-p <- plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = "cluster.id", 
-       alpha = 1, main = "UMAP colored by cluster.id", show.cluser.id = F)
-ggsave(paste0("../../usecase/1/UMAP.noname.pdf" ), p,  width = 10, height = 8)
-
 for ( i in markers) {
-p <- plot2D(fspy, item.use = c("UMAP1", "UMAP2"), color.by = i, 
+p <- plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = i, 
        alpha = 1, main = "UMAP colored by cluster.id", show.cluser.id = F) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../usecase/1/UMAP.", i, ".pdf" ), p,  width = 9, height = 8)
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/6.UMAP.", i, ".pdf"), p,  width = 6, height = 5)
 }
 
 p <- plotTree(fspy, show.node.name = T, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../usecase/1/tree.pdf" ), p, width = 4, height = 4)
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/6.UMAP.", i, ".pdf"), p, width = 4, height = 4)
 for ( i in markers) {
   p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
