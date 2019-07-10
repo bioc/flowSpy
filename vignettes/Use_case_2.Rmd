@@ -22,9 +22,181 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run clustering and dimension reduction, how to build a [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm, how to run pseudotime and how to inference trajectory. It took about four minutes to run the complete analysis workflow with 12000 cells and 9 markers.
+This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run dimensionality reduction and clustering, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm. 
 
-If you want to see the detailed information of flowSpy workflow, please see the vignette **Tutorial of flowSpy** using `vignette("Tutorial_of_flowSpy", package = "flowSpy")`.
+
+``` {r quick-build, eval = FALSE}
+
+# Loading packages
+suppressMessages({
+library(ggplot2)
+library(LSD)
+library(flowCore)
+library(flowViz)
+library(flowSpy)
+})
+
+#########################
+# download sample
+fcs.path <- "../../flowSpy-dataset/FCS/usecase1/"
+fcs.file <- paste0(fcs.path, "Sample_7.fcs")
+
+# Read flow cytomery data via flowCore::read.FCS
+cytof.data <- flowCore::read.FCS(filename = fcs.file)
+
+# show elements in mass cytometry data
+cytof.data
+
+# fetching expression data 
+exp.data <- cytof.data@exprs
+
+# rename colname of expression data
+recol <- as.character(cytof.data@parameters@data$desc)
+names(recol) <- as.character(cytof.data@parameters@data$name)
+
+markers.recol <- recol[grep("CD", recol)]
+markers.recol <- markers.recol[-2]
+colnames(exp.data)[match(names(markers.recol), colnames(exp.data))] <- markers.recol
+
+markers <- as.character(markers.recol)
+markers.idx <- match(markers, colnames(exp.data))
+
+# filtering cells with less 3 markers
+exp.cells <- rowSums(exp.data[, markers.idx] > 0)
+summary(exp.cells)
+exp.data <- exp.data[which(exp.cells > 3), ]
+
+# downsampling
+cell.size <- 40000
+set.seed(1)
+exp.data.filter <- exp.data[sample(1:dim(exp.data)[1], cell.size), ]
+
+# build an FSPY object
+# if you don't want to see the running log information, set verbose FALSE
+meta.data <- data.frame(cell = paste0("cell", 1:nrow(exp.data.filter)),
+                        stage = "D0")
+fspy <- createFSPY(raw.data = exp.data.filter, markers = markers,
+                   meta.data = meta.data,
+                   normalization.method = "log",
+                   verbose = T)
+
+# run KNN
+fspy <- runKNN(fspy, knn = 30, verbose = T)
+
+# run PCA
+fspy <- runFastPCA(fspy, verbose = T)
+
+# run tSNE
+fspy <- runTSNE(fspy, verbose = T)
+
+# run Diffusion map
+fspy <- runDiffusionMap(fspy, verbose = T)
+
+# run UMAP
+fspy <- runUMAP(fspy, verbose = T)
+
+# cluster cells by SOM algorithm
+set.seed(1)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 6, ydim = 6, verbose = T)
+table(fspy@meta.data$cluster.id)
+
+# calculation features of clusters
+fspy <- processingCluster(fspy)
+
+# build minimum spanning tree based on umap
+fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2, verbose = T)
+
+# define root cells
+fspy <- defRootCells(fspy, root.cells = 24, verbose = T)
+
+# pseudotime
+fspy <- runPseudotime(fspy, verbose = T)
+
+# define leaf cells
+fspy <- defLeafCells(fspy, leaf.cells = 31, verbose = T)
+
+# walk between root cells and leaf cells
+fspy <- runWalk(fspy, verbose = T)
+
+
+###############################
+###       visualization     ###
+###############################
+
+# tSNE
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id", 
+       alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T)
+
+for (i in markers) {
+p <- plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = i, 
+               main = i, category = "numeric") + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/Sample_6.cytof.", i, ".pdf"), p, width = 6, height = 5)
+
+}
+
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "pseudotime", 
+       alpha = 1, main = "PCA", category = "numeric", show.cluser.id = T) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+
+# Diffusion Map
+plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "cluster.id", 
+       alpha = 1, main = "Diffusion Map", category = "categorical", show.cluser.id = T)
+
+# UMAP
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id", 
+       alpha = 1, main = "UMAP", category = "categorical", show.cluser.id = T)
+
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD8a", 
+       alpha = 1, main = "PCA", category = "numeric", show.cluser.id = T) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+# Tree plot
+plotTree(fspy, color.by = "CD49f", show.node.name = T, cex.size = 1.5) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+# Cluster plot
+plotCluster(fspy, item.use = c("PC_1", "PC_2"), size = 10,
+            show.cluser.id = T)
+
+plotCluster(fspy, item.use = c("PC_1", "PC_2"), color.by = "pseudotime", 
+            category = "numeric", size = 10)
+
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD8a", 
+            category = "numeric", size = 10, show.cluser.id = T)
+
+plotCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), size = 10)
+
+# Violin plot
+plotViolin(fspy, color.by = "cluster.id", marker = "CD49f", text.angle = 90)
+
+# marker density
+plotMarkerDensity(fspy)
+
+# Pseudotime trajectory
+plotPseudotimeTraj(fspy, var.cols = T) + 
+  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
+
+# Pseudotime trajectory
+plotPseudotimeTraj(fspy, cutoff = 0.1, var.cols = T) + 
+  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7a06a0"))
+
+# plot heatmap of cluster
+plotClusterHeatmap(fspy)
+
+# plot heatmap of cluster
+plotHeatmap(fspy, cluster_rows = T)
+
+```
+
+
+
+
+
+
+
+
 
 
 

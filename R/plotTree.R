@@ -95,6 +95,7 @@ plotPieTree <- function(object,
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")
+  if (length(unique(object@meta.data$stage)) <= 1) stop(Sys.time(), " [ERROR] plotPieTree only fits elements in stage over 2!")
 
   mst <- object@network$mst
 

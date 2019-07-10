@@ -85,6 +85,10 @@ plotPseudotimeTraj <- function(object,
     }
   }
   if (is.null(markers)) markers <- object@markers
+  if (length(markers) > 10) {
+    warning(Sys.time(), " [WARNING] only the first 10 markers will be plot")
+    markers <- markers[1:10]
+  }
 
   plot.data <- NULL
   plot.meta <- object@plot.meta
@@ -93,7 +97,7 @@ plotPseudotimeTraj <- function(object,
                       IsRoot = plot.meta$is.root.cells,
                       IsLeaf = plot.meta$is.leaf.cells,
                       Marker = markers[i],
-                      Signal = plot.meta[, colnames(plot.meta) %in% markers[i]],
+                      Signal = object@log.data[, markers[i]],
                       Stage = plot.meta$stage,
                       TrajValue = plot.meta$traj.value,
                       LogTrajValue = plot.meta$traj.value.log)
@@ -162,15 +166,19 @@ plotMarkerDensity <- function(object,
     }
   }
   if (is.null(markers)) markers <- object@markers
+  if (length(markers) > 10) {
+    warning(Sys.time(), " [WARNING] only the first 10 markers will be plot")
+    markers <- markers[1:10]
+  }
 
   plot.data <- NULL
-  plot.meta <- object@plot.meta
+  plot.meta <- fetchPlotMeta(object, verbose = F)
   for (i in 1:length(markers)) {
     sub <- data.frame(Pseudotime = plot.meta$pseudotime,
                       IsRoot = plot.meta$is.root.cells,
                       IsLeaf = plot.meta$is.leaf.cells,
                       Marker = markers[i],
-                      Signal = plot.meta[, markers[i]],
+                      Signal = object@log.data[, markers[i]],
                       Stage = plot.meta$stage,
                       TrajValue = plot.meta$traj.value,
                       LogTrajValue = plot.meta$traj.value.log)

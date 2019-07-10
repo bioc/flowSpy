@@ -30,11 +30,15 @@ plot3D <- function(object,
                    main = "3D plot of FSPY",
                    ...) {
 
-  object <- updatePlotMeta(object, verbose = F)
+  # update and fetch plot meta information
+  plot.meta <- fetchPlotMeta(object, verbose = F)
+  idx <- match(c(color.by, item.use), colnames(object@log.data))
+  idx <- idx[which(!is.na(idx))]
+  if (length(idx) > 0) plot.meta <- data.frame(plot.meta, object@log.data[, idx])
 
-  if ( !all(item.use %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
+  if ( !all(item.use %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
-  if ( !all(color.by %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
+  if ( !all(color.by %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   if (length(item.use) < 3) stop(Sys.time(), " [ERROR] item.use is less than two characters.")
   if (length(item.use) > 3) {
@@ -46,15 +50,15 @@ plot3D <- function(object,
     color.by <- color.by[1]
   }
 
-  item.use.idx <- match(item.use, colnames(object@plot.meta))
-  color.by.idx <- match(color.by, colnames(object@plot.meta))
+  item.use.idx <- match(item.use, colnames(plot.meta))
+  color.by.idx <- match(color.by, colnames(plot.meta))
 
-  plot.data <- data.frame(plot.x = object@plot.meta[, item.use.idx[1]],
-                          plot.y = object@plot.meta[, item.use.idx[2]],
-                          plot.z = object@plot.meta[, item.use.idx[3]],
-                          color.by = object@plot.meta[, color.by.idx])
+  plot.data <- data.frame(plot.x = plot.meta[, item.use.idx[1]],
+                          plot.y = plot.meta[, item.use.idx[2]],
+                          plot.z = plot.meta[, item.use.idx[3]],
+                          color.by = plot.meta[, color.by.idx])
 
-  if ((length( unique(plot.data$color.by) ) > 50) & (category != "numeric")) {
+  if ((length( unique(plot.data$color.by) ) > 64) & (category != "numeric")) {
     warning(Sys.time(), " [WARNING] color.by is categorical and has more than 50 elements. It will be used as numeric instead.")
     category = "numeric"
   }

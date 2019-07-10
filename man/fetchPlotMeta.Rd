@@ -4,7 +4,7 @@
 \alias{fetchPlotMeta}
 \title{Fetching plot metadata of FSPY}
 \usage{
-fetchPlotMeta(object, verbose = F)
+fetchPlotMeta(object, markers = NULL, verbose = F)
 }
 \arguments{
 \item{object}{An FSPY object}

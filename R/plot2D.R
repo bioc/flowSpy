@@ -23,7 +23,7 @@
 #' @examples
 #'
 plot2D <- function(object,
-                   item.use = c("PC1", "PC2"),
+                   item.use = c("PC_1", "PC_2"),
                    color.by = "stage",
                    order.by = NULL,
                    size = 1,
@@ -34,14 +34,21 @@ plot2D <- function(object,
                    main = "2D plot of FSPY",
                    plot.theme = theme_bw()) {
 
-  # update plot meta information
-  object <- updatePlotMeta(object, verbose = F)
+  # update and fetch plot meta information
+  plot.meta <- fetchPlotMeta(object, verbose = F)
+  idx <- match(c(color.by, item.use), colnames(object@log.data))
+  idx <- idx[which(!is.na(idx))]
+  if (length(idx) > 0) {
+    sub <- as.data.frame(object@log.data[, idx])
+    colnames(sub) <- colnames(object@log.data)[idx]
+    plot.meta <- data.frame(plot.meta, sub)
+  }
 
   # check item.use parameter in plot.meta data.frame
-  if ( !all(item.use %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
+  if ( !all(item.use %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   # check color.by parameter in plot.meta data.frame
-  if ( !all(color.by %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
+  if ( !all(color.by %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
   if (length(item.use) < 2) stop(Sys.time(), " [ERROR] item.use is less than two elements.")
   if (length(item.use) > 2) {
@@ -53,14 +60,14 @@ plot2D <- function(object,
     color.by <- color.by[1]
   }
 
-  item.use.idx <- match(item.use, colnames(object@plot.meta))
-  color.by.idx <- match(color.by, colnames(object@plot.meta))
+  item.use.idx <- match(item.use, colnames(plot.meta))
+  color.by.idx <- match(color.by, colnames(plot.meta))
 
-  plot.data <- data.frame(plot.x = object@plot.meta[, item.use.idx[1]],
-                          plot.y = object@plot.meta[, item.use.idx[2]],
-                          color.by = object@plot.meta[, color.by.idx])
+  plot.data <- data.frame(plot.x = plot.meta[, item.use.idx[1]],
+                          plot.y = plot.meta[, item.use.idx[2]],
+                          color.by = plot.meta[, color.by.idx])
 
-  if ((length( unique(plot.data$color.by) ) > 50) & (category != "numeric")) {
+  if ((length( unique(plot.data$color.by) ) > 64) & (category != "numeric")) {
     warning(Sys.time(), " [WARNING] color.by is categorical and has more than 50 elements. It will be used as numeric instead.")
     category = "numeric"
   }
@@ -98,6 +105,86 @@ plot2D <- function(object,
 
 }
 
+#'
+#' Visualization violin plot of FSPY
+#'
+#' @name plotViolin
+#'
+#' @param object An FSPY object
+#' @param item.use character. Items use to 2D plot, axes x and y must be numeric.
+#' @param color.by character. Dot or mesh color by which character. It can be one of the column
+#'     of plot.meta, or it can be just "density" (the default value).
+#' @param order.by vector. Order of color theme.
+#' @param size numeric. Size of the dot
+#' @param alpha numberic. Transparency (0-1) of the dot, default is 1.
+#' @param category character. numeric or categorical
+#' @param show.cluser.id logical. Whether to show cluster id in the plot.
+#' @param show.cluser.id.size numeric. Size of the cluster id.
+#' @param main character. Title of the plot.
+#' @param plot.theme themes from \code{ggplot2}
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#' @examples
+#'
+plotViolin <- function(object,
+                       marker,
+                       color.by = "cluster.id",
+                       order.by = NULL,
+                       size = 1,
+                       text.angle = 0,
+                       main = "Violin plot FSPY",
+                       plot.theme = theme_bw()) {
+
+  # update plot meta information
+  plot.meta <- fetchPlotMeta(object, verbose = F)
+
+  if (missing(marker)) stop(Sys.time(), " [ERROR] marker is missing.")
+  # check item.use parameter in plot.meta data.frame
+  if (length(marker) > 1) {
+    warning(Sys.time(), " [WARNING] marker has more than two elements. Only the first two will be used")
+    marker <- marker[1]
+  }
+  if ( !all(marker %in% colnames(object@log.data)) ) stop(Sys.time(), " [ERROR] marker name is not correct")
+  plot.meta <- data.frame(plot.meta, marker = object@log.data[, marker])
+
+  # check color.by parameter in plot.meta data.frame
+  if ( !all(color.by %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
+
+  if (length(color.by) > 1) {
+    warning(Sys.time(), " [WARNING] color.by has more than one elements. Only the first one will be used")
+    color.by <- color.by[1]
+  }
+  color.by.idx <- match(color.by, colnames(plot.meta))
+
+  plot.data <- data.frame(marker.by = plot.meta$marker,
+                          color.by = plot.meta[, color.by.idx])
+
+  if (length( unique(plot.data$color.by) ) > 64) {
+    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 64 elements. It will be used as numeric instead.")
+  }
+
+  if (is.null(order.by)) {
+    plot.data$color.by <- factor(plot.data$color.by)
+  } else {
+    plot.data$color.by <- factor(as.character(plot.data$color.by), levels = order.by)
+  }
+
+  # plot
+  gg <- ggplot(plot.data, aes(x = color.by, y= marker.by, fill = color.by)) + geom_violin(scale = "width")
+  gg <- gg + plot.theme
+  gg <- gg + stat_summary(fun.y=mean, geom="point", size = size, color="black")
+  gg <- gg + labs(y = marker, x = color.by, title = paste0(main))
+  gg <- gg + theme(axis.text.x = element_text(angle = text.angle, hjust = 1, vjust = 1))
+
+  return(gg)
+
+}
+
+
+
 
 #'
 #' Visualization pie plot of cluster data of FSPY
@@ -129,6 +216,10 @@ plotPieCluster <- function(object,
                            size.by.cell.number = T,
                            main = "2D pie plot of FSPY",
                            plot.theme = theme_bw()) {
+
+  if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
+  if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")
+  if (length(unique(object@meta.data$stage)) <= 1) stop(Sys.time(), " [ERROR] plotPieTree only fits elements in stage over 2!")
 
   # update plot meta information
   plot.data <- fetchClustMeta(object, verbose = F)
@@ -271,6 +362,80 @@ plotCluster <- function(object,
                           size = show.cluser.id.size)
     }
   }
+
+  return(gg)
+
+}
+
+
+#'
+#' Visualization heatmap of cluster data of FSPY
+#'
+#' @name plotClusterHeatmap
+#'
+#' @param object An FSPY object
+#' @param color.by character. Dot or mesh color by which character. It can be one of the column
+#'     of plot.meta, or it can be just "density" (the default value).
+#'
+#' @import pheatmap
+#'
+#' @export
+#'
+#' @examples
+#'
+plotClusterHeatmap <- function(object,
+                               color = colorRampPalette(c("blue","white","red"))(100),
+                               scale = "row", ...) {
+
+  # update plot meta information
+  plot.meta.data <- fetchClustMeta(object, verbose = F)
+
+  mat <- plot.meta.data[, object@markers]
+  rownames(mat) <- plot.meta.data$cluster
+  gg <- pheatmap(t(mat), color = color, scale = scale, border_color = NA, ...)
+
+  return(gg)
+
+}
+
+
+#'
+#' Visualization heatmap of data of FSPY
+#'
+#' @name plotHeatmap
+#'
+#' @param object An FSPY object
+#' @param color.by character. Dot or mesh color by which character. It can be one of the column
+#'     of plot.meta, or it can be just "density" (the default value).
+#'
+#' @import pheatmap
+#'
+#' @export
+#'
+#' @examples
+#'
+plotHeatmap <- function(object,
+                        color = colorRampPalette(c("blue","white","red"))(100),
+                        scale = "row",
+                        downsize = 1000,
+                        cluster_rows = F,
+                        cluster_cols = F,
+                        ...) {
+
+  # update plot meta information
+  plot.meta.data <- fetchPlotMeta(object, verbose = F)
+
+  if (downsize > dim(plot.meta.data)[1]) {
+    warning(Sys.time(), " [ERROR] Too large sample size of downsampling")
+    downsize = dim(plot.meta.data)[1]
+  }
+  plot.meta.data <- plot.meta.data[sample(1:dim(plot.meta.data)[1], downsize), ]
+
+  if (max(plot.meta.data$pseudotime) > 0) plot.meta.data <- plot.meta.data[order(plot.meta.data$pseudotime), ]
+
+  mat <- object@log.data[match(plot.meta.data$cell, rownames(object@log.data)), ]
+  gg <- pheatmap(t(mat), color = color, scale = scale, cluster_rows = cluster_rows,
+                 cluster_cols = cluster_cols, border_color = NA, fontsize_col = 0.01, ...)
 
   return(gg)
 
