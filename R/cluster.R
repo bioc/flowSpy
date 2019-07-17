@@ -63,6 +63,8 @@ runCluster <- function(object, cluster.method = "som", verbose = F, ...) {
 #'    provided.
 #'
 #' @param object an FSPY object
+#' @param downsampleing.size numeric. Percentage of sample size of downsampling.
+#'    This parameter is from 0 to 1. by default is 1.
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the clustering functions.
 #'
@@ -76,6 +78,7 @@ runCluster <- function(object, cluster.method = "som", verbose = F, ...) {
 #'
 #'
 processingCluster <- function(object, perplexity = 5, k = 5,
+                              downsampleing.size = 1, seed = 1,
                               umap.config = umap.defaults, verbose = F, ...) {
 
   if (missing(object)) {
@@ -103,6 +106,22 @@ processingCluster <- function(object, perplexity = 5, k = 5,
 
   object@cluster <- data.frame(pca.info$rotation, tsne.info$Y, dm.info@eigenvectors, umap.info$layout)
   rownames(object@cluster) <- rownames(object@tree.meta$cluster)
+
+  if (downsampleing.size >= 1) {
+    if (verbose) message(Sys.time(), " [INFO] No downsampling performed")
+    cell.name <- object@meta.data$cell
+  } else if ( downsampleing.size <= 0) {
+    warning(Sys.time(), " [WARNING] The value of downsampleing.size must be larger than 0 ")
+    cell.name <- object@meta.data$cell
+  } else {
+    set.seed(seed)
+    cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampleing.size )) )
+    cell.name <- unlist(cell.name)
+  }
+
+  object@cell.name <- as.character(cell.name)
+  object@meta.data$dowsample <- 0
+  object@meta.data$dowsample[match(cell.name, object@meta.data$cell)] <- 1
 
   return(object)
 
@@ -197,8 +216,6 @@ runHclust <- function(object, k = 25,
 #'
 #' @importFrom stats kmeans
 #' @export
-#'
-#'
 #'
 #'
 runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
@@ -361,7 +378,6 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
                           codes = codes, importance = importance,
                           ...)
 
-
   # generating som network
   object@meta.data$som.id <- flowsom$mapping[, 1]
   object@meta.data$som.value <- flowsom$mapping[, 2]
@@ -376,6 +392,52 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 
 
 
+#' RphenoGraph clustering
+#'
+#' @description R implementation of the phenograph algorithm
+#'    A simple R implementation of the phenograph
+#'    [PhenoGraph](http://www.cell.com/cell/abstract/S0092-8674(15)00637-6) algorithm,
+#'    which is a clustering method designed for high-dimensional single-cell
+#'    data analysis. It works by creating a graph ("network") representing
+#'    phenotypic similarities between cells by calculating the Jaccard
+#'    coefficient between nearest-neighbor sets, and then identifying communities
+#'    using the well known [Louvain method](https://sites.google.com/site/findcommunities/)
+#'    in this graph.
+#'
+#' @param object Input data matrix.
+#' @param mode Number of nearest neighbours, default is 30.
+#'
+#' @return a communities object, the operations of this class contains:
+#'
+#' @importFrom igraph graph.adjacency simplify distances
+#'
+#' @export
+#'
+#'
+runPhenograph <- function(object, mode = "undirected", knn = 30, verbose = F, ...){
+
+  if (length(object@knn) == 0) {
+    stop(Sys.time(), " [ERROR] KNN must be run first")
+  }
+  fout <- suppressWarnings(findKNN(object@log.data, k = knn, ...))
+
+  mat <- t(object@log.data)
+  adj <- matrix(0, ncol(mat), ncol(mat))
+  rownames(adj) <- colnames(adj) <- colnames(mat)
+  for(i in seq_len(ncol(mat))) {
+    adj[i, colnames(mat)[fout$index[i,]]] <- 1
+  }
+  g <- igraph::graph.adjacency(adj, mode = mode, ... )
+  # remove self loops
+  g <- simplify(g)
+
+  community <- cluster_louvain(g)
+
+  object@meta.data$phenograph.id <- community$membership
+
+  return(object)
+
+}
 
 
 

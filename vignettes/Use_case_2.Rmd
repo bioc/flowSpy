@@ -39,7 +39,7 @@ library(flowSpy)
 #########################
 # download sample
 fcs.path <- "../../flowSpy-dataset/FCS/usecase1/"
-fcs.file <- paste0(fcs.path, "Sample_7.fcs")
+fcs.file <- paste0(fcs.path, "Sample_6.fcs")
 
 # Read flow cytomery data via flowCore::read.FCS
 cytof.data <- flowCore::read.FCS(filename = fcs.file)
@@ -64,10 +64,10 @@ markers.idx <- match(markers, colnames(exp.data))
 # filtering cells with less 3 markers
 exp.cells <- rowSums(exp.data[, markers.idx] > 0)
 summary(exp.cells)
-exp.data <- exp.data[which(exp.cells > 3), ]
+exp.data <- exp.data[which(exp.cells > 2), ]
 
 # downsampling
-cell.size <- 40000
+cell.size <- 30000
 set.seed(1)
 exp.data.filter <- exp.data[sample(1:dim(exp.data)[1], cell.size), ]
 

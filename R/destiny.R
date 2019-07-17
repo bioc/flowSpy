@@ -24,7 +24,8 @@ runDiffusionMap <- function(object, sigma.use = NULL,
                             density.norm = TRUE,  verbose = F,
                             ...) {
 
-  dm.data <- as.matrix(object@log.data)
+  if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
+  dm.data <- as.matrix(object@log.data[which(object@meta.data$dowsample == 1), ])
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Diffusion Map.")
   # Figure out sigma

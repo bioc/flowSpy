@@ -27,6 +27,9 @@ defRootCells <- function(object, root.cells = NULL, verbose = F) {
     stop(Sys.time(), " [ERROR] invalid root.cells .")
   }
 
+  ds.cells <- object@meta.data$cell[which(object@meta.data$dowsample == 1)]
+  root.cells <- root.cells[root.cells %in% ds.cells]
+
   object@meta.data$is.root.cells <- 0
   object@meta.data$is.root.cells[match(root.cells, object@meta.data$cell)] <- 1
   if ( length(root.cells) == 0 ) {
@@ -67,6 +70,9 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
   } else {
     stop(Sys.time(), " [ERROR] invalid leaf.cells .")
   }
+
+  ds.cells <- object@meta.data$cell[which(object@meta.data$dowsample == 1)]
+  leaf.cells <- leaf.cells[leaf.cells %in% ds.cells]
 
   if (pseudotime.cutoff > 0) {
     if ( !all("pseudotime" %in% colnames(object@meta.data)) ) {
@@ -121,22 +127,25 @@ runPseudotime <- function(object, mode = "undirected", verbose = F, ...) {
 
   if ("pseudotime" %in% colnames(object@meta.data)) message(Sys.time(), " [INFO] Pseudotime exists in meta.data, it will be replaced.")
 
-  mat <- t(object@log.data)
-  adj <- matrix(0, ncol(mat), ncol(mat))
-  rownames(adj) <- colnames(adj) <- colnames(mat)
-  for(i in seq_len(ncol(mat))) {
-    adj[i, colnames(mat)[object@knn.index[i,]]] <- 1
+  knn.index <- object@knn.index
+
+  adj <- matrix(0, nrow(knn.index), nrow(knn.index))
+  rownames(adj) <- colnames(adj) <- rownames(knn.index)
+  for(i in seq_len(ncol(knn.index))) {
+    adj[i, rownames(knn.index)[knn.index[i,]]] <- 1
   }
   g <- igraph::graph.adjacency(adj, mode = mode, ... )
   # remove self loops
   g <- simplify(g)
 
 
-  dist.all.path <- distances(g, v = object@root.cells)
-  pst <- colMeans(dist.all.path)
+  dist.all.path <- distances(g, v = as.character(object@root.cells))
+  dist.all.path[which(is.infinite(dist.all.path))] <- max(dist.all.path[which(!is.infinite(dist.all.path))]) + 1
+  pst <- colMeans(dist.all.path, na.rm = TRUE)
   pst <- ( pst - min(pst) )/ max( pst - min(pst) )
 
-  object@meta.data$pseudotime <- pst
+  object@meta.data$pseudotime <- 0
+  object@meta.data$pseudotime[which(object@meta.data$dowsample == 1)] <- pst
   object@meta.data$traj.value <- 0
   object@meta.data$traj.value.log <- 0
 

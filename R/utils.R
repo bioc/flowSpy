@@ -10,7 +10,7 @@
 #'
 #'
 updatePlotMeta <- function(object, verbose = TRUE) {
-  plot.meta <- object@meta.data
+  plot.meta <- object@meta.data[which(object@meta.data$dowsample == 1), ]
   if (dim(object@pca.value)[2] > 0) {
     plot.meta <- cbind(plot.meta, object@pca.value)
   }
@@ -47,7 +47,7 @@ updateClustMeta <- function(object, verbose = TRUE) {
 
   # Generating tree meta information
   plot.data <- fetchPlotMeta(object, verbose = F)
-  plot.data <- cbind(plot.data, object@log.data)
+  plot.data <- cbind(plot.data, object@log.data[which(object@meta.data$dowsample == 1), ])
 
   if (length(unique(plot.data$stage)) > 1) {
     cell.count <- table(plot.data[, match(c("cluster.id", "stage"), colnames(plot.data)) ])
@@ -101,7 +101,7 @@ fetchPlotMeta <- function(object, markers = NULL, verbose = F) {
   plot.meta <- object@plot.meta
   idx <- match(markers, colnames(object@log.data))
   idx <- idx[which(!is.na(idx))]
-  if (length(idx) > 0) plot.meta <- data.frame(plot.meta, object@log.data[, idx])
+  if (length(idx) > 0) plot.meta <- data.frame(plot.meta, object@log.data[which(object@meta.data$dowsample == 1), idx])
 
   return(plot.meta)
 }

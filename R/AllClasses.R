@@ -134,7 +134,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = FALSE,
-                       normalization.method = "log", verbose = FALSE, ...) {
+                       normalization.method = c("log", "none"),
+                       verbose = FALSE, ...) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
   if (!is.matrix(raw.data)) {
@@ -211,6 +212,7 @@ createFSPY <- function(raw.data, markers, meta.data,
   }
 
   object@plot.meta <- data.frame(row.names = object@meta.data$cell)
+  object@meta.data$dowsample <- 1
   object@meta.data$pseudotime <- 0
   object@meta.data$traj.value <- 0
   object@meta.data$traj.value.log <- 0

@@ -24,7 +24,9 @@ runFastPCA <- function(object, center = FALSE, scale. = TRUE,
                        verbose = F, ...) {
   # PCA calculation
   if (verbose) message(Sys.time(), " [INFO] Calculating PCA.")
-  pca.obj <- fast.prcomp( t(object@log.data), retx = TRUE, center = center, scale. = scale., ...)
+  if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
+  mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
+  pca.obj <- fast.prcomp( t(mat), retx = TRUE, center = center, scale. = scale., ...)
 
   object@pca.sdev <- pca.obj$sdev
   object@pca.value <- pca.obj$rotation

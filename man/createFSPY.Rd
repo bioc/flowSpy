@@ -5,7 +5,7 @@
 \title{create an FSPY object}
 \usage{
 createFSPY(raw.data, markers, meta.data, batch = NULL,
-  batch.correct = FALSE, normalization.method = "log",
+  batch.correct = FALSE, normalization.method = c("log", "none"),
   verbose = FALSE, ...)
 }
 \arguments{

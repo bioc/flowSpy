@@ -20,8 +20,9 @@ setMethod(
   definition = function(object) {
     cat(
       "FSPY Information:\n",
-      "FSPY object:", nrow(object@raw.data), " cells \n",
-      "FSPY object:", ncol(object@log.data), " markers \n"
+      "Input cell number:", nrow(object@raw.data), " cells \n",
+      "Enroll marker number:", ncol(object@log.data), " markers \n",
+      "Cells after downsampling:", sum(object@meta.data$dowsample), " markers \n"
     )
     invisible(NULL)
   }

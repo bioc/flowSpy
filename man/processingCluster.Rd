@@ -5,10 +5,14 @@
 \title{processingCluster}
 \usage{
 processingCluster(object, perplexity = 5, k = 5,
-  umap.config = umap.defaults, verbose = F, ...)
+  downsampleing.size = 1, seed = 1, umap.config = umap.defaults,
+  verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
+
+\item{downsampleing.size}{numeric. Percentage of sample size of downsampling.
+This parameter is from 0 to 1. by default is 1.}
 
 \item{verbose}{logic. Whether to print calculation progress.}
 

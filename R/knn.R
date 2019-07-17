@@ -34,12 +34,14 @@ runKNN <- function(object,
   } else {
     object@knn <- knn
   }
+  if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
+  mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
 
   if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
-  fout <- findKNN(object@log.data, k = object@knn, ...)
+  fout <- suppressWarnings(findKNN(mat, k = object@knn, ...))
 
-  rownames(fout$index) <- object@meta.data$cell
-  rownames(fout$distance) <- object@meta.data$cell
+  rownames(fout$index) <- rownames(mat)
+  rownames(fout$distance) <- rownames(mat)
 
   object@knn = knn
   object@knn.index = fout$index

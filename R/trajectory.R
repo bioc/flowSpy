@@ -33,16 +33,17 @@ runWalk <- function(object, mode = "undirected",
 
   if (!"pseudotime" %in% colnames(object@meta.data)) stop(Sys.time(), " [INFO] Pseudotime exists in meta.data, it will be replaced.")
 
-  mat <- t(object@log.data)
-  adj <- matrix(0, ncol(mat), ncol(mat))
-  rownames(adj) <- colnames(adj) <- colnames(mat)
-  pseudotime <- object@meta.data$pseudotime
+  knn.index <- object@knn.index
+
+  adj <- matrix(0, nrow(knn.index), nrow(knn.index))
+  rownames(adj) <- colnames(adj) <- rownames(knn.index)
+  pseudotime <- object@meta.data$pseudotime[which(object@meta.data$dowsample == 1)]
 
   # generating a adjacency matrix by nearest neighbors
   if (verbose) message(Sys.time(), " [INFO] Generating a adjacency matrix.")
-  for(i in seq_len(ncol(mat))) {
-    idx <- object@knn.index[i,][ pseudotime[object@knn.index[i,]] > pseudotime[i]  ]
-    adj[i, colnames(mat)[idx]] <- 1
+  for(i in seq_len(nrow(knn.index))) {
+    idx <- knn.index[i,][ pseudotime[knn.index[i,]] > pseudotime[i]  ]
+    adj[i, rownames(knn.index)[idx]] <- 1
   }
   g <- igraph::graph.adjacency(adj, mode = mode, ...)
   # remove self loops
@@ -56,7 +57,7 @@ runWalk <- function(object, mode = "undirected",
     warning(Sys.time(), " [WARNING] max.run.forward is too large.")
   }
   # run forward
-  walk.forward <- lapply(root.cells, function(x) shortest_paths(g, from = x, to = object@leaf.cells)$vpath )
+  walk.forward <- lapply(as.character(root.cells), function(x) shortest_paths(g, from = x, to = as.character(object@leaf.cells))$vpath )
 
   # run run backward
   if (backward.walk) {
@@ -73,6 +74,8 @@ runWalk <- function(object, mode = "undirected",
     max.run.backward <- 0
   }
 
+  object@meta.data$traj.value <- 0
+  object@meta.data$traj.value.log <- 0
 
   cell.info <- object@meta.data$cell[unlist(c(walk.forward, walk.backward))]
   cell.info <- as.data.frame(table(cell.info))

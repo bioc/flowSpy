@@ -39,7 +39,7 @@ plot2D <- function(object,
   idx <- match(c(color.by, item.use), colnames(object@log.data))
   idx <- idx[which(!is.na(idx))]
   if (length(idx) > 0) {
-    sub <- as.data.frame(object@log.data[, idx])
+    sub <- as.data.frame(object@log.data[which(object@meta.data$dowsample == 1), idx])
     colnames(sub) <- colnames(object@log.data)[idx]
     plot.meta <- data.frame(plot.meta, sub)
   }

@@ -40,7 +40,8 @@ buildTree <- function(object, method = "euclidean",
   if (! "cluster.id" %in% colnames(object@meta.data)) {
     stop(Sys.time(), " [ERROR] Invalid cluster.id, please run runCluster first")
   }
-  mst.mat <- aggregate(tree.mat, list(cluster = object@meta.data[, "cluster.id"]), mean)
+  cluster.info <- object@meta.data$cluster.id[which(object@meta.data$dowsample == 1)]
+  mst.mat <- aggregate(tree.mat, list(cluster = cluster.info), mean)
   rownames(mst.mat) <- mst.mat[, 1]
 
   adjacency <- stats::dist(mst.mat[, -1], method = method)

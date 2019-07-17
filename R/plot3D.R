@@ -34,7 +34,7 @@ plot3D <- function(object,
   plot.meta <- fetchPlotMeta(object, verbose = F)
   idx <- match(c(color.by, item.use), colnames(object@log.data))
   idx <- idx[which(!is.na(idx))]
-  if (length(idx) > 0) plot.meta <- data.frame(plot.meta, object@log.data[, idx])
+  if (length(idx) > 0) plot.meta <- data.frame(plot.meta, object@log.data[which(object@meta.data$dowsample == 1), idx])
 
   if ( !all(item.use %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
 
