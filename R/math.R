@@ -1,5 +1,8 @@
+#################################################################
+# This script contains a set of mathematical computing equations
+#################################################################
+
 # Mean of positive values
-#
 #
 mean.pos <- function(x) {
   y <- which(x > 0)

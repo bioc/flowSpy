@@ -1,38 +1,157 @@
 
 ###############################################################################
-# Most functions in preprocessing modules are modified from cytofkit package.
-# The author of these function is Chen Hao
-# And the reference Hao Chen, Mai Chan Lau, Michael Thomas Wong, Evan W. Newell,
-# Michael Poidinger, Jinmiao Chen. Cytofkit: A Bioconductor Package for
-# an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
+# Functions in preprocessing module are modified from cytofkit package.
+# And here is the reference: Hao Chen, Mai Chan Lau, Michael Thomas Wong,
+# Evan W. Newell, Michael Poidinger, Jinmiao Chen. Cytofkit: A Bioconductor Package
+# for an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
 ###############################################################################
 
+#'
+#' Merge the expression matrix from multiple FCS files with preprocessing
+#'
+#' @name runExprsMerge
+#'
+#' @description  Apply preprocessing on each FCS file including compensation
+#'   (for FCM data only) and transformation with selected markers, then expression
+#'   matrix are extracted and merged using one of the methods, \code{all},
+#'   \code{min}, \code{fixed} or \code{ceil}
+#'
+#' @param fcsFiles A vector of FCS file names.
+#' @param comp If \verb{TRUE}, does compensation  by compensation matrix contained
+#'    in FCS. Agrument also accepts a compensation matrix to be applied.
+#'    Otherwise \verb{FALSE}.
+#' @param transformMethod Data Transformation method, including \code{autoLgcl},
+#'    \code{cytofAsinh}, \code{logicle} and \code{arcsinh}, or \code{none} to
+#'    avoid transformation.
+#' @param scaleTo Scale the expression to a specified range c(a, b), default is NULL.
+#' @param mergeMethod Merge method for mutiple FCS expression data. cells can be
+#'    combined using one of the four different methods including \code{ceil},
+#'    \code{all}, \code{min}, \code{fixed}. The default option is \code{ceil},
+#'    up to a fixed number (specified by \code{fixedNum}) of cells are sampled
+#'    without replacement from each fcs file and combined for analysis.
+#'    \code{all}: all cells from each fcs file are combined for analysis.
+#'    \code{min}: The minimum number of cells among all the selected fcs files
+#'    are sampled from each fcs file and combined for analysis.
+#'    \code{fixed}: a fixed num (specified by fixedNum) of cells are sampled
+#'    (with replacement when the total number of cell is less than fixedNum)
+#'    from each fcs file and combined for analysis.
+#' @param fixedNum The fixed number of cells to be extracted from each FCS file.
+#' @param sampleSeed A sampling seed for reproducible expression matrix merging.
+#' @param ... Other arguments passed to \code{runExprsExtract}
+#'
+#' @return A matrix containing the merged expression data, with selected markers.
+#' @seealso \code{\link{runExprsExtract}}
+#' @export
+#'
+#' @author Chen Hao
+#' @references Hao Chen, Mai Chan Lau, Michael Thomas Wong, Evan W. Newell,
+#'    Michael Poidinger, Jinmiao Chen. Cytofkit: A Bioconductor Package for
+#'    an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
+#'
+#'
+runExprsMerge <- function(fcsFiles,
+                          comp = FALSE,
+                          transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
+                          scaleTo = NULL,
+                          mergeMethod = c("ceil", "all", "fixed", "min"),
+                          fixedNum = 2000,
+                          sampleSeed = 1, ...) {
 
+  transformMethod <- match.arg(transformMethod)
+  mergeMethod <- match.arg(mergeMethod)
+
+  exprsL <- mapply(runExprsExtract, fcsFiles,
+                   MoreArgs = list(comp = comp,
+                                   transformMethod = transformMethod,
+                                   scaleTo = scaleTo, ...),
+                   SIMPLIFY = FALSE)
+
+  if(is.numeric(sampleSeed))
+    set.seed(sampleSeed)
+  ## test if number of events in any fcs less than fixedNum
+  eventCountTest <- suppressWarnings(any(lapply(exprsL, function(x) if (nrow(x) < fixedNum) {1} else {0})))
+  ## solution 1: change mergeMethod from fixed to ceil
+  #if(mergeMethod == "fixed" && eventCountTest == TRUE){
+  #  mergeMethod <- "ceil"
+  #}
+  ## solution 2: use lowest number of fcs events as fixedNum
+  if(mergeMethod == "fixed" && eventCountTest == TRUE){
+    warning("One or more FCS files have less events than specified fixedNum; using lowest as fixedNum")
+    fixedNum <- min(rapply(exprsL, nrow))
+  }
+  switch(mergeMethod,
+         ceil = {
+           mergeFunc <- function(x) {
+             if (nrow(x) < fixedNum) {
+               x
+             } else {
+               x[sample(nrow(x), size = fixedNum, replace = FALSE), , drop = FALSE]
+             }
+           }
+           merged <- do.call(rbind, lapply(exprsL, mergeFunc))
+         },
+         all = {
+           merged <- do.call(rbind, exprsL)
+         },
+         fixed = {
+           mergeFunc <- function(x) {
+             x[sample(nrow(x), size = fixedNum, replace = ifelse(nrow(x) < fixedNum, TRUE, FALSE)), , drop=FALSE]
+           }
+           merged <- do.call(rbind, lapply(exprsL, mergeFunc))
+         },
+         min = {
+           minSize <- min(sapply(exprsL, nrow))
+           mergeFunc <- function(x) {
+             x[sample(nrow(x), size = minSize, replace = FALSE), , drop=FALSE]
+           }
+           merged <- do.call(rbind, lapply(exprsL, mergeFunc))
+         })
+
+  return(merged)
+}
+
+
+
+
+#'
 #' Extract the expression data from a FCS file with preprocessing
 #'
 #' @name runExprsExtract
 #'
 #' @description  Extract the FCS expresssion data with preprocessing of
-#'    compensation (for FCM data only)
-#'    and transformation. Transformtion methods includes \code{autoLgcl}, \code{cytofAsinh},
-#'    \code{logicle} (customizable) and \code{arcsinh} (customizable).
+#'    compensation (for FCM data only) and transformation. Transformtion
+#'    methods includes \code{autoLgcl}, \code{cytofAsinh}, \code{logicle}
+#'    (customizable) and \code{arcsinh} (customizable).
 #'
 #' @param fcsFile The name of the FCS file.
 #' @param verbose If \verb{TRUE}, print the message details of FCS loading.
-#' @param comp If \verb{TRUE}, does compensation  by compensation matrix contained in FCS. Agrument also accepts a compensation matrix to be applied. Otherwise \verb{FALSE}.
-#' @param transformMethod Data Transformation method, including \code{autoLgcl}, \code{cytofAsinh}, \code{logicle} and \code{arcsinh}, or \code{none} to avoid transformation.
+#' @param comp If \verb{TRUE}, does compensation  by compensation matrix
+#'    contained in FCS. Agrument also accepts a compensation matrix to be
+#'    applied. Otherwise \verb{FALSE}.
+#' @param transformMethod Data Transformation method, including \code{autoLgcl},
+#'    \code{cytofAsinh}, \code{logicle} and \code{arcsinh}, or \code{none}
+#'    to avoid transformation.
+#' @param showDesc logical. Whether to show \code{desc} name in the output matrix.
 #' @param scaleTo Scale the expression to a specified range c(a, b), default is NULL.
-#' @param q Quantile of negative values removed for auto w estimation, default is 0.05, parameter for autoLgcl transformation.
-#' @param l_w Linearization width in asymptotic decades, parameter for logicle transformation.
+#' @param q Quantile of negative values removed for auto w estimation,
+#'    default is 0.05, parameter for autoLgcl transformation.
+#' @param l_w Linearization width in asymptotic decades, parameter for
+#'    logicle transformation.
 #' @param l_t Top of the scale data value, parameter for logicle transformation.
-#' @param l_m Full width of the transformed display in asymptotic decades, parameter for logicle transformation.
-#' @param l_a Additional negative range to be included in the display in asymptotic decades, parameter for logicle transformation.
-#' @param a_a Positive double that corresponds to the base of the arcsinh transformation, \code{arcsinh} = asinh(a + b * x) + c).
-#' @param a_b Positive double that corresponds to a scale factor of the arcsinh transformation, \code{arcsinh} = asinh(a + b * x) + c).
-#' @param a_c Positive double that corresponds to another scale factor of the arcsinh transformation, \code{arcsinh} = asinh(a + b * x) + c).
+#' @param l_m Full width of the transformed display in asymptotic decades,
+#'    parameter for logicle transformation.
+#' @param l_a Additional negative range to be included in the display
+#'    in asymptotic decades, parameter for logicle transformation.
+#' @param a_a Positive double that corresponds to the base of the arcsinh
+#'    transformation, \code{arcsinh} = asinh(a + b * x) + c).
+#' @param a_b Positive double that corresponds to a scale factor of the
+#'    arcsinh transformation, \code{arcsinh} = asinh(a + b * x) + c).
+#' @param a_c Positive double that corresponds to another scale factor
+#'    of the arcsinh transformation, \code{arcsinh} = asinh(a + b * x) + c).
 #'
 #' @return A transformed expression data matrix
-#' @importFrom flowCore read.FCS compensate estimateLogicle logicleTransform parameters transformList arcsinhTransform biexponentialTransform
+#' @importFrom flowCore read.FCS compensate estimateLogicle logicleTransform
+#' @importFrom flowCore parameters transformList arcsinhTransform biexponentialTransform
 #' @importMethodsFrom flowCore transform
 #' @importClassesFrom flowCore transformList
 #'
@@ -48,8 +167,9 @@
 runExprsExtract <- function(fcsFile,
                             verbose = FALSE,
                             comp = FALSE,
-                            transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "none"),
+                            transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
                             scaleTo = NULL,
+                            showDesc = TRUE,
                             q = 0.05,
                             l_w = 0.1, l_t = 4000, l_m = 4.5, l_a = 0,
                             a_a = 1, a_b = 1, a_c =0) {
@@ -119,6 +239,15 @@ runExprsExtract <- function(fcsFile,
            data[ ,transMarker_id] <- apply(data[ ,transMarker_id, drop=FALSE], 2, trans)
            exprs <- data[ ,marker_id, drop=FALSE]
          },
+         logAbs = {
+           data <- fcs@exprs
+           cs <- apply(data[ ,transMarker_id], 2, sum)
+           transMarker_id <- transMarker_id[cs > 0]
+           cs <- cs[cs > 0]
+           norm_factors <- (10**ceiling(log10(median(cs))))/cs
+           data[ ,transMarker_id] <- round(log10(sweep(abs(data[ ,transMarker_id]), 2, norm_factors, "*")+1), digits=3)
+           exprs <- data[ ,marker_id, drop=FALSE]
+         },
          none = {
            data <- fcs@exprs
            exprs <- data[ ,marker_id, drop=FALSE]
@@ -140,7 +269,12 @@ runExprsExtract <- function(fcsFile,
   }
 
   ## add rownames and colnames
-  col_names <- paste0(pd$name, "<", pd$desc,">")
+  if (showDesc) {
+    col_names <- paste0(pd$name, "<", pd$desc,">")
+  } else {
+    col_names <- paste0(pd$name)
+  }
+
   colnames(exprs) <- col_names[marker_id]
   row.names(exprs) <- paste(name, 1:nrow(exprs), sep = "_")
 
@@ -174,11 +308,11 @@ scaleData <- function(x, range = c(0, 4.5)) {
   (x - min(x))/(max(x) - min(x)) * (range[2] - range[1]) + range[1]
 }
 
-
+#'
 #' Noise reduced arsinh transformation
 #'
-#' Inverse hyperbolic sine transformation (arsinh) with a cofactor of 5, reduce noise from negative values
-#' Adopted from Plos Comp reviewer
+#' Inverse hyperbolic sine transformation (arsinh) with a cofactor of 5,
+#' reduce noise from negative values. Adopted from Plos Comp reviewer
 #'
 #' @param value A vector of numeric values.
 #' @param cofactor Cofactor for asinh transformation, default 5 for mass cytometry data.
@@ -189,7 +323,6 @@ scaleData <- function(x, range = c(0, 4.5)) {
 #' @references Hao Chen, Mai Chan Lau, Michael Thomas Wong, Evan W. Newell,
 #'    Michael Poidinger, Jinmiao Chen. Cytofkit: A Bioconductor Package for
 #'    an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
-#'
 #'
 #'
 cytofAsinh <- function(value, cofactor = 5) {
@@ -210,7 +343,8 @@ cytofAsinh <- function(value, cofactor = 5) {
 #'
 #' @param x A flowFrame object.
 #' @param channels Channel names to be transformed.
-#' @param m The full width of the transformed display in asymptotic decades. \code{m} should be greater than zero.
+#' @param m The full width of the transformed display in asymptotic decades.
+#'    \code{m} should be greater than zero.
 #' @param q The percentile of negative values used as reference poiont of negative range.
 #' @importFrom methods is
 #' @importFrom flowCore logicleTransform

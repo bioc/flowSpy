@@ -18,10 +18,10 @@
 #' @return An FSPY object with knn, knn.index and knn.distance information.
 #'
 #' @import BiocNeighbors
-#' @export
 #'
 #'
 runKNN <- function(object,
+                   given.mat = NULL,
                    knn = 30,
                    knn.replace = TRUE,
                    verbose = FALSE, ...) {
@@ -34,8 +34,20 @@ runKNN <- function(object,
   } else {
     object@knn <- knn
   }
-  if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
-  mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
+
+  if (length(which(object@meta.data$dowsample == 1)) < 10) {
+    stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
+  }
+
+  if (is.null(given.mat)) {
+    mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
+  } else {
+    if (nrow(given.mat) != nrow(object@log.data[which(object@meta.data$dowsample == 1), ])) {
+      stop(Sys.time, " [ERROR] Invalid given.mat ")
+    } else {
+      mat <- given.mat
+    }
+  }
 
   if (verbose) message(paste0(Sys.time(), " [INFO] Calculating KNN " ) )
   fout <- suppressWarnings(findKNN(mat, k = object@knn, ...))

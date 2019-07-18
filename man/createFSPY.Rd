@@ -5,7 +5,7 @@
 \title{create an FSPY object}
 \usage{
 createFSPY(raw.data, markers, meta.data, batch = NULL,
-  batch.correct = FALSE, normalization.method = c("log", "none"),
+  batch.correct = FALSE, normalization.method = "none",
   verbose = FALSE, ...)
 }
 \arguments{
@@ -16,8 +16,8 @@ createFSPY(raw.data, markers, meta.data, batch = NULL,
 \item{meta.data}{data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.}
 
 \item{normalization.method}{character. Normalization and transformation method.
-Whether to log transformed raw.data. If FALSE, it's better
-to perform transformation using \code{\link[transformation]{flowCore}} before creating FSPY
+Whether to log transformed raw.data. If FALSE, it's better to perform transformation
+using \code{\link[transformation]{flowCore}} before creating FSPY
 object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
 scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
 information.}

@@ -112,8 +112,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' @param markers vector. Detailed marker information in the gate of flow cytometer.
 #' @param meta.data data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.
 #' @param normalization.method character. Normalization and transformation method.
-#'    Whether to log transformed raw.data. If FALSE, it's better
-#'    to perform transformation using \code{\link[transformation]{flowCore}} before creating FSPY
+#'    Whether to log transformed raw.data. If FALSE, it's better to perform transformation
+#'    using \code{\link[transformation]{flowCore}} before creating FSPY
 #'    object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
 #'    scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
 #'    information.
@@ -134,7 +134,7 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = FALSE,
-                       normalization.method = c("log", "none"),
+                       normalization.method = "none",
                        verbose = FALSE, ...) {
   # QC of cells
   if (missing(raw.data)) stop(Sys.time(), " [ERROR] raw.data is required")
@@ -211,6 +211,7 @@ createFSPY <- function(raw.data, markers, meta.data,
     }
   }
 
+  # Initialization of all parameters in computation
   object@plot.meta <- data.frame(row.names = object@meta.data$cell)
   object@meta.data$dowsample <- 1
   object@meta.data$pseudotime <- 0

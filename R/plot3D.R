@@ -58,7 +58,7 @@ plot3D <- function(object,
                           plot.z = plot.meta[, item.use.idx[3]],
                           color.by = plot.meta[, color.by.idx])
 
-  if ((length( unique(plot.data$color.by) ) > 64) & (category != "numeric")) {
+  if ((length( unique(plot.data$color.by) ) > 256) & (category != "numeric")) {
     warning(Sys.time(), " [WARNING] color.by is categorical and has more than 50 elements. It will be used as numeric instead.")
     category = "numeric"
   }

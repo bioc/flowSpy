@@ -67,8 +67,8 @@ plot2D <- function(object,
                           plot.y = plot.meta[, item.use.idx[2]],
                           color.by = plot.meta[, color.by.idx])
 
-  if ((length( unique(plot.data$color.by) ) > 64) & (category != "numeric")) {
-    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 50 elements. It will be used as numeric instead.")
+  if ((length( unique(plot.data$color.by) ) > 256) & (category != "numeric")) {
+    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 256 elements. It will be used as numeric instead.")
     category = "numeric"
   }
 
@@ -148,7 +148,7 @@ plotViolin <- function(object,
     marker <- marker[1]
   }
   if ( !all(marker %in% colnames(object@log.data)) ) stop(Sys.time(), " [ERROR] marker name is not correct")
-  plot.meta <- data.frame(plot.meta, marker = object@log.data[, marker])
+  plot.meta <- data.frame(plot.meta, marker = object@log.data[which(fspy@meta.data$dowsample == 1), marker])
 
   # check color.by parameter in plot.meta data.frame
   if ( !all(color.by %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
@@ -162,8 +162,8 @@ plotViolin <- function(object,
   plot.data <- data.frame(marker.by = plot.meta$marker,
                           color.by = plot.meta[, color.by.idx])
 
-  if (length( unique(plot.data$color.by) ) > 64) {
-    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 64 elements. It will be used as numeric instead.")
+  if (length( unique(plot.data$color.by) ) > 256) {
+    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 256 elements. It will be used as numeric instead.")
   }
 
   if (is.null(order.by)) {
@@ -330,8 +330,8 @@ plotCluster <- function(object,
                           color.by = plot.meta.data[, color.by.idx],
                           size.by = plot.meta.data[, size.by.idx])
 
-  if ((length( unique(plot.data$color.by) ) > 50) & (category != "numeric")) {
-    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 50 elements. It will be used as numeric instead.")
+  if ((length( unique(plot.data$color.by) ) > 256) & (category != "numeric")) {
+    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 256 elements. It will be used as numeric instead.")
     category = "numeric"
   }
 

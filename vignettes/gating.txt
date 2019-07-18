@@ -1,0 +1,20 @@
+
+# for use case 2-1
+gating
+fcs.data <- fcs.data[which(fcs.data[, "PerCP-Cy5-5-A"] < 200), ]
+fcs.data <- fcs.data[which((fcs.data[, "FSC-A"] > 40000) & (fcs.data[, "FSC-A"] < 200000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "SSC-A"] > 10000) & (fcs.data[, "SSC-A"] < 150000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "FSC-H"] > 5000) & (fcs.data[, "FSC-H"] < 80000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "FSC-W"] > 50000) & (fcs.data[, "FSC-W"] < 130000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "SSC-H"] > 5000) & (fcs.data[, "SSC-H"] < 100000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "SSC-W"] > 60000) & (fcs.data[, "SSC-W"] < 120000)), ]
+
+
+# for use case 2
+gating
+fcs.data <- fcs.data[which((fcs.data[, "FSC-A"] > 50000) & (fcs.data[, "FSC-A"] < 200000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "SSC-A"] > 30000) & (fcs.data[, "SSC-A"] < 150000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "FSC-H"] > 40000) & (fcs.data[, "FSC-H"] < 120000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "FSC-W"] > 50000) & (fcs.data[, "FSC-W"] < 120000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "SSC-H"] > 20000) & (fcs.data[, "SSC-H"] < 120000)), ]
+fcs.data <- fcs.data[which((fcs.data[, "SSC-W"] > 60000) & (fcs.data[, "SSC-W"] < 120000)), ]

@@ -22,12 +22,13 @@
 #' @export
 #'
 #'
-runCluster <- function(object, cluster.method = "som", verbose = F, ...) {
+runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phenograph",
+                                                  "hclust", "mclust"), verbose = F, ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
   }
-
+  cluster.method <- match.arg(cluster.method)
   if (cluster.method == "som") {
     object <- runSOM(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$som.id
@@ -44,6 +45,9 @@ runCluster <- function(object, cluster.method = "som", verbose = F, ...) {
   } else if (cluster.method == "kmeans") {
     object <- runKmeans(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$kmeans.id
+  } else if (cluster.method == "phenograph") {
+    object <- runPhenograph(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$phenograph.id
   } else {
     warning(Sys.time(), " [WARNING] Invalid cluster.method parameter ")
   }

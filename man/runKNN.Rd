@@ -4,7 +4,8 @@
 \alias{runKNN}
 \title{Calculate k-nearest neighbors of FSPY}
 \usage{
-runKNN(object, knn = 30, knn.replace = TRUE, verbose = FALSE, ...)
+runKNN(object, given.mat = NULL, knn = 30, knn.replace = TRUE,
+  verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
