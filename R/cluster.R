@@ -52,6 +52,11 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
     warning(Sys.time(), " [WARNING] Invalid cluster.method parameter ")
   }
 
+  # Initialization
+  object@network <- list()
+  object@meta.data$is.root.cells <- 0
+  object@meta.data$is.leaf.cells <- 0
+
   return(object)
 
 }
@@ -83,6 +88,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'
 processingCluster <- function(object, perplexity = 5, k = 5,
                               downsampleing.size = 1, seed = 1,
+                              force.resample = TRUE,
                               umap.config = umap.defaults, verbose = F, ...) {
 
   if (missing(object)) {
@@ -111,21 +117,37 @@ processingCluster <- function(object, perplexity = 5, k = 5,
   object@cluster <- data.frame(pca.info$rotation, tsne.info$Y, dm.info@eigenvectors, umap.info$layout)
   rownames(object@cluster) <- rownames(object@tree.meta$cluster)
 
-  if (downsampleing.size >= 1) {
-    if (verbose) message(Sys.time(), " [INFO] No downsampling performed")
-    cell.name <- object@meta.data$cell
-  } else if ( downsampleing.size <= 0) {
-    warning(Sys.time(), " [WARNING] The value of downsampleing.size must be larger than 0 ")
-    cell.name <- object@meta.data$cell
-  } else {
-    set.seed(seed)
-    cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampleing.size )) )
-    cell.name <- unlist(cell.name)
-  }
+  if (force.resample) {
+    # Initialization
+    object@network <- list()
+    object@meta.data$is.root.cells <- 0
+    object@meta.data$is.leaf.cells <- 0
+    object@meta.data$dowsample <- 0
+    object@meta.data$pseudotime <- 0
+    object@meta.data$traj.value <- 0
+    object@meta.data$traj.value.log <- 0
+    object@meta.data$is.root.cells <- 0
+    object@meta.data$is.leaf.cells <- 0
+    object@pca.sdev <- vector()
+    object@umap.value <- object@tsne.value <- object@pca.scores <- object@pca.value <- matrix()
+    object@dm <- new("DiffusionMap")
 
-  object@cell.name <- as.character(cell.name)
-  object@meta.data$dowsample <- 0
-  object@meta.data$dowsample[match(cell.name, object@meta.data$cell)] <- 1
+    if (downsampleing.size >= 1) {
+      if (verbose) message(Sys.time(), " [INFO] No downsampling performed")
+      cell.name <- object@meta.data$cell
+    } else if ( downsampleing.size <= 0) {
+      warning(Sys.time(), " [WARNING] The value of downsampleing.size must be larger than 0 ")
+      cell.name <- object@meta.data$cell
+    } else {
+      set.seed(seed)
+      cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampleing.size )) )
+      cell.name <- unlist(cell.name)
+    }
+
+    object@cell.name <- as.character(cell.name)
+    object@meta.data$dowsample[match(cell.name, object@meta.data$cell)] <- 1
+
+  }
 
   return(object)
 

@@ -21,6 +21,7 @@
 #'
 runDiffusionMap <- function(object, sigma.use = NULL,
                             distance = c("euclidean", "cosine", "rankcor"),
+                            k = 30,
                             density.norm = TRUE,  verbose = F,
                             ...) {
 
@@ -42,7 +43,7 @@ runDiffusionMap <- function(object, sigma.use = NULL,
     warning(Sys.time(), " [WARNING] Invalid sigma value. Using an optimal global sigma instead.")
   }
   # Calculate the Diffusion Map
-  dm.obj <- DiffusionMap(dm.data, sigma=sigma.use, k=object@knn, density_norm = density.norm, distance=distance[1], ...)
+  dm.obj <- DiffusionMap(dm.data, sigma=sigma.use, k=k, density_norm = density.norm, distance=distance[1], ...)
 
   rownames(dm.obj@eigenvectors) <- rownames(dm.data)
   colnames(dm.obj@eigenvectors) <- paste0("DC_", 1:ncol(dm.obj@eigenvectors))
