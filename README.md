@@ -52,7 +52,7 @@ library(flowSpy)
 
 This requires the `devtools` package to be installed first.
 
-``` {r install-github, eval = FALSE}
+```
 
 # If not already installed
 install.packages("devtools") 
