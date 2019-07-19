@@ -66,9 +66,6 @@ library(flowSpy)
 
 <center> <img src="https://github.com/ytdai/flowSpy/blob/master/vignettes/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
-<center> **Workflow of flowSpy** </center>
-
-
 ## 4 Version History
 
 July 19, 2019
