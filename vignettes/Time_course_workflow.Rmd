@@ -1,5 +1,5 @@
 ---
-title: "Tutorial of use case 2 and 3"
+title: "Time course flow cytometry data workflow"
 author: "Yuting Dai"
 package: flowSpy
 date: "`r Sys.Date()`"
@@ -11,7 +11,7 @@ output:
   pdf_document:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Use Case 2 and 3}
+  %\VignetteIndexEntry{Time_course_workflow}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   %\VignetteEncoding{UTF-8}
