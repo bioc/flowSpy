@@ -1,6 +1,8 @@
 #'
 #' Calculate t-Distributed Stochastic Neighbor Embedding in FSPY
 #'
+#' @name runTSNE
+#'
 #' @param object an FSPY object
 #' @param dims integer, Output dimensionality (default: 2)
 #' @param initial_dims integer. the number of dimensions that should

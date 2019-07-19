@@ -1,6 +1,8 @@
 #'
 #' Calculate principal components in FSPY
 #'
+#' @name runFastPCA
+#'
 #' @param object an FSPY object
 #' @param center logical, a logical value indicating whether the variables
 #'    should be shifted to be zero centered. Alternately, a vector

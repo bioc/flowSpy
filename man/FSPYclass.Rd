@@ -7,13 +7,13 @@
 \title{flowSpy class}
 \description{
 All information stored in FSPY object. You can use \code{creatFSPY} to
-   create this object. In this package, most of the functions will use
+   create an FSPY object. In this package, most of the functions will use
    FSPY object as input, and return a modified FSPY obejct as well.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{raw.data}}{matrix. Raw signal data captured using flow cytometry.}
+\item{\code{raw.data}}{matrix. Raw signal data captured in flow or mass cytometry.}
 
 \item{\code{log.data}}{matrix. Log-transfromed dataset of raw.data.}
 
@@ -23,7 +23,7 @@ All information stored in FSPY object. You can use \code{creatFSPY} to
 
 \item{\code{markers.idx}}{vector. Index of markers used in the calculation of PCA, tSNE, destiny and umap.}
 
-\item{\code{cell.name}}{vector. Cell names of log data.}
+\item{\code{cell.name}}{vector. Cell names after performing downsampling.}
 
 \item{\code{knn}}{numeric. Numbers of nearest neighbors}
 
@@ -42,20 +42,20 @@ generated from \code{\link[gmodels]{fast.prcomp}}.}
 
 \item{\code{umap.value}}{matrix umap coordinates information calculated using \code{\link[umap]{umap}}.}
 
-\item{\code{root.cells}}{vector, Names of root cells, which can be modified by \code{defRootCells}.}
+\item{\code{root.cells}}{vector, Names of root cells, which can be modified by \code{defRootCells}.
+An root cell is manually set to be the origin of all cells. Pseudotime in root cells are the lowest.}
 
-\item{\code{leaf.cells}}{vector. Names of leaf cells, which can be modified by \code{defLeafCells}.}
+\item{\code{leaf.cells}}{vector. Names of leaf cells, which can be modified by \code{defLeafCells}.
+An leaf cell is manually set to be the terminal state of all cells. Pseuodtime in leaf cells are the largest.}
 
 \item{\code{network}}{list. Network stored in the calculation of trajectory and pseudotime.}
 
 \item{\code{walk}}{list. Random forward and backward walk between \code{root.cells} and \code{leaf.cells}.}
 
-\item{\code{diff.tree}}{list. Differentiation tree of all cells.}
-
 \item{\code{diff.traj}}{list. Differentiation trajectory all cells.}
 
 \item{\code{plot.meta}}{data.frame. Plot meta information for \code{plot2D} or \code{plot3D}.}
 
-\item{\code{add.meta}}{list. Additional meta information of FSPY object.}
+\item{\code{tree.meta}}{data.frame. Tree meta information of FSPY object.}
 }}
 

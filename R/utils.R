@@ -91,6 +91,8 @@ updateClustMeta <- function(object, verbose = TRUE) {
 #' @param object An FSPY object
 #' @param verbose logical. Whether to print calculation progress.
 #'
+#' @return a data.frame containing meta information for visualization
+#'
 #' @export
 #'
 #'
@@ -114,8 +116,9 @@ fetchPlotMeta <- function(object, markers = NULL, verbose = F) {
 #' @param object An FSPY object
 #' @param verbose logical. Whether to print calculation progress.
 #'
-#' @export
+#' @return a data.frame containing clustering information for visualization
 #'
+#' @export
 #'
 fetchClustMeta <- function(object, verbose = F) {
 
@@ -134,6 +137,8 @@ fetchClustMeta <- function(object, verbose = F) {
 #' @param logical.connect character. "and" or "or"
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Paramters to pass to limitation
+#'
+#' @return a vector containing cell names
 #'
 #' @export
 #'
@@ -183,6 +188,8 @@ fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 
 #'
 #' constraintMatrix
+#'
+#' @name constraintMatrix
 #'
 #' @description
 #' constraint FCS data by a provid cutoff

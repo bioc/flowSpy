@@ -1,6 +1,8 @@
 #'
 #' Calculate diffusion map in FSPY
 #'
+#' @name runDiffusionMap
+#'
 #' @param object an FSPY object
 #' @param sigma.use numeric. Diffusion scale parameter of the Gaussian kernel. One of '\code{local}',
 #'     '\code{global}', a \code{\link[base]{numeric}} global sigma or a Sigmas object.
@@ -9,6 +11,7 @@
 #'    be found because of a singularity in the matrix. See \code{\link[destiny]{DiffusionMap}}
 #' @param distance Distance measurement method applied to data or a distance matrix/dist.
 #'    For the allowed values, see \code{\link[destiny]{find_knn}}
+#' @param k numeric. By default is 30. \code{\link[destiny]{find_dm_k}} can be used to specify k.
 #' @param density.norm logical. If TRUE, use density normalisation. See \code{\link[destiny]{DiffusionMap}}
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... options to pass on to the \code{\link[destiny]{DiffusionMap}} function
@@ -43,7 +46,8 @@ runDiffusionMap <- function(object, sigma.use = NULL,
     warning(Sys.time(), " [WARNING] Invalid sigma value. Using an optimal global sigma instead.")
   }
   # Calculate the Diffusion Map
-  dm.obj <- DiffusionMap(dm.data, sigma=sigma.use, k=k, density_norm = density.norm, distance=distance[1], ...)
+  distance <- match.arg(distance)
+  dm.obj <- DiffusionMap(dm.data, sigma=sigma.use, k=k, density_norm = density.norm, distance=distance, ...)
 
   rownames(dm.obj@eigenvectors) <- rownames(dm.data)
   colnames(dm.obj@eigenvectors) <- paste0("DC_", 1:ncol(dm.obj@eigenvectors))

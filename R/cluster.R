@@ -5,25 +5,28 @@
 #'
 #' @description Compute a specific clustering using the combined flow
 #'    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
-#'    "clara" \code{\link[cluster]{clara}}, "kmeans" \code{\link[stats]{kmeans}} are
+#'    "clara" \code{\link[cluster]{clara}}, "phenograph", "kmeans" \code{\link[stats]{kmeans}} are
 #'    provided.
 #'
 #' @param object an FSPY object
-#' @param cluster.method character. Four clustering method are provided: som, hclust, clara, kmeans.
+#' @param cluster.method character. Four clustering method are provided: som, clara, kmeans and phenograph.
+#'    Clustering method "hclust" and "mclust" are not recommended because of long computing time.
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the clustering functions.
 #'
-#' @seealso Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
-#'    \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
-#'    \code{runMclust} and \code{runKmeans} to run clustering respectively.
+#' @seealso \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+#'    \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}.
+#'    You can use \code{runSOM}, \code{runClara},
+#'    \code{runPhenotype}, \code{runKmeans}, \code{runMclust} and
+#'    \code{runHclust} to run clustering respectively.
 #'
 #' @return An FSPY object with cluster.id in meta.data
 #'
 #' @export
 #'
 #'
-runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phenograph",
-                                                  "hclust", "mclust"), verbose = F, ...) {
+runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phenograph", "hclust", "mclust"),
+                       verbose = F, ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
@@ -33,12 +36,13 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
     object <- runSOM(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$som.id
   } else if (cluster.method == "hclust") {
+    warning(Sys.time(), " [WARNING] hclust method is not recommended ")
     object <- runHclust(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$hclust.id
   } else if (cluster.method == "mclust") {
     warning(Sys.time(), " [WARNING] mclust method is not recommended ")
-    #object <- runMclust(object, verbose = verbose, ...)
-    #object@meta.data$cluster.id <- object@meta.data$mclust.id
+    object <- runMclust(object, verbose = verbose, ...)
+    object@meta.data$cluster.id <- object@meta.data$mclust.id
   } else if (cluster.method == "clara") {
     object <- runClara(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$clara.id
@@ -52,7 +56,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
     warning(Sys.time(), " [WARNING] Invalid cluster.method parameter ")
   }
 
-  # Initialization
+  # Initialization for root cells
   object@network <- list()
   object@meta.data$is.root.cells <- 0
   object@meta.data$is.leaf.cells <- 0
@@ -66,20 +70,24 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'
 #' @name processingCluster
 #'
-#' @description Compute a specific clustering using the combined flow
-#'    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
-#'    "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[stats]{kmeans}} are
-#'    provided.
+#' @description Calculate Principal Components Analysis (PCA), t-Distributed
+#'    Stochastic Neighbor Embedding (tSNE), Diffusion Map and Uniform Manifold
+#'    Approximation and Projection (UMAP) of clusters calculated by runCluster.
 #'
 #' @param object an FSPY object
-#' @param downsampleing.size numeric. Percentage of sample size of downsampling.
+#' @param perplexity numeric. Perplexity parameter (should not be bigger than 3 *
+#'    perplexity < nrow(X) - 1, see details for interpretation). See \code{\link[Rtsne]{Rtsne}}
+#'    for more information.
+#' @param k numeric. The parameter k in k-Nearest Neighbor.
+#' @param downsampling.size numeric. Percentage of sample size of downsampling.
 #'    This parameter is from 0 to 1. by default is 1.
+#' @param seed numeric. Random seed for downsampling
+#' @param umap.config object of class umap.config. See \code{\link[umap]{umap}}.
 #' @param verbose logic. Whether to print calculation progress.
-#' @param ... options to pass on to the clustering functions.
+#' @param ... options to pass on to the dimensionality reduction functions.
 #'
-#' @seealso Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
-#'    \code{\link[mclust]{mlcust}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
-#'    \code{runMclust} and \code{runKmeans} to run clustering respectively.
+#' @seealso \code{\link[umap]{umap}}, \code{\link[gmodels]{fast.prcomp}},
+#'    \code{\link[Rtsne]{Rtsne}}, \code{\link[destiny]{DiffusionMap}}
 #'
 #' @return An FSPY object with cluster.id in meta.data
 #'
@@ -87,12 +95,16 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'
 #'
 processingCluster <- function(object, perplexity = 5, k = 5,
-                              downsampleing.size = 1, seed = 1,
+                              downsampling.size = 1, seed = 1,
                               force.resample = TRUE,
                               umap.config = umap.defaults, verbose = F, ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
+  }
+
+  if (!"cluster.id" %in% colnames(object@meta.data)) {
+    stop(Sys.time(), " [ERROR] cluster.id is not in colnames of FSPY object, please run runCluster first ")
   }
 
   # checking index of markers in cluster
@@ -132,15 +144,15 @@ processingCluster <- function(object, perplexity = 5, k = 5,
     object@umap.value <- object@tsne.value <- object@pca.scores <- object@pca.value <- matrix()
     object@dm <- new("DiffusionMap")
 
-    if (downsampleing.size >= 1) {
+    if (downsampling.size >= 1) {
       if (verbose) message(Sys.time(), " [INFO] No downsampling performed")
       cell.name <- object@meta.data$cell
-    } else if ( downsampleing.size <= 0) {
-      warning(Sys.time(), " [WARNING] The value of downsampleing.size must be larger than 0 ")
+    } else if ( downsampling.size <= 0) {
+      warning(Sys.time(), " [WARNING] The value of downsampling.size must be larger than 0 ")
       cell.name <- object@meta.data$cell
     } else {
       set.seed(seed)
-      cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampleing.size )) )
+      cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampling.size )) )
       cell.name <- unlist(cell.name)
     }
 
@@ -211,7 +223,7 @@ runHclust <- function(object, k = 25,
 
   hc.tree <- cutree(hc, k = k)
 
-  object@meta.data$hclust.id <- hc.tree
+  object@meta.data$hclust.id <- object@meta.data$cluster.id <- hc.tree
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Hclust completed.")
   return(object)
@@ -255,7 +267,7 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
   kmeans.info <- kmeans(kmeans.data, centers = k, iter.max = iter.max, nstart = nstart,
                         algorithm = algorithm, trace=FALSE)
 
-  object@meta.data$kmeans.id <- kmeans.info$cluster
+  object@meta.data$kmeans.id <- object@meta.data$cluster.id  <- kmeans.info$cluster
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans completed.")
   return(object)
@@ -267,7 +279,7 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 #' @name runClara
 #'
-#' @description Perform k-means clustering on a data matrix.
+#' @description Clustering a data matrix into k clusters
 #'
 #' @param object  an FSPY object
 #' @param k numeric. The number of clusters. It is required that
@@ -302,10 +314,11 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 
   if (scale) clara.data <- scale(object@log.data) else clara.data = object@log.data
 
+  metric <- match.arg(metric)
   clara.info <- clara(clara.data, k = k, metric = metric, stand = stand, samples = samples,
                       sampsize = sampsize, trace = trace, ...)
 
-  object@meta.data$clara.id <- clara.info$clustering
+  object@meta.data$clara.id <- object@meta.data$cluster.id  <- clara.info$clustering
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans completed.")
   return(object)
@@ -343,7 +356,7 @@ runMclust <- function(object, scale = F,
 
   mod <- Mclust(mclust.data, ...)
 
-  object@meta.data$mclust.id <- mod$classification
+  object@meta.data$mclust.id <- object@meta.data$cluster.id  <- mod$classification
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Mclust completed.")
   return(object)
@@ -405,7 +418,7 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
                           ...)
 
   # generating som network
-  object@meta.data$som.id <- flowsom$mapping[, 1]
+  object@meta.data$som.id <- object@meta.data$cluster.id  <- flowsom$mapping[, 1]
   object@meta.data$som.value <- flowsom$mapping[, 2]
   object@som <- flowsom
 
@@ -420,7 +433,7 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 
 #' RphenoGraph clustering
 #'
-#' @description R implementation of the phenograph algorithm
+#' @description
 #'    A simple R implementation of the phenograph
 #'    [PhenoGraph](http://www.cell.com/cell/abstract/S0092-8674(15)00637-6) algorithm,
 #'    which is a clustering method designed for high-dimensional single-cell
@@ -430,17 +443,20 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #'    using the well known [Louvain method](https://sites.google.com/site/findcommunities/)
 #'    in this graph.
 #'
-#' @param object Input data matrix.
-#' @param mode Number of nearest neighbours, default is 30.
+#' @param object an FSPY object.
+#' @param mode character. specifies how igraph should interpret the supplied matrix.
+#' @param knn numeric. Number of nearest neighbours, default is 30.
+#' @param verbose logical. Whether to print calculation progress.
+#' @param ... Parameters passing to \code{\link[igraph]{graph.adjacency}} function
 #'
-#' @return a communities object, the operations of this class contains:
+#' @return an FSPY object
 #'
 #' @importFrom igraph graph.adjacency simplify distances
 #'
 #' @export
 #'
-#'
-runPhenograph <- function(object, mode = "undirected", knn = 30, verbose = F, ...){
+runPhenograph <- function(object, mode = c("undirected", "directed", "max", "min", "upper", "lower", "plus"),
+                          knn = 30, verbose = F, ...){
 
   if (length(object@knn) == 0) {
     stop(Sys.time(), " [ERROR] KNN must be run first")
@@ -453,13 +469,14 @@ runPhenograph <- function(object, mode = "undirected", knn = 30, verbose = F, ..
   for(i in seq_len(ncol(mat))) {
     adj[i, colnames(mat)[fout$index[i,]]] <- 1
   }
+  mode <- match.arg(mode)
   g <- igraph::graph.adjacency(adj, mode = mode, ... )
   # remove self loops
   g <- simplify(g)
 
   community <- cluster_louvain(g)
 
-  object@meta.data$phenograph.id <- community$membership
+  object@meta.data$phenograph.id <- object@meta.data$cluster.id <- community$membership
 
   return(object)
 

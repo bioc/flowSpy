@@ -21,10 +21,6 @@ An FSPY object
 \description{
 This subsets an FSPY object by given a list of cells or cluster id.
     This function will subset all results without recalculating them, such as knn,
-    PCA, tSNE, umap and pseudotime. However, this function will worked after running
-    \code{\link[flowSpy]{runKNN}}. For instance, you can choose recalculate PCA and
+    PCA, tSNE, umap and pseudotime. For instance, you can choose recalculate PCA and
     tSNE and destiny scores by paramter recalculate.
-}
-\examples{
-
 }

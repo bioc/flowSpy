@@ -19,7 +19,7 @@
 #'
 runUMAP <- function(object, umap.config = umap.defaults, n_neighbors = 30, dim = 2, verbose = F, ...) {
   if (verbose) message(Sys.time(), " [INFO] Calculating Umap.")
-  if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
+  if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampling.size paramter. ")
   mat <- as.matrix(object@log.data[which(object@meta.data$dowsample == 1), ])
 
   umap.config$n_neighbors <- n_neighbors

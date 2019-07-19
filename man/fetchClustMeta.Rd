@@ -11,6 +11,9 @@ fetchClustMeta(object, verbose = F)
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }
+\value{
+a data.frame containing clustering information for visualization
+}
 \description{
 Fetching clusters' metadata of FSPY
 }

@@ -11,6 +11,9 @@ fetchPlotMeta(object, markers = NULL, verbose = F)
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }
+\value{
+a data.frame containing meta information for visualization
+}
 \description{
 Fetching plot metadata of FSPY
 }

@@ -10,7 +10,8 @@ runCluster(object, cluster.method = c("som", "kmeans", "clara",
 \arguments{
 \item{object}{an FSPY object}
 
-\item{cluster.method}{character. Four clustering method are provided: som, hclust, clara, kmeans.}
+\item{cluster.method}{character. Four clustering method are provided: som, clara, kmeans and phenograph.
+Clustering method "hclust" and "mclust" are not recommended because of long computing time.}
 
 \item{verbose}{logic. Whether to print calculation progress.}
 
@@ -22,11 +23,13 @@ An FSPY object with cluster.id in meta.data
 \description{
 Compute a specific clustering using the combined flow
    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
-   "clara" \code{\link[cluster]{clara}}, "kmeans" \code{\link[stats]{kmeans}} are
+   "clara" \code{\link[cluster]{clara}}, "phenograph", "kmeans" \code{\link[stats]{kmeans}} are
    provided.
 }
 \seealso{
-Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
-   \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
-   \code{runMclust} and \code{runKmeans} to run clustering respectively.
+\code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+   \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}.
+   You can use \code{runSOM}, \code{runClara},
+   \code{runPhenotype}, \code{runKmeans}, \code{runMclust} and
+   \code{runHclust} to run clustering respectively.
 }

@@ -44,11 +44,6 @@ fcs.files <- paste0(fcs.path, "D", c(0,2,4,6,8,10), "-sub.fcs")
 fcs.data <- runExprsMerge(fcs.files, comp = F, transformMethod = "none")
 
 # Refine colnames of fcs data
-# for usecase 2-1
-recol <- c(`FITC-A<CD43>` = "CD43", `APC-A<CD34>` = "CD34", `BV421-A<CD90>` = "CD90",
-           `BV510-A<CD45RA>` = "CD45RA", `BV605-A<CD31>` = "CD31", `BV650-A<CD49f>` = "CD49f",
-           `BV 735-A<CD73>` = "CD73", `BV786-A<CD45>` = "CD45", `PE-A<FLK1>` = "FLK1",
-           `PE-Cy7-A<CD38>` = "CD38")
 # for usecase 2
 recol <- c(`FITC-A<NA>` = "CD43", `APC-A<NA>` = "CD34", `BV421-A<NA>` = "CD90",
            `BV510-A<NA>` = "CD45RA", `BV605-A<NA>` = "CD31", `BV650-A<NA>` = "CD49f",
@@ -145,11 +140,11 @@ plotViolin(fspy, color.by = "cluster.id", marker = "CD45RA", text.angle = 90)
 
 fspy <- defRootCells(fspy, root.cells = c(16), verbose = T)
 
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "none", dim.use = 1:2)
 
-fspy <- defLeafCells(fspy, leaf.cells = c(6,24), verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = c(6,2,24), verbose = T)
 
-fspy <- runWalk(fspy, verbose = T)
+fspy <- runWalk(fspy, verbose = T, max.run.forward = 30, backward.walk = F)
 
 plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
             size = 1, color.by = "pseudotime") + 
@@ -175,6 +170,11 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), size = 10, show.cluser.id = 
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "pseudotime", 
             size = 10, show.cluser.id = T, category = "numeric") + 
   scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+
+plot2D(fspy, item.use = c("pseudotime", "traj.value.log"), 
+       size = 1, color.by = "stage")
+
 
 #################################################
 

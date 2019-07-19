@@ -27,7 +27,6 @@ This tutorial contains key steps of `flowSpy` workflow, including how to build a
 
 ``` {r quick-build, eval = FALSE}
 
-
 # Loading packages
 suppressMessages({
 library(ggplot2)
@@ -59,7 +58,7 @@ exp.data <- cytof.data@exprs
 # Solution 2
 # Read FCS data via flowSpy::runExprsExtract
 # This solution is recommended
-exp.data <- runExprsExtract(fcs.file, showDesc = FALSE)
+exp.data <- runExprsExtract(fcs.file, showDesc = FALSE, transformMethod = "autoLgcl")
 
 # Fetching CD markers
 markers <- colnames(exp.data)
@@ -78,22 +77,22 @@ fspy <- createFSPY(raw.data = exp.data, markers = markers,
 # Cluster cells by SOM algorithm
 # Set random seed to make results reproducible
 set.seed(1)
-fspy <- runCluster(fspy, cluster.method = "som", xdim = 9, ydim = 9, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 10, ydim = 10, verbose = T)
 
 # Cluster based downsampling
 # The total cell number is 236,187, and we can just keep 10% cells to reduce 
 # computation load and improve computation time.
 # Downsampling by setting downsampleing.size 0.1.
-fspy <- processingCluster(fspy, downsampleing.size = 0.02, force.resample = F)
+fspy <- processingCluster(fspy, downsampling.size = 0.1)
 
-# Now there is only 23,663 cells enrolled in the dimensionality reduction
+# Now there is only 23,666 cells enrolled in the dimensionality reduction
 fspy
 
 # run Principal Component Analysis (PCA)
 fspy <- runFastPCA(fspy, verbose = T)
 
 # run t-Distributed Stochastic Neighbor Embedding (tSNE)
-fspy <- runTSNE(fspy, verbose = T)
+fspy <- runTSNE(fspy, dims = 3, verbose = T)
 
 # run Diffusion map
 fspy <- runDiffusionMap(fspy, verbose = T)
@@ -102,7 +101,7 @@ fspy <- runDiffusionMap(fspy, verbose = T)
 fspy <- runUMAP(fspy, verbose = T)
 
 # build minimum spanning tree based on tsne
-fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2, verbose = T)
+fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:3, verbose = T)
 
 ###########################################
 # This is visualization module

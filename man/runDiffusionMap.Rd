@@ -5,7 +5,8 @@
 \title{Calculate diffusion map in FSPY}
 \usage{
 runDiffusionMap(object, sigma.use = NULL, distance = c("euclidean",
-  "cosine", "rankcor"), density.norm = TRUE, verbose = F, ...)
+  "cosine", "rankcor"), k = 30, density.norm = TRUE, verbose = F,
+  ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -18,6 +19,8 @@ be found because of a singularity in the matrix. See \code{\link[destiny]{Diffus
 
 \item{distance}{Distance measurement method applied to data or a distance matrix/dist.
 For the allowed values, see \code{\link[destiny]{find_knn}}}
+
+\item{k}{numeric. By default is 30. \code{\link[destiny]{find_dm_k}} can be used to specify k.}
 
 \item{density.norm}{logical. If TRUE, use density normalisation. See \code{\link[destiny]{DiffusionMap}}}
 

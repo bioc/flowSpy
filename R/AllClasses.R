@@ -17,15 +17,15 @@ NULL
 #' @name FSPYclass
 #'
 #' @description  All information stored in FSPY object. You can use \code{creatFSPY} to
-#'    create this object. In this package, most of the functions will use
+#'    create an FSPY object. In this package, most of the functions will use
 #'    FSPY object as input, and return a modified FSPY obejct as well.
 #'
-#' @slot raw.data matrix. Raw signal data captured using flow cytometry.
+#' @slot raw.data matrix. Raw signal data captured in flow or mass cytometry.
 #' @slot log.data matrix. Log-transfromed dataset of raw.data.
 #' @slot meta.data data.frame. Meta data information, and colnames of "stage" and "cell" are required.
 #' @slot markers vector. Markers used in the calculation of PCA, tSNE, diffusion map and UMAP.
 #' @slot markers.idx vector. Index of markers used in the calculation of PCA, tSNE, destiny and umap.
-#' @slot cell.name vector. Cell names of log data.
+#' @slot cell.name vector. Cell names after performing downsampling.
 #' @slot knn numeric. Numbers of nearest neighbors
 #' @slot knn.index,knn.distance matrix. Each row of the \code{knn.index} matrix corresponds to a point
 #'     in \code{log.data} and contains the row indices in \code{log.data} that are its nearest neighbors.
@@ -37,13 +37,14 @@ NULL
 #' @slot dm DiffusionMap object. Diffusion map calculated by \code{\link[destiny]{DiffusionMap}}
 #' @slot umap.value matrix umap coordinates information calculated using \code{\link[umap]{umap}}.
 #' @slot root.cells vector, Names of root cells, which can be modified by \code{defRootCells}.
+#'     An root cell is manually set to be the origin of all cells. Pseudotime in root cells are the lowest.
 #' @slot leaf.cells vector. Names of leaf cells, which can be modified by \code{defLeafCells}.
+#'     An leaf cell is manually set to be the terminal state of all cells. Pseuodtime in leaf cells are the largest.
 #' @slot network list. Network stored in the calculation of trajectory and pseudotime.
 #' @slot walk list. Random forward and backward walk between \code{root.cells} and \code{leaf.cells}.
-#' @slot diff.tree list. Differentiation tree of all cells.
 #' @slot diff.traj list. Differentiation trajectory all cells.
 #' @slot plot.meta data.frame. Plot meta information for \code{plot2D} or \code{plot3D}.
-#' @slot add.meta list. Additional meta information of FSPY object.
+#' @slot tree.meta data.frame. Tree meta information of FSPY object.
 #'
 #' @importClassesFrom destiny DiffusionMap DPT
 #'
@@ -102,21 +103,25 @@ FSPY <- methods::setClass("FSPY", slots = c(
 
 #' create an FSPY object
 #'
-#' @description
-#' This function include all information used in flow cytometry data
-#' processing.
+#' @description This function is about how to build an FSPY object. An FSPY object is the base
+#'    for the whole analysizing workflow of flow and mass cytometry data.
 #'
 #' @name createFSPY
 #'
 #' @param raw.data matrix. Raw data read from FCS file after perform preprocessing.
 #' @param markers vector. Detailed marker information in the gate of flow cytometer.
 #' @param meta.data data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.
+#' @param batch vector. Batch covariate (only one batch allowed). Method to correct batch effect
+#'    function is refered to \code{\link[ComBat]{sva}}.
+#' @param batch.correct logical. Whether to correct batch effect. If TRUE, batch must be provided.
 #' @param normalization.method character. Normalization and transformation method.
-#'    Whether to log transformed raw.data. If FALSE, it's better to perform transformation
-#'    using \code{\link[transformation]{flowCore}} before creating FSPY
-#'    object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
+#'    Whether to normalize and log transformed of raw.data. In flowSpy workflow, it's better
+#'    to perform transformation of FCS data using \code{runExprsExtract} or \code{runExprsMerge} or
+#'    \code{\link[transformation]{flowCore}} before creating an FSPY object.
+#'    \code{flowSpy} only provide log transforma method. If you need to using truncateTransform,
 #'    scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
-#'    information.
+#'    information. And \code{runExprsExtract} in \code{flowSpy}, autoLgcl, cytofAsinh, logicle, arcsinh,
+#'    and logAbs can be used to perform transformation of FCS data.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... paramters pass to \code{correctBatchFSPY} function.
 #'
@@ -128,9 +133,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' # See vignette tutorial
 #' vignette(package = "flowSpy")
 #' vignette("Quick_start", package = "flowSpy")
-#' vignette("Tutorial_of_flowSpy", package = "flowSpy")
-#'
-#'
+#' vignette("Use_case_1", package = "flowSpy")
+#' vignette("Use_case_2_3", package = "flowSpy")
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = FALSE,

@@ -4,20 +4,25 @@
 \alias{runPhenograph}
 \title{RphenoGraph clustering}
 \usage{
-runPhenograph(object, mode = "undirected", knn = 30, verbose = F,
-  ...)
+runPhenograph(object, mode = c("undirected", "directed", "max", "min",
+  "upper", "lower", "plus"), knn = 30, verbose = F, ...)
 }
 \arguments{
-\item{object}{Input data matrix.}
+\item{object}{an FSPY object.}
 
-\item{mode}{Number of nearest neighbours, default is 30.}
+\item{mode}{character. specifies how igraph should interpret the supplied matrix.}
+
+\item{knn}{numeric. Number of nearest neighbours, default is 30.}
+
+\item{verbose}{logical. Whether to print calculation progress.}
+
+\item{...}{Parameters passing to \code{\link[igraph]{graph.adjacency}} function}
 }
 \value{
-a communities object, the operations of this class contains:
+an FSPY object
 }
 \description{
-R implementation of the phenograph algorithm
-   A simple R implementation of the phenograph
+A simple R implementation of the phenograph
    [PhenoGraph](http://www.cell.com/cell/abstract/S0092-8674(15)00637-6) algorithm,
    which is a clustering method designed for high-dimensional single-cell
    data analysis. It works by creating a graph ("network") representing

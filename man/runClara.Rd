@@ -39,7 +39,7 @@ the number of observations (n = nrow(x))}
 an FSPY object with clara.id in meta.data
 }
 \description{
-Perform k-means clustering on a data matrix.
+Clustering a data matrix into k clusters
 }
 \seealso{
 \code{\link[cluster]{clara}}

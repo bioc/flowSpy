@@ -1,16 +1,18 @@
 Package: flowSpy
 Type: Package
-Title: An Analysis Toolkit for Flow Cytometry Data
+Title: A Toolkit for Flow And Mass Cytometry Data
 Version: 1.2.2
 Date: 2019-05-07
 Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
             email = "forlynna@sjtu.edu.cn"))
 Author: Yuting Dai [aut, cre, cph]
 Maintainer: Yuting Dai <forlynna@sjtu.edu.cn>
-Description: flowSpy offers visualization options for flow cytometry data.
-    PCA, tSNE, diffusion map and SOM were included in base function section, 
-    and pseudotime, differentiation tree, differentiation trajectory, sankey 
-    diagrams and network were included in improved function section.
+Description: A trajectory inference and visualization toolkit 
+    of flow and mass cytometry data. flowSpy offers complete 
+    analyzing workflow for flow and mass cytometry data. Main 
+    computation modules in flowSpy are subpopulation identification, 
+    dimensionality reduction, pseudotime, trajectory inference 
+    and visualization. 
 Depends: R (>= 3.5), igraph
 Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
         flowUtils, Biobase, Matrix, flowCore, sva,

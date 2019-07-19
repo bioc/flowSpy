@@ -15,6 +15,9 @@ fetchCell(object, logical.connect = "or", verbose = FALSE, ...)
 
 \item{...}{Paramters to pass to limitation}
 }
+\value{
+a vector containing cell names
+}
 \description{
 Fetching cellls of FSPY
 }

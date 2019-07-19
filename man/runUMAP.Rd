@@ -4,8 +4,8 @@
 \alias{runUMAP}
 \title{Calculating UMAP}
 \usage{
-runUMAP(object, umap.config = umap.defaults, dim = 2, verbose = F,
-  ...)
+runUMAP(object, umap.config = umap.defaults, n_neighbors = 30,
+  dim = 2, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

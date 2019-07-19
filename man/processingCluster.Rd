@@ -5,30 +5,38 @@
 \title{processingCluster}
 \usage{
 processingCluster(object, perplexity = 5, k = 5,
-  downsampleing.size = 1, seed = 1, umap.config = umap.defaults,
-  verbose = F, ...)
+  downsampling.size = 1, seed = 1, force.resample = TRUE,
+  umap.config = umap.defaults, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
 
-\item{downsampleing.size}{numeric. Percentage of sample size of downsampling.
+\item{perplexity}{numeric. Perplexity parameter (should not be bigger than 3 *
+perplexity < nrow(X) - 1, see details for interpretation). See \code{\link[Rtsne]{Rtsne}}
+for more information.}
+
+\item{k}{numeric. The parameter k in k-Nearest Neighbor.}
+
+\item{downsampling.size}{numeric. Percentage of sample size of downsampling.
 This parameter is from 0 to 1. by default is 1.}
+
+\item{seed}{numeric. Random seed for downsampling}
+
+\item{umap.config}{object of class umap.config. See \code{\link[umap]{umap}}.}
 
 \item{verbose}{logic. Whether to print calculation progress.}
 
-\item{...}{options to pass on to the clustering functions.}
+\item{...}{options to pass on to the dimensionality reduction functions.}
 }
 \value{
 An FSPY object with cluster.id in meta.data
 }
 \description{
-Compute a specific clustering using the combined flow
-   cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
-   "mclust" \code{\link[mclust]{mlcust}}, "kmeans" \code{\link[stats]{kmeans}} are
-   provided.
+Calculate Principal Components Analysis (PCA), t-Distributed
+   Stochastic Neighbor Embedding (tSNE), Diffusion Map and Uniform Manifold
+   Approximation and Projection (UMAP) of clusters calculated by runCluster.
 }
 \seealso{
-Four clustering methods are provided: \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
-   \code{\link[mclust]{mlcust}}, \code{\link[stats]{kmeans}}. You can use \code{runSOM}, \code{runHclust},
-   \code{runMclust} and \code{runKmeans} to run clustering respectively.
+\code{\link[umap]{umap}}, \code{\link[gmodels]{fast.prcomp}},
+   \code{\link[Rtsne]{Rtsne}}, \code{\link[destiny]{DiffusionMap}}
 }

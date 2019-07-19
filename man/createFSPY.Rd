@@ -15,12 +15,19 @@ createFSPY(raw.data, markers, meta.data, batch = NULL,
 
 \item{meta.data}{data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.}
 
+\item{batch}{vector. Batch covariate (only one batch allowed). Method to correct batch effect
+function is refered to \code{\link[ComBat]{sva}}.}
+
+\item{batch.correct}{logical. Whether to correct batch effect. If TRUE, batch must be provided.}
+
 \item{normalization.method}{character. Normalization and transformation method.
-Whether to log transformed raw.data. If FALSE, it's better to perform transformation
-using \code{\link[transformation]{flowCore}} before creating FSPY
-object. flowSpy only provide log transforma parameter. If you need to using truncateTransform,
+Whether to normalize and log transformed of raw.data. In flowSpy workflow, it's better
+to perform transformation of FCS data using \code{runExprsExtract} or \code{runExprsMerge} or
+\code{\link[transformation]{flowCore}} before creating an FSPY object.
+\code{flowSpy} only provide log transforma method. If you need to using truncateTransform,
 scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
-information.}
+information. And \code{runExprsExtract} in \code{flowSpy}, autoLgcl, cytofAsinh, logicle, arcsinh,
+and logAbs can be used to perform transformation of FCS data.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
@@ -30,15 +37,14 @@ information.}
 An FSPY object with raw.data and markers and meta.data
 }
 \description{
-This function include all information used in flow cytometry data
-processing.
+This function is about how to build an FSPY object. An FSPY object is the base
+   for the whole analysizing workflow of flow and mass cytometry data.
 }
 \examples{
 # See vignette tutorial
 vignette(package = "flowSpy")
 vignette("Quick_start", package = "flowSpy")
-vignette("Tutorial_of_flowSpy", package = "flowSpy")
-
-
+vignette("Use_case_1", package = "flowSpy")
+vignette("Use_case_2_3", package = "flowSpy")
 
 }

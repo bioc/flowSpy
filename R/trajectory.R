@@ -16,6 +16,7 @@
 #' @param ... Parameters passing to calculation function.
 #'
 #' @importFrom igraph graph.adjacency simplify shortest_paths
+#'
 #' @return An FSPY object
 #'
 #' @export
