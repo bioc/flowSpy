@@ -76,7 +76,7 @@ fspy <- createFSPY(raw.data = exp.data, markers = markers,
 
 # Cluster cells by SOM algorithm
 # Set random seed to make results reproducible
-set.seed(10)
+set.seed(6)
 fspy <- runCluster(fspy, cluster.method = "som", xdim = 10, ydim = 10, verbose = T)
 
 # Cluster based downsampling
@@ -95,17 +95,6 @@ fspy <- runFastPCA(fspy, verbose = T)
 # run t-Distributed Stochastic Neighbor Embedding (tSNE)
 set.seed(1)
 fspy <- runTSNE(fspy, dims = 2, verbose = T)
-
-fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2, verbose = T)
-
-for (i in markers) {
-p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/marker.", i, ".pdf"), width = 10, height = 8)
-}
-
-
-
 
 # run Diffusion map
 fspy <- runDiffusionMap(fspy, verbose = T)
@@ -163,6 +152,11 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
 plotClusterHeatmap(fspy)
 
 
+for (i in markers) {
+p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/marker.", i, ".pdf"), width = 6, height = 8)
+}
 
 for (i in markers) {
 p <- plotTree(fspy, color.by = i, show.node.name = T, cex.size = 1, as.tree = T, root.id = 25) + 
