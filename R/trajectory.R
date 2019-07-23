@@ -58,7 +58,7 @@ runWalk <- function(object, mode = "undirected",
     warning(Sys.time(), " [WARNING] max.run.forward is too large.")
   }
   # run forward
-  walk.forward <- lapply(as.character(root.cells), function(x) shortest_paths(g, from = x, to = as.character(object@leaf.cells))$vpath )
+  walk.forward <- suppressWarnings(lapply(as.character(root.cells), function(x) shortest_paths(g, from = x, to = as.character(object@leaf.cells))$vpath ))
 
   # run run backward
   if (backward.walk) {
@@ -69,7 +69,7 @@ runWalk <- function(object, mode = "undirected",
     } else {
       warning(Sys.time(), " [WARNING] max.run.backward is too large.")
     }
-    walk.backward <- lapply(leaf.cells, function(x) shortest_paths(g, from = x, to = object@root.cells)$vpath )
+    walk.backward <- suppressWarnings(lapply(leaf.cells, function(x) shortest_paths(g, from = x, to = object@root.cells)$vpath ))
   } else {
     walk.backward <- NULL
     max.run.backward <- 0

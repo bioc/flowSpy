@@ -152,6 +152,8 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
 plotClusterHeatmap(fspy)
 
 
+##############################
+### This part must be removed 
 for (i in markers) {
 p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))

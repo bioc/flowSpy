@@ -108,7 +108,7 @@ plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage",
 # Plot 2D tSNE. And cells are colored by CD45RA markers expression
 plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD45RA", 
                main = "tSNE CD45RA", category = "numeric")  + 
-  scale_colour_gradientn(colors = c("#00599F", "#00599F", "#EEEEEE", "#FF3222", "#FF3222"))
+  scale_colour_gradientn(colors = c("#00599F","#00599F","#EEEEEE","#FF3222","#FF3222"))
 
 # Plot 2D UMAP. And cells are colored by cluster id
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id", 
@@ -116,12 +116,13 @@ plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id",
 
 # Plot 2D UMAP. And cells are colored by stage
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage", 
-       alpha = 1, main = "UMAP", category = "categorical", show.cluser.id = T)
+       alpha = 1, main = "UMAP", category = "categorical") +
+   scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
 
 # Plot 2D UMAPE. And cells are colored by CD45RA markers expression
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD45RA", 
                main = "UMAP CD45RA", category = "numeric")  + 
-  scale_colour_gradientn(colors = c("#00599F", "#00599F", "#EEEEEE", "#FF3222", "#FF3222"))
+  scale_colour_gradientn(colors = c("#00599F","#00599F","#EEEEEE","#FF3222","#FF3222"))
 
 # Tree plot
 plotTree(fspy, color.by = "CD45RA", show.node.name = T, cex.size = 1) + 
@@ -141,17 +142,17 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
 
 # plot pie tree
 plotPieTree(fspy, cex.size = 3, size.by.cell.number = T) + 
-  scale_fill_manual(values = c("#00599F", "#009900", "#FF3222", "#F4D31D", "#FF99FF","#7A06A0"))
+  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
 
-plotPieTree(fspy, cex.size = 5, size.by.cell.number = T, as.tree = T, root.id = 16) + 
-  scale_fill_manual(values = c("#00599F", "#009900", "#FF3222", "#F4D31D", "#FF99FF","#7A06A0"))
+plotPieTree(fspy, cex.size = 5, size.by.cell.number = T, as.tree = T, root.id = 18) + 
+  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
 
 # plot pie cluster
 plotPieCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), cex.size = 40) + 
-  scale_fill_manual(values = c("#00599F", "#009900", "#FF3222", "#F4D31D", "#FF99FF","#7A06A0"))
+  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
 
 plotPieCluster(fspy, item.use = c("PC_1", "PC_2"), cex.size = 0.5) + 
-  scale_fill_manual(values = c("#00599F", "#009900", "#FF3222", "#F4D31D", "#FF99FF","#7A06A0"))
+  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
 
 # plot heatmap of cluster
 plotClusterHeatmap(fspy)
@@ -162,6 +163,10 @@ plotViolin(fspy, color.by = "cluster.id", marker = "CD45RA", text.angle = 90)
 # plot cluster
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), size = 10, show.cluser.id = T)
 
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD43", 
+            size = 10, show.cluser.id = T, category = "numeric") + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
 ###########################################
 # This is pseudotime module
 ###########################################
@@ -170,7 +175,7 @@ fspy <- defRootCells(fspy, root.cells = c(18), verbose = T)
 
 fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
 
-fspy <- defLeafCells(fspy, leaf.cells = c(25,1), verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = c(25,24,1), verbose = T)
 
 fspy <- runWalk(fspy, verbose = T)
 
@@ -188,17 +193,71 @@ plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "numeric",
             size = 1, color.by = "pseudotime") + 
   scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
+# marker plot colored by pseudotime
+plot2D(fspy, item.use = c("pseudotime", "CD43"), category = "categorical",
+            size = 1, color.by = "stage")  + 
+  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+
+plot2D(fspy, item.use = c("pseudotime", "FLK1"), category = "categorical",
+            size = 1, color.by = "stage")  + 
+  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+
+# Tree plot
+plotTree(fspy, color.by = "pseudotime", cex.size = 1) + 
+  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
 # denisty plot by different stage
-plotPseudotimeDensity(fspy, adjust = 1)
+plotPseudotimeDensity(fspy, adjust = 1) + 
+  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
 
 # trajectory value
 plotPseudotimeTraj(fspy, var.cols = T) + 
   scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
-plotPseudotimeTraj(fspy, cutoff = 0.1, var.cols = T) + 
+plotPseudotimeTraj(fspy, cutoff = 0.01, var.cols = T) + 
   scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
-plotHeatmap(fspy, downsize = 10000)
+plotHeatmap(fspy, downsize = 12000, cluster_rows = T,
+            olor = colorRampPalette(c("blue","blue", "white","red","red"))(100))
+
+# plot cluster
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "traj.value.log", 
+            size = 10, show.cluser.id = T, category = "numeric") + 
+  scale_colour_gradientn(colors = c("#EEEEEE", "#FF3222", "#CC0000", "#CC0000"))
+
+plotTree(fspy, color.by = "traj.value.log", cex.size = 1) + 
+  scale_colour_gradientn(colors = c("#EEEEEE","#FF3222","#CC0000","#CC0000"))
+
+###########################################
+# fetching intermediate state cells
+###########################################
+
+cell.inter <- fetchCell(fspy, traj.value.log = 0.01)
+sub.fspy <- subsetFSPY(fspy, cells = cell.inter)
+
+set.seed(1)
+sub.fspy <- runCluster(sub.fspy, cluster.method = "som", xdim = 1, ydim = 2, verbose = T)
+
+# build minimum spanning tree based on raw
+sub.fspy <- buildTree(sub.fspy, dim.type = "raw", verbose = T)
+
+plotMarkerDensity(sub.fspy, adjust = 1)
+
+plotPieTree(sub.fspy, cex.size = 0.5) + 
+  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
+
+##############################
+### This part must be removed 
+for (i in markers) {
+p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/marker.", i, ".pdf"), width = 6, height = 7)
+}
+
+p <- plotTree(fspy, color.by = "CD45RA", show.node.name = T, cex.size = 1) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/marker.n.CD45RA.pdf"), width = 6, height = 7)
+
 
 ```
 
