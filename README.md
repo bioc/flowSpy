@@ -1,5 +1,5 @@
 
-# flowSpy v1.2.2  <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/logo.png" align="right" height=100 width=100/>
+# flowSpy v1.2.2  <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
 
 flowSpy is a trajectory inference and visualization toolkit of flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
 
