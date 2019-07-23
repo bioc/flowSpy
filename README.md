@@ -74,6 +74,15 @@ July 19, 2019
     - Fixed some bugs on cluster based downsampling
 
 
+## 5 Reference
+
+[1] Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2019). FlowSOM: Using
+  self-organizing maps for visualization and interpretation of cytometry data.
+  http://www.r-project.org, http://dambi.ugent.be.
+
+[2] Qiu, P., et al., Extracting a cellular hierarchy from high-dimensional cytometry data with SPADE. Nat Biotechnol, 2011. 29(10): p.886-91.
+
+
 
 
 
