@@ -9,7 +9,7 @@ using namespace Rcpp;
 // In this way, the undirected graph is symmetrized by halfing the weight 
 // in code `weights(r, 2) = u/(2.0*ncol - u)/2`.
 //
-// Author: Chen Hao, Date: 25/09/2015 update by Yuting Dai
+// Author: Chen Hao, Date: 25/09/2015 update by Yuting Dai 24/07/2019
 
 
 // [[Rcpp::export]]
