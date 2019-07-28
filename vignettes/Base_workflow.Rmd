@@ -86,7 +86,7 @@ fspy <- runCluster(fspy, cluster.method = "som", xdim = 10, ydim = 10, verbose =
 set.seed(1)
 fspy <- processingCluster(fspy, downsampling.size = 0.1)
 
-# Now there is only 23,666 cells enrolled in the dimensionality reduction
+# Now there is only 23,664 cells enrolled in the dimensionality reduction
 fspy
 
 # run Principal Component Analysis (PCA)
@@ -132,7 +132,7 @@ plot3D(fspy, item.use = c("UMAP_1", "UMAP_2", "UMAP_3"), color.by = "CD45RA",
        main = "UMAP CD45RA", category = "numeric", size = 0.2)
 
 # Tree plot
-plotTree(fspy, color.by = "CD3", show.node.name = T, cex.size = 1) + 
+plotTree(fspy, color.by = "cell.number", show.node.name = T, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 plotTree(fspy, color.by = "CD3", show.node.name = T, cex.size = 1, 
@@ -147,6 +147,11 @@ plotCluster(fspy, item.use = c("PC_1", "PC_2"), category = "numeric",
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
             size = 100, color.by = "CD45RA") + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
+            size = 100, color.by = "CD3", show.cluser.id = T) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
 
 # plot heatmap of cluster
 plotClusterHeatmap(fspy)
@@ -168,11 +173,36 @@ ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/tree.", i, ".pdf"), width = 10
 
 for (i in markers) {
 p <- plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
-            size = 100, color.by = i, show.cluser.id = T, show.cluser.id.size = 100) + 
+            size = 100, color.by = i, main = i, show.cluser.id.size = 100) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/tsne.", i, ".pdf"), width = 10, height = 8)
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/tsne.", i, ".pdf"), width = 6, height = 5)
 }
 
+
+
+######################## 
+plotMarkerDensity(fspy)
+
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD3", 
+       alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+for (i in markers) {
+p <- plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = i, 
+       alpha = 1, main = i, category = "categorical", show.cluser.id = T) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/all.tsne.", i, ".pdf"), width = 6, height = 5)
+}
+
+
+
+######################## D3 network
+library(plotly)
+library(visNetwork)
+
+visIgraph(fspy@network$mst, layout = "layout_in_circle")
+
+visIgraph(fspy@network$mst, smooth = T) %>% visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE, manipulation = TRUE) %>% visLegend()
 
 ```
 

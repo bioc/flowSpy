@@ -355,7 +355,7 @@ plotCluster <- function(object,
   gg <- gg + plot.theme
   gg <- gg + labs(x = item.use[1], y = item.use[2], title = paste0(main))
 
-  if (show.cluser.id & (category == "categorical")) {
+  if (show.cluser.id) {
     for ( i in 1:nrow(plot.data)) {
       gg <- gg + annotate(geom="text", x = plot.data$plot.x[i], y = plot.data$plot.y[i],
                           label = rownames(plot.data)[i],

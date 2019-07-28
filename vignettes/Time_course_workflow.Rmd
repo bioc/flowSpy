@@ -92,10 +92,12 @@ fspy <- runUMAP(fspy, verbose = T)
 # build minimum spanning tree based on tsne
 fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2, verbose = T)
 
-
 ###########################################
 # This is visualization module
 ###########################################
+
+# Plot marker density
+plotMarkerDensity(fspy)
 
 # Plot 2D tSNE. And cells are colored by cluster id
 plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id", 
@@ -173,7 +175,7 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD43",
 
 fspy <- defRootCells(fspy, root.cells = c(18), verbose = T)
 
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:5)
 
 fspy <- defLeafCells(fspy, leaf.cells = c(25,24,1), verbose = T)
 
@@ -254,9 +256,22 @@ p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) +
 ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/marker.", i, ".pdf"), width = 6, height = 7)
 }
 
+for (i in markers) {
+p <- plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = i, 
+               main = i, category = "numeric")  + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/umap.", i, ".pdf"), width = 6, height = 5)
+}
+
+
 p <- plotTree(fspy, color.by = "CD45RA", show.node.name = T, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/marker.n.CD45RA.pdf"), width = 6, height = 7)
+
+
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "categorical",
+            size = 1, color.by = "stage")  + 
+  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
 
 
 ```
