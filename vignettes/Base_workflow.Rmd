@@ -86,7 +86,7 @@ fspy <- runCluster(fspy, cluster.method = "som", xdim = 10, ydim = 10, verbose =
 set.seed(1)
 fspy <- processingCluster(fspy, downsampling.size = 0.1)
 
-# Now there is only 23,664 cells enrolled in the dimensionality reduction
+# Now only 23,664 cells are enrolled in the dimensionality reduction
 fspy
 
 # run Principal Component Analysis (PCA)

@@ -175,9 +175,9 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD43",
 
 fspy <- defRootCells(fspy, root.cells = c(18), verbose = T)
 
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:5)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
 
-fspy <- defLeafCells(fspy, leaf.cells = c(25,24,1), verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = c(25,24,33,1), verbose = T)
 
 fspy <- runWalk(fspy, verbose = T)
 
