@@ -24,6 +24,28 @@
 #'
 #' @export
 #'
+#' @examples
+#' # After building an FSPY object
+#' # Set random seed to make results reproducible
+#' set.seed(1)
+#' fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
+#'
+#' # K-means clustering
+#' fspy <- runCluster(fspy, cluster.method = "kmeans", k = 9, verbose = T)
+#'
+#' # Clara clustering
+#' fspy <- runCluster(fspy, cluster.method = "clara", k = 9, verbose = T)
+#'
+#' # phenoGraph clustering
+#' fspy <- runCluster(fspy, cluster.method = "phenograph", verbose = T)
+#'
+#' # hclust clustering
+#' # not recommended for large cell size
+#' fspy <- runCluster(fspy, cluster.method = "hclust", k = 9, verbose = T)
+#'
+#' # mclust clustering
+#' # not recommended for large cell size
+#' fspy <- runCluster(fspy, cluster.method = "mclust", verbose = T)
 #'
 runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phenograph", "hclust", "mclust"),
                        verbose = F, ...) {
@@ -36,11 +58,9 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
     object <- runSOM(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$som.id
   } else if (cluster.method == "hclust") {
-    warning(Sys.time(), " [WARNING] hclust method is not recommended ")
     object <- runHclust(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$hclust.id
   } else if (cluster.method == "mclust") {
-    warning(Sys.time(), " [WARNING] mclust method is not recommended ")
     object <- runMclust(object, verbose = verbose, ...)
     object@meta.data$cluster.id <- object@meta.data$mclust.id
   } else if (cluster.method == "clara") {
@@ -93,6 +113,20 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'
 #' @export
 #'
+#' @examples
+#' # After running clustering
+#' set.seed(1)
+#' fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
+#'
+#' # Do not perfrom downsampling
+#' fspy <- processingCluster(fspy, perplexity = 2)
+#'
+#' # Perform cluster based downsampling
+#' # Only keep 50% cells
+#' fspy <- processingCluster(fspy, perplexity = 2, downsampling.size = 0.5)
+#'
+#' # Processing clusters without downsampling step
+#' fspy <- processingCluster(fspy, perplexity = 2, force.resample = FALSE)
 #'
 processingCluster <- function(object, perplexity = 5, k = 5,
                               downsampling.size = 1, seed = 1,
@@ -308,7 +342,7 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jaccard"),
                      stand = FALSE, samples = 5, scale = T,
-                     sampsize = min(n, 40 + 2 * k), trace = 0, verbose = F, ...) {
+                     trace = 0, verbose = F, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Clara")
 
@@ -316,7 +350,7 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 
   metric <- match.arg(metric)
   clara.info <- clara(clara.data, k = k, metric = metric, stand = stand, samples = samples,
-                      sampsize = sampsize, trace = trace, ...)
+                      trace = trace, ...)
 
   object@meta.data$clara.id <- object@meta.data$cluster.id  <- clara.info$clustering
 
@@ -336,7 +370,6 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 #' @param scale logical. Whether to use scaled data in Mclust.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to \code{\link[mclust]{Mclust}} function
-#'
 #'
 #' @return an FSPY object with mclust.id in meta.data
 #'
@@ -401,6 +434,8 @@ runMclust <- function(object, scale = F,
 #' @export
 #'
 #'
+#'
+#'
 runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
                    alpha = c(0.05,  0.01), radius = 1, init = FALSE,
                    distf = 2, codes = NULL, importance = NULL,
@@ -428,9 +463,6 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
   return(object)
 }
 
-
-
-
 #' RphenoGraph clustering
 #'
 #' @description
@@ -455,34 +487,24 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #'
 #' @export
 #'
-runPhenograph <- function(object, mode = c("undirected", "directed", "max", "min", "upper", "lower", "plus"),
-                          knn = 30, verbose = F, ...){
+runPhenograph <- function(object, knn = 30, scale = F, verbose = F, ...){
 
-  if (length(object@knn) == 0) {
-    stop(Sys.time(), " [ERROR] KNN must be run first")
-  }
-  fout <- suppressWarnings(findKNN(object@log.data, k = knn, ...))
 
-  mat <- t(object@log.data)
-  adj <- matrix(0, ncol(mat), ncol(mat))
-  rownames(adj) <- colnames(adj) <- colnames(mat)
-  for(i in seq_len(ncol(mat))) {
-    adj[i, colnames(mat)[fout$index[i,]]] <- 1
-  }
-  mode <- match.arg(mode)
-  g <- igraph::graph.adjacency(adj, mode = mode, ... )
-  # remove self loops
-  g <- simplify(g)
+  if (verbose) message(Sys.time(), " [INFO] Calculating phenoGraph")
 
-  community <- cluster_louvain(g)
+  if (scale) phenograph.data <- scale(object@log.data) else phenograph.data = object@log.data
 
-  object@meta.data$phenograph.id <- object@meta.data$cluster.id <- community$membership
+  mod <- Rphenograph(phenograph.data, k = 30)
+
+  object@meta.data$phenograph.id <- object@meta.data$cluster.id  <- membership(mod[[2]])
+
+  if (verbose) message(Sys.time(), " [INFO] Calculating phenoGraph completed.")
 
   return(object)
 
 }
 
-
+#'
 #' RphenoGraph clustering
 #'
 #' @name Rphenograph
@@ -494,14 +516,18 @@ runPhenograph <- function(object, mode = c("undirected", "directed", "max", "min
 #' phenotypic similarities between cells by calclating the Jaccard coefficient between nearest-neighbor sets, and then identifying communities
 #' using the well known [Louvain method](https://sites.google.com/site/findcommunities/) in this graph.
 #'
+#' This function is developed by Hao Chen  and updated by Yuting Dai.
+#'
 #' @param data matrix; input data matrix
 #' @param k integer; number of nearest neighbours (default:30)
 #'
-#' @return a list contains an igraph graph object for \code{graph_from_data_frame} and a communities object, the operations of this class contains:
+#' @return a list contains an igraph graph object for \code{graph_from_data_frame}
+#'     and a communities object, the operations of this class contains:
 #' \item{print}{returns the communities object itself, invisibly.}
 #' \item{length}{returns an integer scalar.}
 #' \item{sizes}{returns a numeric vector.}
-#' \item{membership}{returns a numeric vector, one number for each vertex in the graph that was the input of the community detection.}
+#' \item{membership}{returns a numeric vector, one number for each vertex in
+#'     the graph that was the input of the community detection.}
 #' \item{modularity}{returns a numeric scalar.}
 #' \item{algorithm}{returns a character scalar.}
 #' \item{crossing}{returns a logical vector.}
@@ -510,10 +536,12 @@ runPhenograph <- function(object, mode = c("undirected", "directed", "max", "min
 #' \item{cut_at}{returns a numeric vector, the membership vector of the vertices.}
 #' \item{as.dendrogram}{returns a dendrogram object.}
 #' \item{show_trace}{returns a character vector.}
-#' \item{code_len}{returns a numeric scalar for communities found with the InfoMAP method and NULL for other methods.}
+#' \item{code_len}{returns a numeric scalar for communities found with the InfoMAP
+#'     method and NULL for other methods.}
 #' \item{plot}{for communities objects returns NULL, invisibly.}
 #'
-#' @references Jacob H. Levine and et.al. Data-Driven Phenotypic Dissection of AML Reveals Progenitor-like Cells that Correlate with Prognosis. Cell, 2015.
+#' @references Jacob H. Levine and et.al. Data-Driven Phenotypic Dissection of AML
+#'     Reveals Progenitor-like Cells that Correlate with Prognosis. Cell, 2015.
 #' @examples
 #' iris_unique <- unique(iris) # Remove duplicates
 #' data <- as.matrix(iris_unique[,1:4])

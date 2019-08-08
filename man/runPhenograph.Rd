@@ -4,19 +4,18 @@
 \alias{runPhenograph}
 \title{RphenoGraph clustering}
 \usage{
-runPhenograph(object, mode = c("undirected", "directed", "max", "min",
-  "upper", "lower", "plus"), knn = 30, verbose = F, ...)
+runPhenograph(object, knn = 30, scale = F, verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object.}
-
-\item{mode}{character. specifies how igraph should interpret the supplied matrix.}
 
 \item{knn}{numeric. Number of nearest neighbours, default is 30.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
 \item{...}{Parameters passing to \code{\link[igraph]{graph.adjacency}} function}
+
+\item{mode}{character. specifies how igraph should interpret the supplied matrix.}
 }
 \value{
 an FSPY object

@@ -21,3 +21,12 @@ This must be one of "euclidean", "maximum", "manhattan",
 \description{
 constraint FCS data by a provid cutoff
 }
+\examples{
+mat <- matrix(runif(10000), nrow = 1000, ncol = 10)
+colnames(mat) <- LETTERS[1:10]
+dim(mat)
+
+mat <- constraintMatrix(mat)
+dim(mat)
+
+}

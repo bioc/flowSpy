@@ -21,6 +21,9 @@
 #' @seealso \code{\link[gmodels]{fast.prcomp}}
 #'
 #' @export
+#' @examples
+#'
+#' fspy <- runFastPCA(fspy, verbose = T)
 #'
 runFastPCA <- function(object, center = FALSE, scale. = TRUE,
                        verbose = F, ...) {

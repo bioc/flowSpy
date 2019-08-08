@@ -11,6 +11,17 @@
 #'
 #' @export
 #'
+#' @examples
+#' plotPseudotimeDensity(fspy)
+#'
+#' plotPseudotimeDensity(fspy, adjust = 1)
+#' plotPseudotimeDensity(fspy, adjust = 2)
+#'
+#' plotPseudotimeDensity(fspy, adjust = 2) +
+#'   scale_color_manual(values = c("#00599F","#FF3222","#009900",
+#'                                 "#FF9933","#FF99FF","#7A06A0"))
+#'
+#'
 plotPseudotimeDensity <- function(object, color.by = "stage",
                                   main = "Density of pseudotime",
                                   adjust = 0.5,
@@ -62,6 +73,17 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 #' @importFrom stats predict
 #'
 #' @export
+#'
+#' @examples
+#' plotPseudotimeTraj(fspy)
+#' plotPseudotimeTraj(fspy, print.curve = F)
+#' plotPseudotimeTraj(fspy, var.cols = T)
+#'
+#' plotPseudotimeTraj(fspy) +
+#'    scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#'
+#' plotPseudotimeTraj(fspy, markers = c("CD43", "CD34")) +
+#' scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 #'
 plotPseudotimeTraj <- function(object,
                                cutoff = -1,
@@ -149,6 +171,10 @@ plotPseudotimeTraj <- function(object,
 #' @importFrom stats predict
 #'
 #' @export
+#'
+#' @examples
+#' plotMarkerDensity(fspy)
+#' plotMarkerDensity(fspy, adjust = 1)
 #'
 plotMarkerDensity <- function(object,
                               cutoff = -1,

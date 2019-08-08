@@ -43,7 +43,7 @@ fcs.path <- "../../flowSpy-dataset/FCS/usecase2/"
 fcs.files <- paste0(fcs.path, "D", c(0,2,4,6,8,10), "-sub.fcs")
 
 set.seed(1)
-fcs.data <- runExprsMerge(fcs.files, comp = F, transformMethod = "none")
+fcs.data <- runExprsMerge(fcs.files, comp = F, transformMethod = "none", fixedNum = 2000)
 
 # Refine colnames of fcs data
 # for usecase 2

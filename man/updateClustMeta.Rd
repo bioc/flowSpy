@@ -14,3 +14,7 @@ updateClustMeta(object, verbose = TRUE)
 \description{
 Update clusters' meta information of FSPY
 }
+\examples{
+fspy <- updateClustMeta(fspy)
+
+}

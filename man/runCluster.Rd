@@ -26,6 +26,30 @@ Compute a specific clustering using the combined flow
    "clara" \code{\link[cluster]{clara}}, "phenograph", "kmeans" \code{\link[stats]{kmeans}} are
    provided.
 }
+\examples{
+# After building an FSPY object
+# Set random seed to make results reproducible
+set.seed(1)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
+
+# K-means clustering
+fspy <- runCluster(fspy, cluster.method = "kmeans", k = 9, verbose = T)
+
+# Clara clustering
+fspy <- runCluster(fspy, cluster.method = "clara", k = 9, verbose = T)
+
+# phenoGraph clustering
+fspy <- runCluster(fspy, cluster.method = "phenograph", verbose = T)
+
+# hclust clustering
+# not recommended for large cell size
+fspy <- runCluster(fspy, cluster.method = "hclust", k = 9, verbose = T)
+
+# mclust clustering
+# not recommended for large cell size
+fspy <- runCluster(fspy, cluster.method = "mclust", verbose = T)
+
+}
 \seealso{
 \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
    \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}.

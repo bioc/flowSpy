@@ -18,4 +18,9 @@ Visualization heatmap of cluster data of FSPY
 }
 \examples{
 
+plotClusterHeatmap(fspy)
+plotClusterHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
+plotClusterHeatmap(fspy, cluster_row = F)
+plotClusterHeatmap(fspy, cluster_row = F, cluster_col = F)
+
 }

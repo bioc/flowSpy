@@ -19,3 +19,15 @@ An FSPY object
 \description{
 definition of root cells
 }
+\examples{
+# Define root cells by cluster
+fspy <- defRootCells(fspy, root.cells = 6, verbose = T)
+fspy <- defRootCells(fspy, root.cells = c(6,8), verbose = T)
+
+# Define root cells by cell names
+cells <- test.meta.data$cell[which(test.meta.data$stage == "D0")]
+cells <- as.character(cells)
+fspy <- defRootCells(fspy, root.cells = cells, verbose = T)
+
+
+}

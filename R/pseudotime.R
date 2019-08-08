@@ -13,6 +13,16 @@
 #'
 #' @export
 #'
+#' @examples
+#' # Define root cells by cluster
+#' fspy <- defRootCells(fspy, root.cells = 6, verbose = T)
+#' fspy <- defRootCells(fspy, root.cells = c(6,8), verbose = T)
+#'
+#' # Define root cells by cell names
+#' cells <- test.meta.data$cell[which(test.meta.data$stage == "D0")]
+#' cells <- as.character(cells)
+#' fspy <- defRootCells(fspy, root.cells = cells, verbose = T)
+#'
 #'
 defRootCells <- function(object, root.cells = NULL, verbose = F) {
   if (length(object@root.cells) != 0) message(Sys.time(), " [INFO] root.cells in FSPY object exist, they will be replaced.")
@@ -57,6 +67,17 @@ defRootCells <- function(object, root.cells = NULL, verbose = F) {
 #'
 #' @export
 #'
+#' @examples
+#'
+#' # Define leaf cells by cluster
+#' fspy <- defLeafCells(fspy, leaf.cells = 1, verbose = T)
+#' fspy <- defLeafCells(fspy, leaf.cells = c(1,3), verbose = T)
+#'
+#' # Define root cells by cell names
+#' cells <- test.meta.data$cell[which(test.meta.data$stage == "D10")]
+#' cells <- as.character(cells)
+#' fspy <- defLeafCells(fspy, leaf.cells = cells, verbose = T)
+#'
 #'
 defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = F) {
   if (length(object@leaf.cells) != 0) message(Sys.time(), " [INFO] leaf.cells in FSPY object exist, they will be replaced.")
@@ -68,7 +89,7 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
   } else if (is.numeric(leaf.cells)) {
     leaf.cells <- object@meta.data$cell[object@meta.data$cluster.id %in% leaf.cells]
   } else {
-    stop(Sys.time(), " [ERROR] invalid leaf.cells .")
+    stop(Sys.time(), " [ERROR] invalid leaf.cells.")
   }
 
   ds.cells <- object@meta.data$cell[which(object@meta.data$dowsample == 1)]
@@ -82,7 +103,7 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
   }
 
   leaf.time <- object@meta.data$pseudotime[match(leaf.cells, object@meta.data$cell)]
-  leaf.cells <- leaf.cells[which(leaf.time > pseudotime.cutoff )]
+  leaf.cells <- leaf.cells[which(leaf.time >= pseudotime.cutoff )]
 
   object@meta.data$is.leaf.cells <- 0
   object@meta.data$is.leaf.cells[match(leaf.cells, object@meta.data$cell)] <- 1
@@ -116,6 +137,25 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' @return An FSPY object
 #'
 #' @export
+#'
+#' @examples
+#'
+#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
+#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "tsne", dim.use = 1:2)
+#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:3)
+#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "pca", dim.use = 1:3)
+#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "raw")
+#'
+#'
+#' # tSNE plot colored by pseudotime
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
+#'        size = 1, color.by = "pseudotime") +
+#'        scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#' # UMAP plot colored by pseudotime
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "numeric",
+#'        size = 1, color.by = "pseudotime") +
+#'        scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#'
 #'
 runPseudotime <- function(object, mode = "undirected", dim.type = "tsne", dim.use = 1:2, verbose = F, ...) {
 

@@ -38,4 +38,68 @@ Visualization of 2D data of FSPY
 }
 \examples{
 
+# Default plot
+plot2D(fspy)
+
+# PCA plot
+plot2D(fspy, item.use = c("PC_1", "PC_2"))
+plot2D(fspy, item.use = c("PC_1", "PC_2"), color.by = "cluster.id")
+plot2D(fspy, item.use = c("PC_1", "PC_2"), color.by = "stage")
+plot2D(fspy, item.use = c("PC_2", "PC_3"), color.by = "stage") +
+  scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                                "#FF99FF","#7A06A0","#FF3222"))
+plot2D(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43",
+       category = "numeric")
+plot2D(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43",
+       category = "numeric") +
+       scale_colour_gradientn(colors = c("blue","white","red"))
+
+# tSNE plot
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"))
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage")
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id",
+       alpha = 0.5, main = "tSNE Plot")
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id",
+       alpha = 1, main = "tSNE Plot", show.cluser.id = T)
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD43",
+       category = "numeric", size = 3) +
+       scale_colour_gradientn(colors = c("blue","white","red"))
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage") +
+  scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                                "#FF99FF","#7A06A0","#FF3222"))
+
+# Diffusion Map plot
+plot2D(fspy, item.use = c("DC_1", "DC_2"))
+plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "stage")
+plot2D(fspy, item.use = c("DC_2", "DC_3"), color.by = "cluster.id",
+       alpha = 0.5, main = "Diffusion Map Plot")
+plot2D(fspy, item.use = c("DC_2", "DC_3"), color.by = "cluster.id",
+       alpha = 1, main = "Diffusion Map Plot", show.cluser.id = T)
+plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "CD43",
+       category = "numeric", size = 3) +
+       scale_colour_gradientn(colors = c("blue","white","red"))
+
+# UMAP plot
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"))
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage")
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id",
+       alpha = 0.5, main = "UMAP Plot")
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id",
+       alpha = 1, main = "UMAP Plot", show.cluser.id = T)
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD43",
+       category = "numeric", size = 3) +
+       scale_colour_gradientn(colors = c("blue","white","red"))
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage") +
+  scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                                "#FF99FF","#7A06A0","#FF3222"))
+
+# Marker Plot
+plot2D(fspy, item.use = c("CD43", "CD90"), color.by = "cluster.id")
+plot2D(fspy, item.use = c("CD34", "CD90"), color.by = "CD43",
+       category = "numeric", size = 3) +
+       scale_colour_gradientn(colors = c("blue","white","red"))
+
+# Pseudotime
+plot2D(fspy, item.use = c("pseudotime", "CD43"), color.by = "stage")
+
 }

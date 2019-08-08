@@ -22,3 +22,15 @@ plotPseudotimeDensity(object, color.by = "stage",
 \description{
 plot Pseudotime density of FSPY
 }
+\examples{
+plotPseudotimeDensity(fspy)
+
+plotPseudotimeDensity(fspy, adjust = 1)
+plotPseudotimeDensity(fspy, adjust = 2)
+
+plotPseudotimeDensity(fspy, adjust = 2) +
+  scale_color_manual(values = c("#00599F","#FF3222","#009900",
+                                "#FF9933","#FF99FF","#7A06A0"))
+
+
+}

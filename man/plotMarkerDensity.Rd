@@ -21,3 +21,8 @@ plotMarkerDensity(object, cutoff = -1, markers = NULL, adjust = 0.5,
 \description{
 plotMarkerDensity
 }
+\examples{
+plotMarkerDensity(fspy)
+plotMarkerDensity(fspy, adjust = 1)
+
+}

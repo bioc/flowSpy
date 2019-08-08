@@ -8,6 +8,9 @@
 #'
 #' @export
 #'
+#' @examples
+#' fspy <- updatePlotMeta(fspy)
+#'
 #'
 updatePlotMeta <- function(object, verbose = TRUE) {
   plot.meta <- object@meta.data[which(object@meta.data$dowsample == 1), ]
@@ -42,6 +45,8 @@ updatePlotMeta <- function(object, verbose = TRUE) {
 #'
 #' @export
 #'
+#' @examples
+#' fspy <- updateClustMeta(fspy)
 #'
 updateClustMeta <- function(object, verbose = TRUE) {
 
@@ -95,6 +100,15 @@ updateClustMeta <- function(object, verbose = TRUE) {
 #'
 #' @export
 #'
+#' @examples
+#'
+#' plot.data <- fetchPlotMeta(fspy)
+#' head(plot.data)
+#'
+#' plot.data <- fetchPlotMeta(fspy, markers = c("CD43", "CD34"))
+#' head(plot.data)
+#'
+#'
 #'
 fetchPlotMeta <- function(object, markers = NULL, verbose = F) {
 
@@ -120,6 +134,12 @@ fetchPlotMeta <- function(object, markers = NULL, verbose = F) {
 #'
 #' @export
 #'
+#' @examples
+#'
+#' clust.data <- fetchClustMeta(fspy)
+#' head(clust.data)
+#'
+#'
 fetchClustMeta <- function(object, verbose = F) {
 
   object <- updateClustMeta(object, verbose = verbose)
@@ -142,6 +162,11 @@ fetchClustMeta <- function(object, verbose = F) {
 #'
 #' @export
 #'
+#' @examples
+#' cell.fetch <- fetchCell(fspy, traj.value.log = 0.01)
+#' cell.fetch <- fetchCell(fspy, stage = c("D0", "D10"))
+#' cell.fetch <- fetchCell(fspy, stage = c("D0", "D10"), traj.value.log = 0.01,
+#'                         logical.connect = "or")
 #'
 fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 
@@ -202,6 +227,14 @@ fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 #'    "canberra", "binary" or "minkowski".
 #'
 #' @export
+#'
+#' @examples
+#' mat <- matrix(runif(10000), nrow = 1000, ncol = 10)
+#' colnames(mat) <- LETTERS[1:10]
+#' dim(mat)
+#'
+#' mat <- constraintMatrix(mat)
+#' dim(mat)
 #'
 constraintMatrix <- function(x, cutoff = 0.99, markers = NULL, method = "euclidean") {
 

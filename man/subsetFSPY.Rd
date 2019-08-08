@@ -24,3 +24,10 @@ This subsets an FSPY object by given a list of cells or cluster id.
     PCA, tSNE, umap and pseudotime. For instance, you can choose recalculate PCA and
     tSNE and destiny scores by paramter recalculate.
 }
+\examples{
+
+cells <- test.meta.data$cell[which(test.meta.data$stage == "D0")]
+sub.fspy <- subsetFSPY(fspy, cells = cells)
+sub.fspy
+
+}

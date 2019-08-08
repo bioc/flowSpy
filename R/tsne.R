@@ -30,7 +30,8 @@
 #'
 #' @export
 #'
-#'
+#' @examples
+#' fspy <- runTSNE(fspy, dims = 2, verbose = T)
 #'
 runTSNE <- function(object, dims = 2, initial_dims = 50, perplexity = 30,
                     theta = 0.5, check_duplicates = TRUE, pca = TRUE, max_iter = 1000,

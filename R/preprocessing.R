@@ -48,6 +48,24 @@
 #'    Michael Poidinger, Jinmiao Chen. Cytofkit: A Bioconductor Package for
 #'    an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
 #'
+#' @examples
+#'
+#' # See vignette tutorials for more information
+#' vignette(package = "flowSpy")
+#' vignette("Quick_start", package = "flowSpy")
+#' vignette("Base_workflow", package = "flowSpy")
+#' vignette("Time_course_workflow", package = "flowSpy")
+#'
+#' if (F) {
+#'   # Path to your FCS files
+#'   fcs.path <- "flowSpy-dataset/FCS/usecase2/"
+#'   fcs.files <- paste0(fcs.path, "D", c(0,2,4,6,8,10), "-sub.fcs")
+#'
+#'   # Merge FCS files, and each file contain 2000 cells
+#'   set.seed(1)
+#'   fcs.data <- runExprsMerge(fcs.files, comp = F, transformMethod = "none", fixedNum = 2000)
+#' }
+#'
 #'
 runExprsMerge <- function(fcsFiles,
                           comp = FALSE,
@@ -156,12 +174,27 @@ runExprsMerge <- function(fcsFiles,
 #' @importClassesFrom flowCore transformList
 #'
 #' @export
-#' @examples
 #'
 #' @author Chen Hao
 #' @references Hao Chen, Mai Chan Lau, Michael Thomas Wong, Evan W. Newell,
 #'    Michael Poidinger, Jinmiao Chen. Cytofkit: A Bioconductor Package for
 #'    an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
+#'
+#' @examples
+#' # See vignette tutorials for more information
+#' vignette(package = "flowSpy")
+#' vignette("Quick_start", package = "flowSpy")
+#' vignette("Base_workflow", package = "flowSpy")
+#' vignette("Time_course_workflow", package = "flowSpy")
+#'
+#' if (F) {
+#'   # Path to your FCS files
+#'   fcs.path <- "flowSpy-dataset/FCS/usecase1/"
+#'   fcs.file <- paste0(fcs.path, "FR-FCM-ZY9R-Bone_Marrow_cytof.fcs")
+#'
+#'   # Read FCS files
+#'   exp.data <- runExprsExtract(fcs.file, showDesc = FALSE, transformMethod = "autoLgcl")
+#' }
 #'
 #'
 runExprsExtract <- function(fcsFile,

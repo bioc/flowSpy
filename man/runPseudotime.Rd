@@ -23,3 +23,23 @@ An FSPY object
 \description{
 calculation of Pseudotime based on KNN
 }
+\examples{
+
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "tsne", dim.use = 1:2)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:3)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "pca", dim.use = 1:3)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "raw")
+
+
+# tSNE plot colored by pseudotime
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
+       size = 1, color.by = "pseudotime") +
+       scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+# UMAP plot colored by pseudotime
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "numeric",
+       size = 1, color.by = "pseudotime") +
+       scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+
+}

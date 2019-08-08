@@ -21,6 +21,11 @@
 #'
 #' @export
 #'
+#' @examples
+#'
+#' fspy <- runWalk(fspy, verbose = T)
+#' fspy <- runWalk(fspy, backward.walk = FALSE, verbose = T)
+#'
 runWalk <- function(object, mode = "undirected",
                     max.run.forward = 20,
                     backward.walk = TRUE, max.run.backward = 20,

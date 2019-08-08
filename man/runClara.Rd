@@ -5,8 +5,8 @@
 \title{runClara}
 \usage{
 runClara(object, k = 25, metric = c("euclidean", "manhattan",
-  "jaccard"), stand = FALSE, samples = 5, scale = T,
-  sampsize = min(n, 40 + 2 * k), trace = 0, verbose = F, ...)
+  "jaccard"), stand = FALSE, samples = 5, scale = T, trace = 0,
+  verbose = F, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -25,15 +25,15 @@ The default is N = 5,}
 
 \item{scale}{logical. Whether to use scaled data in kmeans.}
 
-\item{sampsize}{numberic. Say j, the number of observations in each sample.
-Sampsize should be higher than the number of clusters (k) and at most
-the number of observations (n = nrow(x))}
-
 \item{trace}{numberic. Indicating a trace level for diagnostic output during the algorithm}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
 \item{...}{Parameters passing to \code{\link[cluster]{clara}} function}
+
+\item{sampsize}{numberic. Say j, the number of observations in each sample.
+Sampsize should be higher than the number of clusters (k) and at most
+the number of observations (n = nrow(x))}
 }
 \value{
 an FSPY object with clara.id in meta.data

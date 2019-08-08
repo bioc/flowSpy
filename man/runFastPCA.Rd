@@ -28,6 +28,11 @@ The value is passed to scale. See \code{\link[gmodels]{fast.prcomp}}}
 \description{
 Calculate principal components in FSPY
 }
+\examples{
+
+fspy <- runFastPCA(fspy, verbose = T)
+
+}
 \seealso{
 \code{\link[gmodels]{fast.prcomp}}
 }

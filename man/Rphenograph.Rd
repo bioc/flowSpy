@@ -12,11 +12,13 @@ Rphenograph(data, k = 30)
 \item{k}{integer; number of nearest neighbours (default:30)}
 }
 \value{
-a list contains an igraph graph object for \code{graph_from_data_frame} and a communities object, the operations of this class contains:
+a list contains an igraph graph object for \code{graph_from_data_frame}
+    and a communities object, the operations of this class contains:
 \item{print}{returns the communities object itself, invisibly.}
 \item{length}{returns an integer scalar.}
 \item{sizes}{returns a numeric vector.}
-\item{membership}{returns a numeric vector, one number for each vertex in the graph that was the input of the community detection.}
+\item{membership}{returns a numeric vector, one number for each vertex in
+    the graph that was the input of the community detection.}
 \item{modularity}{returns a numeric scalar.}
 \item{algorithm}{returns a character scalar.}
 \item{crossing}{returns a logical vector.}
@@ -25,7 +27,8 @@ a list contains an igraph graph object for \code{graph_from_data_frame} and a co
 \item{cut_at}{returns a numeric vector, the membership vector of the vertices.}
 \item{as.dendrogram}{returns a dendrogram object.}
 \item{show_trace}{returns a character vector.}
-\item{code_len}{returns a numeric scalar for communities found with the InfoMAP method and NULL for other methods.}
+\item{code_len}{returns a numeric scalar for communities found with the InfoMAP
+    method and NULL for other methods.}
 \item{plot}{for communities objects returns NULL, invisibly.}
 }
 \description{
@@ -35,6 +38,8 @@ A simple R implementation of the [PhenoGraph](http://www.cell.com/cell/abstract/
 which is a clustering method designed for high-dimensional single-cell data analysis. It works by creating a graph ("network") representing
 phenotypic similarities between cells by calclating the Jaccard coefficient between nearest-neighbor sets, and then identifying communities
 using the well known [Louvain method](https://sites.google.com/site/findcommunities/) in this graph.
+
+This function is developed by Hao Chen  and updated by Yuting Dai.
 }
 \examples{
 iris_unique <- unique(iris) # Remove duplicates
@@ -47,7 +52,8 @@ ggplot(iris_unique, aes(x=Sepal.Length, y=Sepal.Width, col=Species, shape=phenog
 
 }
 \references{
-Jacob H. Levine and et.al. Data-Driven Phenotypic Dissection of AML Reveals Progenitor-like Cells that Correlate with Prognosis. Cell, 2015.
+Jacob H. Levine and et.al. Data-Driven Phenotypic Dissection of AML
+    Reveals Progenitor-like Cells that Correlate with Prognosis. Cell, 2015.
 }
 \author{
 Hao Chen <chen_hao@immunol.a-star.edu.sg>

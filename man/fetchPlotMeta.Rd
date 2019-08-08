@@ -17,3 +17,14 @@ a data.frame containing meta information for visualization
 \description{
 Fetching plot metadata of FSPY
 }
+\examples{
+
+plot.data <- fetchPlotMeta(fspy)
+head(plot.data)
+
+plot.data <- fetchPlotMeta(fspy, markers = c("CD43", "CD34"))
+head(plot.data)
+
+
+
+}

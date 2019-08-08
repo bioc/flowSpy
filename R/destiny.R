@@ -22,6 +22,9 @@
 #'
 #' @export
 #'
+#' @examples
+#' fspy <- runDiffusionMap(fspy, verbose = T)
+#'
 runDiffusionMap <- function(object, sigma.use = NULL,
                             distance = c("euclidean", "cosine", "rankcor"),
                             k = 30,

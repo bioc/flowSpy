@@ -14,6 +14,24 @@
 #' @export
 #' @importFrom igraph layout_as_tree layout.kamada.kawai as_data_frame
 #'
+#' @examples
+#'
+#' plotTree(fspy)
+#'
+#' plotTree(fspy, show.node.name = T)
+#'
+#' plotTree(fspy, color.by = "CD43", show.node.name = T, cex.size = 1) +
+#'     scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+#'
+#' plotTree(fspy, color.by = "D0.percent", show.node.name = T, cex.size = 1) +
+#'     scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+#'
+#' plotTree(fspy, color.by = "D2.percent", show.node.name = T, cex.size = 1) +
+#'     scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+#'
+#' plotTree(fspy, color.by = "pseudotime", cex.size = 1) +
+#'     scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#'
 plotTree <- function(object,
                      cex.size = 1,
                      color.by = "cell.number",
@@ -84,6 +102,12 @@ plotTree <- function(object,
 #' @export
 #' @importFrom igraph layout_as_tree layout.kamada.kawai as_data_frame
 #' @import scatterpie
+#'
+#' @examples
+#' # Runs only have two or more stages
+#' plotPieTree(fspy, cex.size = 1, size.by.cell.number = T) +
+#'    scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+#'                                 "#FF9933","#FF99FF","#7A06A0"))
 #'
 plotPieTree <- function(object,
                         cex.size = 2,

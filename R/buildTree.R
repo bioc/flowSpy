@@ -13,6 +13,20 @@
 #'
 #' @return An FSPY object
 #'
+#' @examples
+#'
+#' # build minimum spanning tree (MST) based on tsne
+#' fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2, verbose = T)
+#'
+#' # Using PCA
+#' fspy <- buildTree(fspy, dim.type = "pca", dim.use = 1:4, verbose = T)
+#'
+#' # Using UMAP
+#' fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2, verbose = T)
+#'
+#' # Using Diffusion Maps
+#' fspy <- buildTree(fspy, dim.type = "dc", dim.use = 1:3, verbose = T)
+#'
 #'
 buildTree <- function(object, method = "euclidean",
                       dim.type = "umap", dim.use = 1:2,

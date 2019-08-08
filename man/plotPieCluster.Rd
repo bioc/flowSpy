@@ -36,5 +36,19 @@ of plot.meta, or it can be just "density" (the default value).}
 Visualization pie plot of cluster data of FSPY
 }
 \examples{
+# Runs only have more than two stages
+plotPieCluster(fspy, cex.size = 0.5)
+
+plotPieCluster(fspy, item.use = c("PC_1", "PC_2"), cex.size = 0.5)
+plotPieCluster(fspy, item.use = c("PC_2", "PC_3"), cex.size = 0.5)
+
+plotPieCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), cex.size = 20)
+
+plotPieCluster(fspy, item.use = c("DC_1", "DC_2"), cex.size = 0.5)
+
+plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1)
+plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1) +
+   scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+                                "#FF9933","#FF99FF","#7A06A0"))
 
 }

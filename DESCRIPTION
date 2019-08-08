@@ -8,11 +8,11 @@ Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
 Author: Yuting Dai [aut, cre, cph]
 Maintainer: Yuting Dai <forlynna@sjtu.edu.cn>
 Description: A trajectory inference and visualization toolkit 
-    of flow and mass cytometry data. flowSpy offers complete 
-    analyzing workflow for flow and mass cytometry data. Main 
-    computation modules in flowSpy are subpopulation identification, 
-    dimensionality reduction, trajectory inference, pseudotime 
-    and visualization. 
+    for flow and mass cytometry data. flowSpy offers complete 
+    analyzing workflow for flow and mass cytometry data. flowSpy 
+    can be a valuable tool for application ranging from clustering 
+    and dimensionality reduction to trajectory reconstruction 
+    and pseudotime estimation for flow and mass cytometry data.
 Depends: R (>= 3.5), igraph, ggplot2
 Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
         flowUtils, Biobase, Matrix, flowCore, sva,

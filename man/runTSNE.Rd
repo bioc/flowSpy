@@ -36,6 +36,10 @@ See \code{\link[Rtsne]{Rtsne}}}
 \description{
 Calculate t-Distributed Stochastic Neighbor Embedding in FSPY
 }
+\examples{
+fspy <- runTSNE(fspy, dims = 2, verbose = T)
+
+}
 \references{
 Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based
    Algorithms. Journal of Machine Learning Research, 15, p.3221-3245.

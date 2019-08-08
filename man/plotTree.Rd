@@ -24,3 +24,22 @@ plotTree(object, cex.size = 1, color.by = "cell.number",
 \description{
 plot MST of FSPY
 }
+\examples{
+
+plotTree(fspy)
+
+plotTree(fspy, show.node.name = T)
+
+plotTree(fspy, color.by = "CD43", show.node.name = T, cex.size = 1) +
+    scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+plotTree(fspy, color.by = "D0.percent", show.node.name = T, cex.size = 1) +
+    scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+plotTree(fspy, color.by = "D2.percent", show.node.name = T, cex.size = 1) +
+    scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+plotTree(fspy, color.by = "pseudotime", cex.size = 1) +
+    scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+}

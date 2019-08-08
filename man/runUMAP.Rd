@@ -21,6 +21,12 @@ runUMAP(object, umap.config = umap.defaults, n_neighbors = 30,
 \description{
 Calculate Uniform Manifold Approximation and Projection in FSPY
 }
+\examples{
+
+fspy <- runUMAP(fspy, verbose = T)
+
+
+}
 \seealso{
 \code{\link[umap]{umap}}
 }

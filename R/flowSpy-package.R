@@ -3,11 +3,17 @@
 #' Functions and methods to visualize and analyze flow cytometry data.
 #'
 #' \tabular{ll}{ Package: \tab flowSpy\cr Type: \tab Package\cr Version: \tab
-#' 0.0.1\cr Date: \tab 2018-09-26\cr License: \tab MIT\cr }
-#' Large parts of the analysis process of flow cytometry data has been mostly
-#' qualitative. To this end, dedicated visualization techniques have been used
-#' for both quality control and infernece of the data. This package provides a
-#' number of different visualization tools for flow data.
+#' 1.2.3\cr Date: \tab 2018-09-26\cr License: \tab GPL-3.0\cr }
+#' While high-dimensional single-cell based flow and mass cytometry data has
+#' demonstrated increased applications in microenvironment composition and
+#' stem-cell research, integrated analyzing workflow design for experimental
+#' cytometry data has been challenging. Here, we present flowSpy, an R package
+#' designed for the analysis and interpretation of flow and mass cytometry
+#' data. We have applied flowSpy to mass cytometry and time course flow
+#' cytometry data to validate the usage and practical utility of its
+#' computational modules. These use cases introduce flowSpy as a reliable tool
+#' for high-dimensional cytometry data workflow and reveal good performance
+#' on trajectory reconstruction and pseudotime estimation.
 #'
 #'
 #' @name flowSpy-package
@@ -21,7 +27,11 @@
 #' @examples
 #'
 #' ## examples go here
-#'
+#' ## See vignette tutorials
+#' vignette(package = "flowSpy")
+#' vignette("Quick_start", package = "flowSpy")
+#' vignette("Base_workflow", package = "flowSpy")
+#' vignette("Time_course_workflow", package = "flowSpy")
 #'
 #' @importFrom flowCore read.FCS
 #' @importClassesFrom methods ANY character formula logical matrix missing

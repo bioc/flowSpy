@@ -37,4 +37,6 @@ Visualization violin plot of FSPY
 }
 \examples{
 
+plotViolin(fspy, marker = "CD34")
+
 }

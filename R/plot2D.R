@@ -22,6 +22,70 @@
 #'
 #' @examples
 #'
+#' # Default plot
+#' plot2D(fspy)
+#'
+#' # PCA plot
+#' plot2D(fspy, item.use = c("PC_1", "PC_2"))
+#' plot2D(fspy, item.use = c("PC_1", "PC_2"), color.by = "cluster.id")
+#' plot2D(fspy, item.use = c("PC_1", "PC_2"), color.by = "stage")
+#' plot2D(fspy, item.use = c("PC_2", "PC_3"), color.by = "stage") +
+#'   scale_color_manual(values = c("#00599F","#009900","#FF9933",
+#'                                 "#FF99FF","#7A06A0","#FF3222"))
+#' plot2D(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43",
+#'        category = "numeric")
+#' plot2D(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43",
+#'        category = "numeric") +
+#'        scale_colour_gradientn(colors = c("blue","white","red"))
+#'
+#' # tSNE plot
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"))
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage")
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id",
+#'        alpha = 0.5, main = "tSNE Plot")
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "cluster.id",
+#'        alpha = 1, main = "tSNE Plot", show.cluser.id = T)
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD43",
+#'        category = "numeric", size = 3) +
+#'        scale_colour_gradientn(colors = c("blue","white","red"))
+#' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage") +
+#'   scale_color_manual(values = c("#00599F","#009900","#FF9933",
+#'                                 "#FF99FF","#7A06A0","#FF3222"))
+#'
+#' # Diffusion Map plot
+#' plot2D(fspy, item.use = c("DC_1", "DC_2"))
+#' plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "stage")
+#' plot2D(fspy, item.use = c("DC_2", "DC_3"), color.by = "cluster.id",
+#'        alpha = 0.5, main = "Diffusion Map Plot")
+#' plot2D(fspy, item.use = c("DC_2", "DC_3"), color.by = "cluster.id",
+#'        alpha = 1, main = "Diffusion Map Plot", show.cluser.id = T)
+#' plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "CD43",
+#'        category = "numeric", size = 3) +
+#'        scale_colour_gradientn(colors = c("blue","white","red"))
+#'
+#' # UMAP plot
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"))
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage")
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id",
+#'        alpha = 0.5, main = "UMAP Plot")
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id",
+#'        alpha = 1, main = "UMAP Plot", show.cluser.id = T)
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD43",
+#'        category = "numeric", size = 3) +
+#'        scale_colour_gradientn(colors = c("blue","white","red"))
+#' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage") +
+#'   scale_color_manual(values = c("#00599F","#009900","#FF9933",
+#'                                 "#FF99FF","#7A06A0","#FF3222"))
+#'
+#' # Marker Plot
+#' plot2D(fspy, item.use = c("CD43", "CD90"), color.by = "cluster.id")
+#' plot2D(fspy, item.use = c("CD34", "CD90"), color.by = "CD43",
+#'        category = "numeric", size = 3) +
+#'        scale_colour_gradientn(colors = c("blue","white","red"))
+#'
+#' # Pseudotime
+#' plot2D(fspy, item.use = c("pseudotime", "CD43"), color.by = "stage")
+#'
 plot2D <- function(object,
                    item.use = c("PC_1", "PC_2"),
                    color.by = "stage",
@@ -129,6 +193,8 @@ plot2D <- function(object,
 #'
 #' @examples
 #'
+#' plotViolin(fspy, marker = "CD34")
+#'
 plotViolin <- function(object,
                        marker,
                        color.by = "cluster.id",
@@ -209,6 +275,20 @@ plotViolin <- function(object,
 #' @export
 #'
 #' @examples
+#' # Runs only have more than two stages
+#' plotPieCluster(fspy, cex.size = 0.5)
+#'
+#' plotPieCluster(fspy, item.use = c("PC_1", "PC_2"), cex.size = 0.5)
+#' plotPieCluster(fspy, item.use = c("PC_2", "PC_3"), cex.size = 0.5)
+#'
+#' plotPieCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), cex.size = 20)
+#'
+#' plotPieCluster(fspy, item.use = c("DC_1", "DC_2"), cex.size = 0.5)
+#'
+#' plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1)
+#' plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1) +
+#'    scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+#'                                 "#FF9933","#FF99FF","#7A06A0"))
 #'
 plotPieCluster <- function(object,
                            item.use = c("PC_1", "PC_2"),
@@ -279,6 +359,21 @@ plotPieCluster <- function(object,
 #' @export
 #'
 #' @examples
+#' plotCluster(fspy)
+#'
+#' plotCluster(fspy, item.use = c("PC_1", "PC_2"))
+#' plotCluster(fspy, item.use = c("PC_2", "PC_3"))
+#' plotCluster(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43", category = "numeric")
+#' plotCluster(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43", category = "numeric") +
+#'     scale_colour_gradientn(colors = c("blue", "white", "red"))
+#'
+#' plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"))
+#' plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), show.cluser.id = T)
+#'
+#' plotCluster(fspy, item.use = c("DC_1", "DC_2"))
+#'
+#' plotCluster(fspy, item.use = c("UMAP_1", "UMAP_2"))
+#'
 #'
 plotCluster <- function(object,
                         item.use = c("PC_1", "PC_2"),
@@ -383,6 +478,11 @@ plotCluster <- function(object,
 #'
 #' @examples
 #'
+#' plotClusterHeatmap(fspy)
+#' plotClusterHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
+#' plotClusterHeatmap(fspy, cluster_row = F)
+#' plotClusterHeatmap(fspy, cluster_row = F, cluster_col = F)
+#'
 plotClusterHeatmap <- function(object,
                                color = colorRampPalette(c("blue","white","red"))(100),
                                scale = "row", ...) {
@@ -413,6 +513,9 @@ plotClusterHeatmap <- function(object,
 #' @export
 #'
 #' @examples
+#' plotHeatmap(fspy)
+#' plotHeatmap(fspy, cluster_rows = T)
+#' plotHeatmap(fspy, cluster_rows = T, cluster_cols = T)
 #'
 plotHeatmap <- function(object,
                         color = colorRampPalette(c("blue","white","red"))(100),
@@ -425,8 +528,8 @@ plotHeatmap <- function(object,
   # update plot meta information
   plot.meta.data <- fetchPlotMeta(object, verbose = F)
 
-  if (downsize > dim(plot.meta.data)[1]) {
-    warning(Sys.time(), " [ERROR] Too large sample size of downsampling")
+  if (downsize < dim(plot.meta.data)[1]) {
+    warning(Sys.time(), " [WARNING] Too large sample size of downsampling")
     downsize = dim(plot.meta.data)[1]
   }
   plot.meta.data <- plot.meta.data[sample(1:dim(plot.meta.data)[1], downsize), ]

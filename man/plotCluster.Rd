@@ -38,5 +38,20 @@ of plot.meta, or it can be just "density" (the default value).}
 Visualization of cluster data of FSPY
 }
 \examples{
+plotCluster(fspy)
+
+plotCluster(fspy, item.use = c("PC_1", "PC_2"))
+plotCluster(fspy, item.use = c("PC_2", "PC_3"))
+plotCluster(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43", category = "numeric")
+plotCluster(fspy, item.use = c("PC_2", "PC_3"), color.by = "CD43", category = "numeric") +
+    scale_colour_gradientn(colors = c("blue", "white", "red"))
+
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"))
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), show.cluser.id = T)
+
+plotCluster(fspy, item.use = c("DC_1", "DC_2"))
+
+plotCluster(fspy, item.use = c("UMAP_1", "UMAP_2"))
+
 
 }

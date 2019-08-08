@@ -130,11 +130,25 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' @return An FSPY object with raw.data and markers and meta.data
 #'
 #' @examples
-#' # See vignette tutorial
+#' ## See vignette tutorials
 #' vignette(package = "flowSpy")
 #' vignette("Quick_start", package = "flowSpy")
-#' vignette("Use_case_1", package = "flowSpy")
-#' vignette("Use_case_2_3", package = "flowSpy")
+#' vignette("Base_workflow", package = "flowSpy")
+#' vignette("Time_course_workflow", package = "flowSpy")
+#'
+#' ## Build using test data
+#' data("FSPYdata")
+#' markers <- c("CD43", "CD34", "CD90", "CD45RA",
+#'              "CD31", "CD49f", "CD73", "FLK1", "CD38")
+#'
+#' fspy <- createFSPY(raw.data = test.fcs.data,
+#'                    markers = markers,
+#'                    meta.data = test.meta.data,
+#'                    normalization.method = "log",
+#'                    verbose = T)
+#'
+#' fspy
+#'
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = FALSE,

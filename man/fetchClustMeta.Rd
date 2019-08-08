@@ -17,3 +17,10 @@ a data.frame containing clustering information for visualization
 \description{
 Fetching clusters' metadata of FSPY
 }
+\examples{
+
+clust.data <- fetchClustMeta(fspy)
+head(clust.data)
+
+
+}

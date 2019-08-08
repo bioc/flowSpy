@@ -22,8 +22,17 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run dimensionality reduction and clustering, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm. 
+## Abstract
 
+While high-dimensional single-cell based flow and mass cytometry data has demonstrated increased applications in microenvironment composition and stem-cell research, integrated analyzing workflow design for experimental cytometry data has been challenging. Here, we present flowSpy, an R package designed for the analysis and interpretation of flow and mass cytometry data. We have applied flowSpy to mass cytometry and time course flow cytometry data to validate the usage and practical utility of its computational modules. These use cases introduce flowSpy as a reliable tool for high-dimensional cytometry data workflow and reveal good performance on trajectory reconstruction and pseudotime estimation
+
+## Introduction
+
+To validate the cellular subpopulations identified by flowSpy, we used a 13-marker panel mass cytometry dataset of healthy human bone marrow. This dataset was generated from Bendall et al [1] and completed quality control by Herring et al [2], which could be downloaded from FlowRepository database [3] (https://flowrepository.org/id/FR-FCM-ZY9R). The aim of this use case is to reconstruct the human hematopoietic differentiation hierarchy using the 13-marker panel mass cytometry data using flowSpy.
+
+This tutorial contains key steps of `flowSpy` base workflow, including how to build an FSPY object, how to run clustering and dimensionality reduction, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm. 
+
+## Base workflow
 
 ``` {r quick-build, eval = FALSE}
 
@@ -37,12 +46,14 @@ library(flowSpy)
 })
 
 #########################
-# download sample
+# Read Flow Cytometry Data
+# It can be downloaded via `git clone https://github.com/ytdai/flowSpy-dataset.git` 
+# fcs.path musted be modified based on the download directory from GitHub
 fcs.path <- "../../flowSpy-dataset/FCS/usecase1/"
 fcs.file <- paste0(fcs.path, "FR-FCM-ZY9R-Bone_Marrow_cytof.fcs")
 
 ###########################################
-# Get the expression matrix from FCS file
+#   Get the expression matrix from FCS file
 ###########################################
 # Solution 1
 # Read FCS data via flowCore::read.FCS
@@ -57,7 +68,7 @@ exp.data <- cytof.data@exprs
 
 # Solution 2
 # Read FCS data via flowSpy::runExprsExtract
-# This solution is recommended
+# ** This solution is recommended
 exp.data <- runExprsExtract(fcs.file, showDesc = FALSE, transformMethod = "autoLgcl")
 
 # Fetching CD markers
@@ -152,60 +163,19 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
             size = 100, color.by = "CD3", show.cluser.id = T) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
-
 # plot heatmap of cluster
 plotClusterHeatmap(fspy)
 
 
-##############################
-### This part must be removed 
-for (i in markers) {
-p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/marker.", i, ".pdf"), width = 6, height = 8)
-}
-
-for (i in markers) {
-p <- plotTree(fspy, color.by = i, show.node.name = T, cex.size = 1, as.tree = T, root.id = 25) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/tree.", i, ".pdf"), width = 10, height = 8)
-}
-
-for (i in markers) {
-p <- plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
-            size = 100, color.by = i, main = i, show.cluser.id.size = 100) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/tsne.", i, ".pdf"), width = 6, height = 5)
-}
-
-
-
-######################## 
-plotMarkerDensity(fspy)
-
-plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD3", 
-       alpha = 1, main = "PCA", category = "categorical", show.cluser.id = T) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-
-for (i in markers) {
-p <- plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = i, 
-       alpha = 1, main = i, category = "categorical", show.cluser.id = T) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase1/all.tsne.", i, ".pdf"), width = 6, height = 5)
-}
-
-
-
-######################## D3 network
-library(plotly)
-library(visNetwork)
-
-visIgraph(fspy@network$mst, layout = "layout_in_circle")
-
-visIgraph(fspy@network$mst, smooth = T) %>% visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE, manipulation = TRUE) %>% visLegend()
-
 ```
 
+## Reference
+
+[1] Bendall SC, Simonds EF, Qiu P, Amir el AD, Krutzik PO, Finck R, Bruggner RV, Melamed R, Trejo A, Ornatsky OI, et al: Single-cell mass cytometry of differential immune and drug responses across a human hematopoietic continuum. Science 2011, 332:687-696.
+
+[2] Herring CA, Banerjee A, McKinley ET, Simmons AJ, Ping J, Roland JT, Franklin JL, Liu Q, Gerdes MJ, Coffey RJ, Lau KS: Unsupervised Trajectory Analysis of Single-Cell RNA-Seq and Imaging Data Reveals Alternative Tuft Cell Origins in the Gut. Cell Syst 2018, 6:37-51 e39.
+
+[3] Spidlen J, Breuer K, Rosenberg C, Kotecha N, Brinkman RR: FlowRepository: a resource of annotated flow cytometry datasets associated with peer-reviewed publications. Cytometry A 2012, 81:727-731.
 
 
 

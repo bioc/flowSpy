@@ -36,6 +36,22 @@ Calculate Principal Components Analysis (PCA), t-Distributed
    Stochastic Neighbor Embedding (tSNE), Diffusion Map and Uniform Manifold
    Approximation and Projection (UMAP) of clusters calculated by runCluster.
 }
+\examples{
+# After running clustering
+set.seed(1)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
+
+# Do not perfrom downsampling
+fspy <- processingCluster(fspy, perplexity = 2)
+
+# Perform cluster based downsampling
+# Only keep 50\% cells
+fspy <- processingCluster(fspy, perplexity = 2, downsampling.size = 0.5)
+
+# Processing clusters without downsampling step
+fspy <- processingCluster(fspy, perplexity = 2, force.resample = FALSE)
+
+}
 \seealso{
 \code{\link[umap]{umap}}, \code{\link[gmodels]{fast.prcomp}},
    \code{\link[Rtsne]{Rtsne}}, \code{\link[destiny]{DiffusionMap}}

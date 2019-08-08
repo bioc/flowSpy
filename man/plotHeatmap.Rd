@@ -18,5 +18,8 @@ of plot.meta, or it can be just "density" (the default value).}
 Visualization heatmap of data of FSPY
 }
 \examples{
+plotHeatmap(fspy)
+plotHeatmap(fspy, cluster_rows = T)
+plotHeatmap(fspy, cluster_rows = T, cluster_cols = T)
 
 }

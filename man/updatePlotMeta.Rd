@@ -14,3 +14,8 @@ updatePlotMeta(object, verbose = TRUE)
 \description{
 Update plot meta information of FSPY
 }
+\examples{
+fspy <- updatePlotMeta(fspy)
+
+
+}

@@ -20,3 +20,16 @@ An FSPY object
 \description{
 definition of root cells
 }
+\examples{
+
+# Define leaf cells by cluster
+fspy <- defLeafCells(fspy, leaf.cells = 1, verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = c(1,3), verbose = T)
+
+# Define root cells by cell names
+cells <- test.meta.data$cell[which(test.meta.data$stage == "D10")]
+cells <- as.character(cells)
+fspy <- defLeafCells(fspy, leaf.cells = cells, verbose = T)
+
+
+}
