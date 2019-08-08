@@ -31,7 +31,11 @@ Walk between root cells and leaf cells
 }
 \examples{
 
-fspy <- runWalk(fspy, verbose = T)
-fspy <- runWalk(fspy, backward.walk = FALSE, verbose = T)
+if (F) {
+  fspy <- runWalk(fspy, verbose = T)
+  fspy <- runWalk(fspy, backward.walk = FALSE, verbose = T)
+}
+
+
 
 }

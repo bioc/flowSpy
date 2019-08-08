@@ -7,10 +7,9 @@
 #' @param batch vector. Batch covariate (only one batch allowed)
 #' @param par.prior logical. TRUE indicates parametric adjustments will be used,
 #'    FALSE indicates non-parametric adjustments will be used.
-#' @param prior.plots logical. TRUE give prior plots with black as a kernel
-#'    estimate of the empirical batch effect density and red as the parametric.
 #' @param mean.only logical. FALSE If TRUE ComBat only corrects the mean of the batch
 #'    effect (no scale adjustment)
+#' @param verbose logical. Whether to show log information
 #' @param ... Parameters passing to \code{\link[ComBat]{sva}} function
 #'
 #' @seealso \code{\link[BiocNeighbors]{findKNN}}

@@ -30,10 +30,6 @@ The default is N = 5,}
 \item{verbose}{logical. Whether to print calculation progress.}
 
 \item{...}{Parameters passing to \code{\link[cluster]{clara}} function}
-
-\item{sampsize}{numberic. Say j, the number of observations in each sample.
-Sampsize should be higher than the number of clusters (k) and at most
-the number of observations (n = nrow(x))}
 }
 \value{
 an FSPY object with clara.id in meta.data

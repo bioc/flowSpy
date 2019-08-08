@@ -8,6 +8,7 @@
 #'
 #' @param object an FSPY object
 #' @param umap.config object of class umap.config. See \code{\link[umap]{umap}}.
+#' @param n_neighbors numeric. Number of neighbors
 #' @param dims numeric. Dim of umap, you can also change it in umap.config.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Options to pass on to the \code{\link[umap]{umap}} function

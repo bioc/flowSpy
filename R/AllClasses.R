@@ -125,6 +125,9 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... paramters pass to \code{correctBatchFSPY} function.
 #'
+#' @importFrom methods new
+#' @importFrom stats median
+#'
 #' @export
 #'
 #' @return An FSPY object with raw.data and markers and meta.data
@@ -201,7 +204,7 @@ createFSPY <- function(raw.data, markers, meta.data,
 
   # Create an FSPY object
   if (verbose) message(Sys.time(), " [INFO] Creating FSPY object.")
-  object <- new("FSPY", raw.data = raw.data, meta.data = meta.data,
+  object <- methods::new("FSPY", raw.data = raw.data, meta.data = meta.data,
                 markers = markers, markers.idx = markers.idx)
 
   # normalization and Log-normalize the data

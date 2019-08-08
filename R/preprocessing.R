@@ -168,6 +168,7 @@ runExprsMerge <- function(fcsFiles,
 #'    of the arcsinh transformation, \code{arcsinh} = asinh(a + b * x) + c).
 #'
 #' @return A transformed expression data matrix
+#'
 #' @importFrom flowCore read.FCS compensate estimateLogicle logicleTransform
 #' @importFrom flowCore parameters transformList arcsinhTransform biexponentialTransform
 #' @importMethodsFrom flowCore transform
@@ -351,6 +352,7 @@ scaleData <- function(x, range = c(0, 4.5)) {
 #' @param cofactor Cofactor for asinh transformation, default 5 for mass cytometry data.
 #' @noRd
 #' @return transformed value
+#' @importFrom stats rnorm median quantile
 #'
 #' @author Chen Hao
 #' @references Hao Chen, Mai Chan Lau, Michael Thomas Wong, Evan W. Newell,
@@ -381,6 +383,7 @@ cytofAsinh <- function(value, cofactor = 5) {
 #' @param q The percentile of negative values used as reference poiont of negative range.
 #' @importFrom methods is
 #' @importFrom flowCore logicleTransform
+#' @importFrom stats IQR
 #' @noRd
 #' @return a list of autoLgcl transformations
 #'
@@ -405,7 +408,7 @@ autoLgcl <- function(x, channels, m = 4.5, q = 0.05) {
     t <- max(data)
     ndata <- data[data < 0]
     ## use 1.5 * IQR to filter outliers in negative values
-    nThres <- quantile(ndata, 0.25) - 1.5 * IQR(ndata)
+    nThres <- quantile(ndata, 0.25) - 1.5 * stats::IQR(ndata)
     ndata <- ndata[ndata >= nThres]
     transId <- paste(p, "autolgclTransform", sep = "_")
 

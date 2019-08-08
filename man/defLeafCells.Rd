@@ -10,7 +10,11 @@ defLeafCells(object, leaf.cells = NULL, pseudotime.cutoff = 0,
 \arguments{
 \item{object}{an FSPY object}
 
-\item{leaf.cells}{character or numeric. Cell name of the root cells or cluster.id of root.cells}
+\item{leaf.cells}{character or numeric. Cell name of the root cells or
+cluster.id of root.cells}
+
+\item{pseudotime.cutoff}{numeric. Cutoff of pseudotime. Cells with pseudotime
+over pseudotime.cutoff will be set to be leaf cells}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }

@@ -13,6 +13,11 @@ runPseudotime(object, mode = "undirected", dim.type = "tsne",
 \item{mode}{character. Specifies how igraph should interpret the supplied matrix.
 Possible values are: directed, undirected, upper, lower, max, min, plus.}
 
+\item{dim.type}{character. Type of dimensionality reduction method used to calculate
+pseudotime: umap, tsne, dc, pca or raw.}
+
+\item{dim.use}{numeric. Dimensions used to calculate pseudotime}
+
 \item{verbose}{logical. Whether to print calculation progress.}
 
 \item{...}{Parameters passing to calculation function.}

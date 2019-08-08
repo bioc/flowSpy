@@ -8,6 +8,7 @@
 #'    flow cytometry data. The base function are base on \code{\link[BiocNeighbors]{findKNN}}.
 #'
 #' @param object an FSPY object
+#' @param given.mat matrix. Given matrix to run knn
 #' @param knn numeric. Number of k-nearest neighbors.
 #' @param knn.replace logic. Whether to replace knn in FSPY object
 #' @param verbose logical. Whether to print calculation progress.

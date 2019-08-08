@@ -22,7 +22,13 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-This tutorial contains key steps of `flowSpy` workflow, including how to build an FSPY object, how to run dimensionality reduction and clustering, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm. 
+## Introduction
+
+To illustrate the usage of flowSpy for construction trajectory of time courses FCS data, we generated flow cytometry data from ten-days induced differentiation of human embryonic cell line HUES9. By adding different cytokine combinations in different days, HUES9 (CD90+CD49f+, Day 0, D0 in short) was directional differentiated into mesodermal cells (FLK1+, D4), hemogenic endothelium (CD34+CD31+CD43-, D6) and Hematopoietic Stem/Progenitor Cells (HSPCs, CD34+CD43+CD38-CD45RA-CD90+, D8) in succession (Fig. 3a and Additional file 1: Figure S3) [1].
+
+This tutorial contains key steps of `flowSpy` base workflow, including how to build an FSPY object, how to run clustering and dimensionality reduction, how to build a tree based on [Minimum Spanning Tree](https://en.wikipedia.org/wiki/Minimum_spanning_tree) (MST) algorithm, how to estimate pseudotime and how to identify intermediate state cells using time course flow cytometry data.
+
+## Time course workflow
 
 
 ``` {r quick-build, eval = FALSE}
@@ -110,7 +116,8 @@ plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "stage",
 # Plot 2D tSNE. And cells are colored by CD45RA markers expression
 plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD45RA", 
                main = "tSNE CD45RA", category = "numeric")  + 
-  scale_colour_gradientn(colors = c("#00599F","#00599F","#EEEEEE","#FF3222","#FF3222"))
+ scale_colour_gradientn(colors = c("#00599F","#00599F",
+                                   "#EEEEEE","#FF3222","#FF3222"))
 
 # Plot 2D UMAP. And cells are colored by cluster id
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id", 
@@ -119,12 +126,13 @@ plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "cluster.id",
 # Plot 2D UMAP. And cells are colored by stage
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "stage", 
        alpha = 1, main = "UMAP", category = "categorical") +
-   scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+ scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                               "#FF99FF","#7A06A0","#FF3222"))
 
 # Plot 2D UMAPE. And cells are colored by CD45RA markers expression
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD45RA", 
                main = "UMAP CD45RA", category = "numeric")  + 
-  scale_colour_gradientn(colors = c("#00599F","#00599F","#EEEEEE","#FF3222","#FF3222"))
+ scale_colour_gradientn(colors = c("#00599F","#00599F","#EEEEEE","#FF3222","#FF3222"))
 
 # Tree plot
 plotTree(fspy, color.by = "CD45RA", show.node.name = T, cex.size = 1) + 
@@ -144,17 +152,21 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
 
 # plot pie tree
 plotPieTree(fspy, cex.size = 3, size.by.cell.number = T) + 
-  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
+ scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+                              "#FF9933","#FF99FF","#7A06A0"))
 
 plotPieTree(fspy, cex.size = 5, size.by.cell.number = T, as.tree = T, root.id = 18) + 
-  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
+ scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+                              "#FF9933","#FF99FF","#7A06A0"))
 
 # plot pie cluster
 plotPieCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), cex.size = 40) + 
-  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
+ scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+                              "#FF9933","#FF99FF","#7A06A0"))
 
 plotPieCluster(fspy, item.use = c("PC_1", "PC_2"), cex.size = 0.5) + 
-  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
+ scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+                              "#FF9933","#FF99FF","#7A06A0"))
 
 # plot heatmap of cluster
 plotClusterHeatmap(fspy)
@@ -167,7 +179,7 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), size = 10, show.cluser.id = 
 
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "CD43", 
             size = 10, show.cluser.id = T, category = "numeric") + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+ scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
 ###########################################
 # This is pseudotime module
@@ -188,36 +200,39 @@ fspy <- runWalk(fspy, verbose = T)
 # tSNE plot colored by pseudotime
 plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
             size = 1, color.by = "pseudotime") + 
-  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
 # UMAP plot colored by pseudotime
 plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "numeric",
             size = 1, color.by = "pseudotime") + 
-  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
 # marker plot colored by pseudotime
 plot2D(fspy, item.use = c("pseudotime", "CD43"), category = "categorical",
             size = 1, color.by = "stage")  + 
-  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+ scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                               "#FF99FF","#7A06A0","#FF3222"))
 
 plot2D(fspy, item.use = c("pseudotime", "FLK1"), category = "categorical",
             size = 1, color.by = "stage")  + 
-  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+ scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                               "#FF99FF","#7A06A0","#FF3222"))
 
 # Tree plot
 plotTree(fspy, color.by = "pseudotime", cex.size = 1) + 
-  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
 # denisty plot by different stage
 plotPseudotimeDensity(fspy, adjust = 1) + 
-  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+ scale_color_manual(values = c("#00599F","#009900","#FF9933",
+                               "#FF99FF","#7A06A0","#FF3222"))
 
 # trajectory value
 plotPseudotimeTraj(fspy, var.cols = T) + 
-  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
 plotPseudotimeTraj(fspy, cutoff = 0.01, var.cols = T) + 
-  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
 plotHeatmap(fspy, downsize = 12000, cluster_rows = T,
             olor = colorRampPalette(c("blue","blue", "white","red","red"))(100))
@@ -225,10 +240,10 @@ plotHeatmap(fspy, downsize = 12000, cluster_rows = T,
 # plot cluster
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "traj.value.log", 
             size = 10, show.cluser.id = T, category = "numeric") + 
-  scale_colour_gradientn(colors = c("#EEEEEE", "#FF3222", "#CC0000", "#CC0000"))
+ scale_colour_gradientn(colors = c("#EEEEEE", "#FF3222", "#CC0000", "#CC0000"))
 
 plotTree(fspy, color.by = "traj.value.log", cex.size = 1) + 
-  scale_colour_gradientn(colors = c("#EEEEEE","#FF3222","#CC0000","#CC0000"))
+ scale_colour_gradientn(colors = c("#EEEEEE","#FF3222","#CC0000","#CC0000"))
 
 ###########################################
 # fetching intermediate state cells
@@ -246,37 +261,15 @@ sub.fspy <- buildTree(sub.fspy, dim.type = "raw", verbose = T)
 plotMarkerDensity(sub.fspy, adjust = 1)
 
 plotPieTree(sub.fspy, cex.size = 0.5) + 
-  scale_fill_manual(values = c("#00599F","#FF3222","#009900","#FF9933","#FF99FF","#7A06A0"))
-
-##############################
-### This part must be removed 
-for (i in markers) {
-p <- plotTree(fspy, color.by = i, show.node.name = F, cex.size = 1) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/marker.", i, ".pdf"), width = 6, height = 7)
-}
-
-for (i in markers) {
-p <- plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = i, 
-               main = i, category = "numeric")  + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/umap.", i, ".pdf"), width = 6, height = 5)
-}
-
-
-p <- plotTree(fspy, color.by = "CD45RA", show.node.name = T, cex.size = 1) + 
-  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
-ggsave(paste0("../../flowSpy-dataset/Fig/usecase2/marker.n.CD45RA.pdf"), width = 6, height = 7)
-
-
-plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "categorical",
-            size = 1, color.by = "stage")  + 
-  scale_color_manual(values = c("#00599F","#009900","#FF9933","#FF99FF","#7A06A0","#FF3222"))
+ scale_fill_manual(values = c("#00599F","#FF3222","#009900",
+                              "#FF9933","#FF99FF","#7A06A0"))
 
 
 ```
 
+## References
 
+1.	Wang C, Tang X, Sun X, Miao Z, Lv Y, Yang Y, Zhang H, Zhang P, Liu Y, Du L, et al: TGFbeta inhibition enhances the generation of hematopoietic progenitors from human ES cell-derived hemogenic endothelial cells using a stepwise strategy. Cell Res 2012, 22:194-207.
 
 
 

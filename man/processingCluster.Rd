@@ -22,6 +22,8 @@ This parameter is from 0 to 1. by default is 1.}
 
 \item{seed}{numeric. Random seed for downsampling}
 
+\item{force.resample}{logical. Whether to do resample if downsampling.size < 1}
+
 \item{umap.config}{object of class umap.config. See \code{\link[umap]{umap}}.}
 
 \item{verbose}{logic. Whether to print calculation progress.}

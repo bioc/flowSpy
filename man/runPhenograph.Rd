@@ -11,11 +11,11 @@ runPhenograph(object, knn = 30, scale = F, verbose = F, ...)
 
 \item{knn}{numeric. Number of nearest neighbours, default is 30.}
 
+\item{scale}{logical. Whether to scale the expression matrix}
+
 \item{verbose}{logical. Whether to print calculation progress.}
 
 \item{...}{Parameters passing to \code{\link[igraph]{graph.adjacency}} function}
-
-\item{mode}{character. specifies how igraph should interpret the supplied matrix.}
 }
 \value{
 an FSPY object

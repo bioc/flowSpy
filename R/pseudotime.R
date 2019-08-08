@@ -60,7 +60,10 @@ defRootCells <- function(object, root.cells = NULL, verbose = F) {
 #' @description definition of root cells
 #'
 #' @param object an FSPY object
-#' @param leaf.cells character or numeric. Cell name of the root cells or cluster.id of root.cells
+#' @param leaf.cells character or numeric. Cell name of the root cells or
+#'     cluster.id of root.cells
+#' @param pseudotime.cutoff numeric. Cutoff of pseudotime. Cells with pseudotime
+#'     over pseudotime.cutoff will be set to be leaf cells
 #' @param verbose logical. Whether to print calculation progress.
 #'
 #' @return An FSPY object
@@ -130,6 +133,9 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' @param object An FSPY object
 #' @param mode character. Specifies how igraph should interpret the supplied matrix.
 #'    Possible values are: directed, undirected, upper, lower, max, min, plus.
+#' @param dim.type character. Type of dimensionality reduction method used to calculate
+#'    pseudotime: umap, tsne, dc, pca or raw.
+#' @param dim.use numeric. Dimensions used to calculate pseudotime
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to calculation function.
 #'

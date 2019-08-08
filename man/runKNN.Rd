@@ -10,6 +10,8 @@ runKNN(object, given.mat = NULL, knn = 30, knn.replace = TRUE,
 \arguments{
 \item{object}{an FSPY object}
 
+\item{given.mat}{matrix. Given matrix to run knn}
+
 \item{knn}{numeric. Number of k-nearest neighbors.}
 
 \item{knn.replace}{logic. Whether to replace knn in FSPY object}

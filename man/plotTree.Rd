@@ -6,7 +6,7 @@
 \usage{
 plotTree(object, cex.size = 1, color.by = "cell.number",
   size.by = "cell.number", as.tree = F, root.id = NULL,
-  show.node.name = F, color.theme = NULL)
+  show.node.name = F)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -17,9 +17,11 @@ plotTree(object, cex.size = 1, color.by = "cell.number",
 
 \item{size.by}{numeric. size theme of the dot}
 
-\item{show.node.name}{logical. whether to show node name}
+\item{as.tree}{logical. Whether to show node as tree}
 
-\item{color.theme}{character. Library of color theme}
+\item{root.id}{numeric. Root id of the tree, if as.tree is TRUE}
+
+\item{show.node.name}{logical. whether to show node name}
 }
 \description{
 plot MST of FSPY

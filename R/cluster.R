@@ -102,6 +102,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' @param downsampling.size numeric. Percentage of sample size of downsampling.
 #'    This parameter is from 0 to 1. by default is 1.
 #' @param seed numeric. Random seed for downsampling
+#' @param force.resample logical. Whether to do resample if downsampling.size < 1
 #' @param umap.config object of class umap.config. See \code{\link[umap]{umap}}.
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the dimensionality reduction functions.
@@ -110,6 +111,8 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'    \code{\link[Rtsne]{Rtsne}}, \code{\link[destiny]{DiffusionMap}}
 #'
 #' @return An FSPY object with cluster.id in meta.data
+#'
+#' @importFrom stats cutree
 #'
 #' @export
 #'
@@ -325,9 +328,6 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #' @param samples numeric. Say N, the number of samples to be drawn from the dataset.
 #'    The default is N = 5,
 #' @param trace numberic. Indicating a trace level for diagnostic output during the algorithm
-#' @param sampsize numberic. Say j, the number of observations in each sample.
-#'    Sampsize should be higher than the number of clusters (k) and at most
-#'    the number of observations (n = nrow(x))
 #' @param scale logical. Whether to use scaled data in kmeans.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to \code{\link[cluster]{clara}} function
@@ -476,7 +476,7 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #'    in this graph.
 #'
 #' @param object an FSPY object.
-#' @param mode character. specifies how igraph should interpret the supplied matrix.
+#' @param scale logical. Whether to scale the expression matrix
 #' @param knn numeric. Number of nearest neighbours, default is 30.
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to \code{\link[igraph]{graph.adjacency}} function
@@ -553,6 +553,7 @@ runPhenograph <- function(object, knn = 30, scale = F, verbose = F, ...){
 #'
 #' @importFrom igraph graph.data.frame cluster_louvain modularity membership
 #' @import ggplot2
+#' @import Rcpp
 #' @useDynLib flowSpy
 #'
 #' @export

@@ -45,6 +45,8 @@ updatePlotMeta <- function(object, verbose = TRUE) {
 #'
 #' @export
 #'
+#' @importFrom stats aggregate
+#'
 #' @examples
 #' fspy <- updateClustMeta(fspy)
 #'
@@ -75,7 +77,7 @@ updateClustMeta <- function(object, verbose = TRUE) {
 
   idx.redim <- match(c(object@markers, "pseudotime", "traj.value", "traj.value.log"), colnames(plot.data))
   idx.redim <- unique(idx.redim)
-  tree.meta <- aggregate(plot.data[, idx.redim], list(cluster = plot.data[, "cluster.id"]), mean)
+  tree.meta <- stats::aggregate(plot.data[, idx.redim], list(cluster = plot.data[, "cluster.id"]), mean)
   tree.meta <- data.frame(tree.meta, cell.count,
                           cell.number = cell.total.number,
                           cell.number.percent = cell.total.number.percent,
@@ -94,6 +96,7 @@ updateClustMeta <- function(object, verbose = TRUE) {
 #' @name fetchPlotMeta
 #'
 #' @param object An FSPY object
+#' @param markers vector. Makers fetched from expression matrix
 #' @param verbose logical. Whether to print calculation progress.
 #'
 #' @return a data.frame containing meta information for visualization

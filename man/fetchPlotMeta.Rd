@@ -9,6 +9,8 @@ fetchPlotMeta(object, markers = NULL, verbose = F)
 \arguments{
 \item{object}{An FSPY object}
 
+\item{markers}{vector. Makers fetched from expression matrix}
+
 \item{verbose}{logical. Whether to print calculation progress.}
 }
 \value{

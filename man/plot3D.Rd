@@ -16,6 +16,8 @@ plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage",
 \item{color.by}{character. Dot or mesh color by which character. It can be one of the column
 of plot.meta, or it can be just "density" (the default value).}
 
+\item{order.by}{character. Order of color theme.}
+
 \item{size}{numeric. size of the dot}
 
 \item{angle}{numberic. angle of the plot}

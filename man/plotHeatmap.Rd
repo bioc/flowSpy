@@ -11,8 +11,19 @@ plotHeatmap(object, color = colorRampPalette(c("blue", "white",
 \arguments{
 \item{object}{An FSPY object}
 
-\item{color.by}{character. Dot or mesh color by which character. It can be one of the column
-of plot.meta, or it can be just "density" (the default value).}
+\item{color}{vector. Colors used in heatmap.}
+
+\item{scale}{character. Whether the values should be centered and scaled in either
+the row direction or the column direction, or none. Corresponding values are
+"row", "column" and "none"}
+
+\item{downsize}{numeric. Cells size used to plot heatmap}
+
+\item{cluster_rows}{logical. Whether rows should be clustered}
+
+\item{cluster_cols}{logical. Whether columns should be clustered}
+
+\item{...}{options to pass on to the \code{\link[pheatmap]{pheatmap}} function.}
 }
 \description{
 Visualization heatmap of data of FSPY

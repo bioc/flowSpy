@@ -7,6 +7,7 @@
 #' @param item.use character. Items use to 3D plot, axes x and y and z must be numeric.
 #' @param color.by character. Dot or mesh color by which character. It can be one of the column
 #'     of plot.meta, or it can be just "density" (the default value).
+#' @param order.by character. Order of color theme.
 #' @param size numeric. size of the dot
 #' @param angle numberic. angle of the plot
 #' @param scale.y numeric. scale of y axis related to x- and z axis
@@ -15,6 +16,7 @@
 #' @param ... options to pass on to the \code{\link[scatterplot3d]{scatterplot3d}} function.
 #'
 #' @import scatterplot3d
+#' @importFrom grDevices rainbow
 #'
 #' @export
 #'

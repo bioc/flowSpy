@@ -11,26 +11,28 @@
 #'
 #' @export
 #'
+#' @importFrom stats aggregate
+#'
 #' @return An FSPY object
 #'
 #' @examples
 #'
 #' # build minimum spanning tree (MST) based on tsne
-#' fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2, verbose = T)
+#' fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2)
 #'
 #' # Using PCA
-#' fspy <- buildTree(fspy, dim.type = "pca", dim.use = 1:4, verbose = T)
+#' fspy <- buildTree(fspy, dim.type = "pca", dim.use = 1:4)
 #'
 #' # Using UMAP
-#' fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2, verbose = T)
+#' fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2)
 #'
 #' # Using Diffusion Maps
-#' fspy <- buildTree(fspy, dim.type = "dc", dim.use = 1:3, verbose = T)
+#' fspy <- buildTree(fspy, dim.type = "dc", dim.use = 1:3)
 #'
 #'
 buildTree <- function(object, method = "euclidean",
                       dim.type = "umap", dim.use = 1:2,
-                      verbose = F) {
+                      verbose = FALSE) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree.")
   if (missing(object)) stop(Sys.time(), " [ERROR] FSPY object is missing.")

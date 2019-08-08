@@ -21,7 +21,7 @@ To objectively inference differential trajectory based on time courses FCS data,
 
 - **Clustering**. `flowSpy` can help you to discover and identify subtypes of cells. 
 
-- **Reducing Dimensions**. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP).
+- **Dimensionality Reduction**. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP).
 
 - **Trajectory Inference**. `flowSpy` can help you to construct the cellular differential based on Minimum Spanning Tree (MST) algorithm. 
 
@@ -67,6 +67,11 @@ library(flowSpy)
 <center> <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
 ## 4 Version History
+
+Aug 08, 2019
+  - Version 1.2.4
+  - Changes:
+    - Fixed some bugs and finished Vignette tutorial
 
 July 24, 2019
   - Version 1.2.3

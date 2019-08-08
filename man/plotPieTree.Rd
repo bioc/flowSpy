@@ -5,19 +5,20 @@
 \title{plot MST pie of FSPY}
 \usage{
 plotPieTree(object, cex.size = 2, size.by.cell.number = T,
-  as.tree = F, root.id = NULL, show.node.name = F,
-  color.theme = NULL)
+  as.tree = F, root.id = NULL, show.node.name = F)
 }
 \arguments{
 \item{object}{an FSPY object}
 
 \item{cex.size}{numeric. size cex of the dot}
 
-\item{size.by.cell.number}{logical.}
+\item{size.by.cell.number}{logical. Whether to size node by cell number}
+
+\item{as.tree}{logical. Whether to show node as tree}
+
+\item{root.id}{numeric. Root id of the tree, if as.tree is TRUE}
 
 \item{show.node.name}{logical. whether to show node name}
-
-\item{color.theme}{character. Library of color theme}
 }
 \description{
 plot MST pie of FSPY

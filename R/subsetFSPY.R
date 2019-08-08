@@ -15,6 +15,8 @@
 #'
 #' @return An FSPY object
 #'
+#' @importFrom methods new
+#'
 #' @export
 #'
 #' @examples

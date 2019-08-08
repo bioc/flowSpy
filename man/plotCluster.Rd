@@ -18,6 +18,8 @@ plotCluster(object, item.use = c("PC_1", "PC_2"), color.by = "cluster",
 \item{color.by}{character. Dot or mesh color by which character. It can be one of the column
 of plot.meta, or it can be just "density" (the default value).}
 
+\item{size.by}{character. Size of the dot}
+
 \item{order.by}{vector. Order of color theme.}
 
 \item{size}{numeric. Size of the dot}

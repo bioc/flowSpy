@@ -8,8 +8,9 @@
 #' @param cex.size numeric. size cex of the dot
 #' @param color.by numeric. size color theme of the dot
 #' @param size.by numeric. size theme of the dot
+#' @param as.tree logical. Whether to show node as tree
+#' @param root.id numeric. Root id of the tree, if as.tree is TRUE
 #' @param show.node.name logical. whether to show node name
-#' @param color.theme character. Library of color theme
 #'
 #' @export
 #' @importFrom igraph layout_as_tree layout.kamada.kawai as_data_frame
@@ -38,8 +39,7 @@ plotTree <- function(object,
                      size.by = "cell.number",
                      as.tree = F,
                      root.id = NULL,
-                     show.node.name = F,
-                     color.theme = NULL) {
+                     show.node.name = F) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")
@@ -95,9 +95,10 @@ plotTree <- function(object,
 #'
 #' @param object an FSPY object
 #' @param cex.size numeric. size cex of the dot
-#' @param size.by.cell.number logical.
+#' @param size.by.cell.number logical. Whether to size node by cell number
+#' @param as.tree logical. Whether to show node as tree
+#' @param root.id numeric. Root id of the tree, if as.tree is TRUE
 #' @param show.node.name logical. whether to show node name
-#' @param color.theme character. Library of color theme
 #'
 #' @export
 #' @importFrom igraph layout_as_tree layout.kamada.kawai as_data_frame
@@ -114,8 +115,7 @@ plotPieTree <- function(object,
                         size.by.cell.number = T,
                         as.tree = F,
                         root.id = NULL,
-                        show.node.name = F,
-                        color.theme = NULL) {
+                        show.node.name = F) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")

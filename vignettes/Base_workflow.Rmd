@@ -22,10 +22,6 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
-## Abstract
-
-While high-dimensional single-cell based flow and mass cytometry data has demonstrated increased applications in microenvironment composition and stem-cell research, integrated analyzing workflow design for experimental cytometry data has been challenging. Here, we present flowSpy, an R package designed for the analysis and interpretation of flow and mass cytometry data. We have applied flowSpy to mass cytometry and time course flow cytometry data to validate the usage and practical utility of its computational modules. These use cases introduce flowSpy as a reliable tool for high-dimensional cytometry data workflow and reveal good performance on trajectory reconstruction and pseudotime estimation
-
 ## Introduction
 
 To validate the cellular subpopulations identified by flowSpy, we used a 13-marker panel mass cytometry dataset of healthy human bone marrow. This dataset was generated from Bendall et al [1] and completed quality control by Herring et al [2], which could be downloaded from FlowRepository database [3] (https://flowrepository.org/id/FR-FCM-ZY9R). The aim of this use case is to reconstruct the human hematopoietic differentiation hierarchy using the 13-marker panel mass cytometry data using flowSpy.
@@ -169,13 +165,13 @@ plotClusterHeatmap(fspy)
 
 ```
 
-## Reference
+## References
 
-[1] Bendall SC, Simonds EF, Qiu P, Amir el AD, Krutzik PO, Finck R, Bruggner RV, Melamed R, Trejo A, Ornatsky OI, et al: Single-cell mass cytometry of differential immune and drug responses across a human hematopoietic continuum. Science 2011, 332:687-696.
+1.	Bendall SC, Simonds EF, Qiu P, Amir el AD, Krutzik PO, Finck R, Bruggner RV, Melamed R, Trejo A, Ornatsky OI, et al: Single-cell mass cytometry of differential immune and drug responses across a human hematopoietic continuum. Science 2011, 332:687-696.
 
-[2] Herring CA, Banerjee A, McKinley ET, Simmons AJ, Ping J, Roland JT, Franklin JL, Liu Q, Gerdes MJ, Coffey RJ, Lau KS: Unsupervised Trajectory Analysis of Single-Cell RNA-Seq and Imaging Data Reveals Alternative Tuft Cell Origins in the Gut. Cell Syst 2018, 6:37-51 e39.
+2.	Herring CA, Banerjee A, McKinley ET, Simmons AJ, Ping J, Roland JT, Franklin JL, Liu Q, Gerdes MJ, Coffey RJ, Lau KS: Unsupervised Trajectory Analysis of Single-Cell RNA-Seq and Imaging Data Reveals Alternative Tuft Cell Origins in the Gut. Cell Syst 2018, 6:37-51 e39.
 
-[3] Spidlen J, Breuer K, Rosenberg C, Kotecha N, Brinkman RR: FlowRepository: a resource of annotated flow cytometry datasets associated with peer-reviewed publications. Cytometry A 2012, 81:727-731.
+3.	Spidlen J, Breuer K, Rosenberg C, Kotecha N, Brinkman RR: FlowRepository: a resource of annotated flow cytometry datasets associated with peer-reviewed publications. Cytometry A 2012, 81:727-731.
 
 
 

@@ -17,6 +17,7 @@
 #' @param plot.theme themes from \code{ggplot2}
 #'
 #' @import ggplot2
+#' @importFrom stats aggregate
 #'
 #' @export
 #'
@@ -127,6 +128,8 @@ plot2D <- function(object,
   item.use.idx <- match(item.use, colnames(plot.meta))
   color.by.idx <- match(color.by, colnames(plot.meta))
 
+  plot.x = plot.y =NULL
+
   plot.data <- data.frame(plot.x = plot.meta[, item.use.idx[1]],
                           plot.y = plot.meta[, item.use.idx[2]],
                           color.by = plot.meta[, color.by.idx])
@@ -175,15 +178,12 @@ plot2D <- function(object,
 #' @name plotViolin
 #'
 #' @param object An FSPY object
-#' @param item.use character. Items use to 2D plot, axes x and y must be numeric.
+#' @param marker character. Markers used to plot
 #' @param color.by character. Dot or mesh color by which character. It can be one of the column
 #'     of plot.meta, or it can be just "density" (the default value).
 #' @param order.by vector. Order of color theme.
 #' @param size numeric. Size of the dot
-#' @param alpha numberic. Transparency (0-1) of the dot, default is 1.
-#' @param category character. numeric or categorical
-#' @param show.cluser.id logical. Whether to show cluster id in the plot.
-#' @param show.cluser.id.size numeric. Size of the cluster id.
+#' @param text.angle numberic. Text angle of the violin plot
 #' @param main character. Title of the plot.
 #' @param plot.theme themes from \code{ggplot2}
 #'
@@ -214,7 +214,7 @@ plotViolin <- function(object,
     marker <- marker[1]
   }
   if ( !all(marker %in% colnames(object@log.data)) ) stop(Sys.time(), " [ERROR] marker name is not correct")
-  plot.meta <- data.frame(plot.meta, marker = object@log.data[which(fspy@meta.data$dowsample == 1), marker])
+  plot.meta <- data.frame(plot.meta, marker = object@log.data[which(object@meta.data$dowsample == 1), marker])
 
   # check color.by parameter in plot.meta data.frame
   if ( !all(color.by %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
@@ -259,14 +259,8 @@ plotViolin <- function(object,
 #'
 #' @param object An FSPY object
 #' @param item.use character. Items use to 2D plot, axes x and y must be numeric.
-#' @param color.by character. Dot or mesh color by which character. It can be one of the column
-#'     of plot.meta, or it can be just "density" (the default value).
-#' @param order.by vector. Order of color theme.
-#' @param size numeric. Size of the dot
-#' @param alpha numberic. Transparency (0-1) of the dot, default is 1.
-#' @param category character. numeric or categorical
-#' @param show.cluser.id logical. Whether to show cluster id in the plot.
-#' @param show.cluser.id.size numeric. Size of the cluster id.
+#' @param cex.size numeric. Size of the dot
+#' @param size.by.cell.number logical. Whether to show size of cell number.
 #' @param main character. Title of the plot.
 #' @param plot.theme themes from \code{ggplot2}
 #'
@@ -345,6 +339,7 @@ plotPieCluster <- function(object,
 #' @param item.use character. Items use to 2D plot, axes x and y must be numeric.
 #' @param color.by character. Dot or mesh color by which character. It can be one of the column
 #'     of plot.meta, or it can be just "density" (the default value).
+#' @param size.by character. Size of the dot
 #' @param order.by vector. Order of color theme.
 #' @param size numeric. Size of the dot
 #' @param alpha numberic. Transparency (0-1) of the dot, default is 1.
@@ -469,10 +464,14 @@ plotCluster <- function(object,
 #' @name plotClusterHeatmap
 #'
 #' @param object An FSPY object
-#' @param color.by character. Dot or mesh color by which character. It can be one of the column
-#'     of plot.meta, or it can be just "density" (the default value).
+#' @param color vector. Colors used in heatmap.
+#' @param scale character. Whether the values should be centered and scaled in either
+#'    the row direction or the column direction, or none. Corresponding values are
+#'    "row", "column" and "none"
+#' @param ... options to pass on to the \code{\link[pheatmap]{pheatmap}} function.
 #'
 #' @import pheatmap
+#' @importFrom grDevices colorRampPalette
 #'
 #' @export
 #'
@@ -505,10 +504,17 @@ plotClusterHeatmap <- function(object,
 #' @name plotHeatmap
 #'
 #' @param object An FSPY object
-#' @param color.by character. Dot or mesh color by which character. It can be one of the column
-#'     of plot.meta, or it can be just "density" (the default value).
+#' @param color vector. Colors used in heatmap.
+#' @param scale character. Whether the values should be centered and scaled in either
+#'    the row direction or the column direction, or none. Corresponding values are
+#'    "row", "column" and "none"
+#' @param downsize numeric. Cells size used to plot heatmap
+#' @param cluster_rows logical. Whether rows should be clustered
+#' @param cluster_cols logical. Whether columns should be clustered
+#' @param ... options to pass on to the \code{\link[pheatmap]{pheatmap}} function.
 #'
 #' @import pheatmap
+#' @importFrom grDevices colorRampPalette
 #'
 #' @export
 #'
@@ -528,8 +534,7 @@ plotHeatmap <- function(object,
   # update plot meta information
   plot.meta.data <- fetchPlotMeta(object, verbose = F)
 
-  if (downsize < dim(plot.meta.data)[1]) {
-    warning(Sys.time(), " [WARNING] Too large sample size of downsampling")
+  if (downsize > dim(plot.meta.data)[1]) {
     downsize = dim(plot.meta.data)[1]
   }
   plot.meta.data <- plot.meta.data[sample(1:dim(plot.meta.data)[1], downsize), ]

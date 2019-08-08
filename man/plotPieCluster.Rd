@@ -13,24 +13,13 @@ plotPieCluster(object, item.use = c("PC_1", "PC_2"), cex.size = 1,
 
 \item{item.use}{character. Items use to 2D plot, axes x and y must be numeric.}
 
+\item{cex.size}{numeric. Size of the dot}
+
+\item{size.by.cell.number}{logical. Whether to show size of cell number.}
+
 \item{main}{character. Title of the plot.}
 
 \item{plot.theme}{themes from \code{ggplot2}}
-
-\item{color.by}{character. Dot or mesh color by which character. It can be one of the column
-of plot.meta, or it can be just "density" (the default value).}
-
-\item{order.by}{vector. Order of color theme.}
-
-\item{size}{numeric. Size of the dot}
-
-\item{alpha}{numberic. Transparency (0-1) of the dot, default is 1.}
-
-\item{category}{character. numeric or categorical}
-
-\item{show.cluser.id}{logical. Whether to show cluster id in the plot.}
-
-\item{show.cluser.id.size}{numeric. Size of the cluster id.}
 }
 \description{
 Visualization pie plot of cluster data of FSPY

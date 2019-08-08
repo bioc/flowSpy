@@ -12,6 +12,8 @@ runUMAP(object, umap.config = umap.defaults, n_neighbors = 30,
 
 \item{umap.config}{object of class umap.config. See \code{\link[umap]{umap}}.}
 
+\item{n_neighbors}{numeric. Number of neighbors}
+
 \item{dims}{numeric. Dim of umap, you can also change it in umap.config.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
