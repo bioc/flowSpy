@@ -25,6 +25,8 @@ plotPieCluster(object, item.use = c("PC_1", "PC_2"), cex.size = 1,
 Visualization pie plot of cluster data of FSPY
 }
 \examples{
+
+if (F) {
 # Runs only have more than two stages
 plotPieCluster(fspy, cex.size = 0.5)
 
@@ -39,5 +41,6 @@ plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1)
 plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1) +
    scale_fill_manual(values = c("#00599F","#FF3222","#009900",
                                 "#FF9933","#FF99FF","#7A06A0"))
+}
 
 }

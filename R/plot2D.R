@@ -23,6 +23,10 @@
 #'
 #' @examples
 #'
+#' if (F) {
+#'
+#' data(FSPYdata)
+#'
 #' # Default plot
 #' plot2D(fspy)
 #'
@@ -86,6 +90,8 @@
 #'
 #' # Pseudotime
 #' plot2D(fspy, item.use = c("pseudotime", "CD43"), color.by = "stage")
+#'
+#' }
 #'
 plot2D <- function(object,
                    item.use = c("PC_1", "PC_2"),
@@ -193,7 +199,10 @@ plot2D <- function(object,
 #'
 #' @examples
 #'
+#' if (F) {
 #' plotViolin(fspy, marker = "CD34")
+#' plotViolin(fspy, marker = "CD34", order.by = "pseudotime")
+#' }
 #'
 plotViolin <- function(object,
                        marker,
@@ -225,16 +234,23 @@ plotViolin <- function(object,
   }
   color.by.idx <- match(color.by, colnames(plot.meta))
 
+  marker.by = NULL
+
   plot.data <- data.frame(marker.by = plot.meta$marker,
                           color.by = plot.meta[, color.by.idx])
 
-  if (length( unique(plot.data$color.by) ) > 256) {
-    warning(Sys.time(), " [WARNING] color.by is categorical and has more than 256 elements. It will be used as numeric instead.")
+  if (length( unique(plot.data$color.by) ) > 128) {
+    stop(Sys.time(), " [ERROR] color.by is categorical and has more than 128 elements.")
   }
 
   if (is.null(order.by)) {
     plot.data$color.by <- factor(plot.data$color.by)
-  } else {
+  } else if (order.by == "pseudotime") {
+    cluster.meta <- fetchClustMeta(object, verbose = F)
+    order.by <- cluster.meta$cluster[order(cluster.meta$pseudotime)]
+    plot.data$color.by <- factor(as.character(plot.data$color.by), levels = order.by)
+  }
+  else {
     plot.data$color.by <- factor(as.character(plot.data$color.by), levels = order.by)
   }
 
@@ -269,6 +285,8 @@ plotViolin <- function(object,
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
 #' # Runs only have more than two stages
 #' plotPieCluster(fspy, cex.size = 0.5)
 #'
@@ -283,6 +301,7 @@ plotViolin <- function(object,
 #' plotPieCluster(fspy, item.use = c("UMAP_1", "UMAP_2"), cex.size = 1) +
 #'    scale_fill_manual(values = c("#00599F","#FF3222","#009900",
 #'                                 "#FF9933","#FF99FF","#7A06A0"))
+#' }
 #'
 plotPieCluster <- function(object,
                            item.use = c("PC_1", "PC_2"),
@@ -310,6 +329,7 @@ plotPieCluster <- function(object,
 
   plot.cols <- paste0(unique(object@meta.data$stage), ".percent")
 
+  pos.x = pos.y = cluster = cell.number.percent = NULL
   plot.data <- data.frame(plot.data,
                           pos.x = object@cluster[, item.use.idx[1]],
                           pos.y = object@cluster[, item.use.idx[2]])
@@ -354,6 +374,8 @@ plotPieCluster <- function(object,
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
 #' plotCluster(fspy)
 #'
 #' plotCluster(fspy, item.use = c("PC_1", "PC_2"))
@@ -368,7 +390,7 @@ plotPieCluster <- function(object,
 #' plotCluster(fspy, item.use = c("DC_1", "DC_2"))
 #'
 #' plotCluster(fspy, item.use = c("UMAP_1", "UMAP_2"))
-#'
+#' }
 #'
 plotCluster <- function(object,
                         item.use = c("PC_1", "PC_2"),
@@ -414,7 +436,7 @@ plotCluster <- function(object,
   color.by.idx <- match(color.by, colnames(plot.meta.data))
   size.by.idx <- match(size.by, colnames(plot.meta.data))
 
-
+  plot.x = plot.y = cluster = cell.number.percent = NULL
   plot.data <- data.frame(plot.x = plot.meta.data[, item.use.idx[1]],
                           plot.y = plot.meta.data[, item.use.idx[2]],
                           color.by = plot.meta.data[, color.by.idx],
@@ -477,10 +499,14 @@ plotCluster <- function(object,
 #'
 #' @examples
 #'
+#' if (F) {
+#'
 #' plotClusterHeatmap(fspy)
 #' plotClusterHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
 #' plotClusterHeatmap(fspy, cluster_row = F)
 #' plotClusterHeatmap(fspy, cluster_row = F, cluster_col = F)
+#'
+#' }
 #'
 plotClusterHeatmap <- function(object,
                                color = colorRampPalette(c("blue","white","red"))(100),
@@ -519,9 +545,16 @@ plotClusterHeatmap <- function(object,
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
+#'
 #' plotHeatmap(fspy)
 #' plotHeatmap(fspy, cluster_rows = T)
+#' plotHeatmap(fspy, cluster_rows = T, clustering_method = "ward.D")
 #' plotHeatmap(fspy, cluster_rows = T, cluster_cols = T)
+#'
+#' }
+#'
 #'
 plotHeatmap <- function(object,
                         color = colorRampPalette(c("blue","white","red"))(100),

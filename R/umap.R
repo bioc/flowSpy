@@ -20,7 +20,12 @@
 #'
 #' @examples
 #'
+#' if (F) {
+#'
 #' fspy <- runUMAP(fspy, verbose = T)
+#' fspy <- runUMAP(fspy, n_neighbors = 20, verbose = T)
+#'
+#' }
 #'
 #'
 runUMAP <- function(object, umap.config = umap.defaults, n_neighbors = 30, dims = 2, verbose = F, ...) {

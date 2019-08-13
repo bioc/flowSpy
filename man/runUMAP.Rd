@@ -25,7 +25,12 @@ Calculate Uniform Manifold Approximation and Projection in FSPY
 }
 \examples{
 
+if (F) {
+
 fspy <- runUMAP(fspy, verbose = T)
+fspy <- runUMAP(fspy, n_neighbors = 20, verbose = T)
+
+}
 
 
 }

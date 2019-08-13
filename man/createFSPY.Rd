@@ -41,6 +41,8 @@ This function is about how to build an FSPY object. An FSPY object is the base
    for the whole analysizing workflow of flow and mass cytometry data.
 }
 \examples{
+
+if (F) {
 ## See vignette tutorials
 vignette(package = "flowSpy")
 vignette("Quick_start", package = "flowSpy")
@@ -56,9 +58,10 @@ fspy <- createFSPY(raw.data = test.fcs.data,
                    markers = markers,
                    meta.data = test.meta.data,
                    normalization.method = "log",
-                   verbose = T)
+                   verbose = TRUE)
 
 fspy
 
+}
 
 }

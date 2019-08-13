@@ -23,7 +23,9 @@
 #' @export
 #' @examples
 #'
+#' if (F) {
 #' fspy <- runFastPCA(fspy, verbose = T)
+#' }
 #'
 runFastPCA <- function(object, center = FALSE, scale. = TRUE,
                        verbose = F, ...) {

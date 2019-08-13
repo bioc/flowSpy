@@ -21,9 +21,13 @@
 #'
 #' @examples
 #'
+#' if (F) {
+#'
 #' cells <- test.meta.data$cell[which(test.meta.data$stage == "D0")]
 #' sub.fspy <- subsetFSPY(fspy, cells = cells)
 #' sub.fspy
+#'
+#' }
 #'
 subsetFSPY <- function(object, cells = NULL,
                        knn = NA,

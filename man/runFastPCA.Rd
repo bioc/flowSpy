@@ -30,7 +30,9 @@ Calculate principal components in FSPY
 }
 \examples{
 
+if (F) {
 fspy <- runFastPCA(fspy, verbose = T)
+}
 
 }
 \seealso{

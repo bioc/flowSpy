@@ -20,6 +20,8 @@
 #'
 #' @import BiocNeighbors
 #'
+#' @export
+#'
 #'
 runKNN <- function(object,
                    given.mat = NULL,

@@ -29,6 +29,7 @@ Compute a specific clustering using the combined flow
 \examples{
 # After building an FSPY object
 # Set random seed to make results reproducible
+data(FSPYdata)
 set.seed(1)
 fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
 

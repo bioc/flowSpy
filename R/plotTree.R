@@ -17,6 +17,8 @@
 #'
 #' @examples
 #'
+#' if (F) {
+#'
 #' plotTree(fspy)
 #'
 #' plotTree(fspy, show.node.name = T)
@@ -32,6 +34,8 @@
 #'
 #' plotTree(fspy, color.by = "pseudotime", cex.size = 1) +
 #'     scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#'
+#' }
 #'
 plotTree <- function(object,
                      cex.size = 1,
@@ -105,10 +109,14 @@ plotTree <- function(object,
 #' @import scatterpie
 #'
 #' @examples
+#'
+#' if (F) {
+#'
 #' # Runs only have two or more stages
 #' plotPieTree(fspy, cex.size = 1, size.by.cell.number = T) +
 #'    scale_fill_manual(values = c("#00599F","#FF3222","#009900",
 #'                                 "#FF9933","#FF99FF","#7A06A0"))
+#' }
 #'
 plotPieTree <- function(object,
                         cex.size = 2,

@@ -24,9 +24,13 @@ plotPieTree(object, cex.size = 2, size.by.cell.number = T,
 plot MST pie of FSPY
 }
 \examples{
+
+if (F) {
+
 # Runs only have two or more stages
 plotPieTree(fspy, cex.size = 1, size.by.cell.number = T) +
    scale_fill_manual(values = c("#00599F","#FF3222","#009900",
                                 "#FF9933","#FF99FF","#7A06A0"))
+}
 
 }

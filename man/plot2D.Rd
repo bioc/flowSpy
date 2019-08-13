@@ -38,6 +38,10 @@ Visualization of 2D data of FSPY
 }
 \examples{
 
+if (F) {
+
+data(FSPYdata)
+
 # Default plot
 plot2D(fspy)
 
@@ -101,5 +105,7 @@ plot2D(fspy, item.use = c("CD34", "CD90"), color.by = "CD43",
 
 # Pseudotime
 plot2D(fspy, item.use = c("pseudotime", "CD43"), color.by = "stage")
+
+}
 
 }

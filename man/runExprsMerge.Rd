@@ -51,13 +51,13 @@ Apply preprocessing on each FCS file including compensation
 }
 \examples{
 
-# See vignette tutorials for more information
-vignette(package = "flowSpy")
-vignette("Quick_start", package = "flowSpy")
-vignette("Base_workflow", package = "flowSpy")
-vignette("Time_course_workflow", package = "flowSpy")
 
 if (F) {
+  # See vignette tutorials for more information
+  vignette("Quick_start", package = "flowSpy")
+  vignette("Base_workflow", package = "flowSpy")
+  vignette("Time_course_workflow", package = "flowSpy")
+
   # Path to your FCS files
   fcs.path <- "flowSpy-dataset/FCS/usecase2/"
   fcs.files <- paste0(fcs.path, "D", c(0,2,4,6,8,10), "-sub.fcs")

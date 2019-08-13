@@ -12,6 +12,9 @@
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
+#'
 #' plotPseudotimeDensity(fspy)
 #'
 #' plotPseudotimeDensity(fspy, adjust = 1)
@@ -21,6 +24,7 @@
 #'   scale_color_manual(values = c("#00599F","#FF3222","#009900",
 #'                                 "#FF9933","#FF99FF","#7A06A0"))
 #'
+#' }
 #'
 plotPseudotimeDensity <- function(object, color.by = "stage",
                                   main = "Density of pseudotime",
@@ -28,6 +32,8 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
                                   plot.theme = theme_bw()) {
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   object <- updatePlotMeta(object, verbose = F)
+
+  pseudotime = Pseudotime = Signal = Marker = Stage = NULL
 
   # checking items
   if ( !all("pseudotime" %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] pseudotime is not in plot.meta of FSPY, please run Pseudotime first.")
@@ -75,6 +81,9 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
+#'
 #' plotPseudotimeTraj(fspy)
 #' plotPseudotimeTraj(fspy, print.curve = F)
 #' plotPseudotimeTraj(fspy, var.cols = T)
@@ -84,6 +93,8 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 #'
 #' plotPseudotimeTraj(fspy, markers = c("CD43", "CD34")) +
 #' scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#'
+#' }
 #'
 plotPseudotimeTraj <- function(object,
                                cutoff = -1,
@@ -173,8 +184,13 @@ plotPseudotimeTraj <- function(object,
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
+#'
 #' plotMarkerDensity(fspy)
 #' plotMarkerDensity(fspy, adjust = 1)
+#'
+#' }
 #'
 plotMarkerDensity <- function(object,
                               cutoff = -1,
@@ -198,6 +214,7 @@ plotMarkerDensity <- function(object,
   }
 
   plot.data <- NULL
+  Pseudotime = IsRoot = IsLeaf = Marker = Signal = Stage = TrajValue = LogTrajValue = NULL
   plot.meta <- fetchPlotMeta(object, verbose = F)
   for (i in 1:length(markers)) {
     sub <- data.frame(Pseudotime = plot.meta$pseudotime,

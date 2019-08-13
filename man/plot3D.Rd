@@ -6,7 +6,8 @@
 \usage{
 plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage",
   order.by = NULL, size = 1, angle = 60, scale.y = 0.8,
-  category = "categorical", main = "3D plot of FSPY", ...)
+  category = "categorical", main = "3D plot of FSPY",
+  color.theme = NULL, ...)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -27,6 +28,8 @@ of plot.meta, or it can be just "density" (the default value).}
 \item{category}{character. numeric or categorical}
 
 \item{main}{character. title of the plot}
+
+\item{color.theme}{vector. Color themes use in the plot.}
 
 \item{...}{options to pass on to the \code{\link[scatterplot3d]{scatterplot3d}} function.}
 }

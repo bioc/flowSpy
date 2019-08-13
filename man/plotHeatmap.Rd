@@ -29,8 +29,15 @@ the row direction or the column direction, or none. Corresponding values are
 Visualization heatmap of data of FSPY
 }
 \examples{
+
+if (F) {
+
 plotHeatmap(fspy)
 plotHeatmap(fspy, cluster_rows = T)
+plotHeatmap(fspy, cluster_rows = T, clustering_method = "ward.D")
 plotHeatmap(fspy, cluster_rows = T, cluster_cols = T)
+
+}
+
 
 }

@@ -27,6 +27,7 @@
 #' @examples
 #' # After building an FSPY object
 #' # Set random seed to make results reproducible
+#' data(FSPYdata)
 #' set.seed(1)
 #' fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
 #'
@@ -117,6 +118,9 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' @export
 #'
 #' @examples
+#'
+#' if (F) {
+#'
 #' # After running clustering
 #' set.seed(1)
 #' fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
@@ -130,6 +134,8 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'
 #' # Processing clusters without downsampling step
 #' fspy <- processingCluster(fspy, perplexity = 2, force.resample = FALSE)
+#'
+#' }
 #'
 processingCluster <- function(object, perplexity = 5, k = 5,
                               downsampling.size = 1, seed = 1,
@@ -165,6 +171,12 @@ processingCluster <- function(object, perplexity = 5, k = 5,
 
   object@cluster <- data.frame(pca.info$rotation, tsne.info$Y, dm.info@eigenvectors, umap.info$layout)
   rownames(object@cluster) <- rownames(object@tree.meta$cluster)
+
+  # identify branch
+  branch.id <- suppressMessages(Rphenograph(cluster.mat, k = ceiling(dim(cluster.mat)[1]**0.5)))
+  object@cluster$branch.id <- membership(branch.id[[2]])
+
+  object@meta.data$branch.id <- object@cluster$branch.id[match(object@meta.data$cluster.id,rownames(object@cluster))]
 
   if (force.resample) {
     # Initialization
@@ -354,7 +366,7 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 
   object@meta.data$clara.id <- object@meta.data$cluster.id  <- clara.info$clustering
 
-  if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans completed.")
+  if (verbose) message(Sys.time(), " [INFO] Calculating Clara completed.")
   return(object)
 }
 
@@ -549,7 +561,6 @@ runPhenograph <- function(object, knn = 30, scale = F, verbose = F, ...){
 #' modularity(Rphenograph_out[[2]])
 #' membership(Rphenograph_out[[2]])
 #' iris_unique$phenograph_cluster <- factor(membership(Rphenograph_out[[2]]))
-#' ggplot(iris_unique, aes(x=Sepal.Length, y=Sepal.Width, col=Species, shape=phenograph_cluster)) + geom_point(size = 3)+theme_bw()
 #'
 #' @importFrom igraph graph.data.frame cluster_louvain modularity membership
 #' @import ggplot2
@@ -577,12 +588,12 @@ Rphenograph <- function(data, k=30){
           "  -Input data of ", nrow(data)," rows and ", ncol(data), " columns","\n",
           "  -k is set to ", k)
 
-  cat("  Finding nearest neighbors...")
+  # cat("  Finding nearest neighbors...")
   t1 <- system.time(neighborMatrix <- find_neighbors(data, k=k+1)[,-1])
-  cat("DONE ~",t1[3],"s\n", " Compute jaccard coefficient between nearest-neighbor sets...")
+  # cat("DONE ~",t1[3],"s\n", " Compute jaccard coefficient between nearest-neighbor sets...")
   t2 <- system.time(links <- jaccard_coeff(neighborMatrix))
 
-  cat("DONE ~",t2[3],"s\n", " Build undirected graph from the weighted links...")
+  # cat("DONE ~",t2[3],"s\n", " Build undirected graph from the weighted links...")
   links <- links[links[,1]>0, ]
   relations <- as.data.frame(links)
   colnames(relations)<- c("from","to","weight")
@@ -592,13 +603,13 @@ Rphenograph <- function(data, k=30){
   #    cluster_walktrap, cluster_spinglass,
   #    cluster_leading_eigen, cluster_edge_betweenness,
   #    cluster_fast_greedy, cluster_label_prop
-  cat("DONE ~",t3[3],"s\n", " Run louvain clustering on the graph ...")
+  # cat("DONE ~",t3[3],"s\n", " Run louvain clustering on the graph ...")
   t4 <- system.time(community <- cluster_louvain(g))
   cat("DONE ~",t4[3],"s\n")
 
   message("Run Rphenograph DONE, totally takes ", sum(c(t1[3],t2[3],t3[3],t4[3])), "s.")
-  cat("  Return a community class\n  -Modularity value:", modularity(community),"\n")
-  cat("  -Number of clusters:", length(unique(membership(community))))
+  # cat("  Return a community class\n  -Modularity value:", modularity(community),"\n")
+  # cat("  -Number of clusters:", length(unique(membership(community))))
 
   return(list(g, community))
 }

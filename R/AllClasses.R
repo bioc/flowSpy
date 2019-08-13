@@ -133,6 +133,8 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' @return An FSPY object with raw.data and markers and meta.data
 #'
 #' @examples
+#'
+#' if (F) {
 #' ## See vignette tutorials
 #' vignette(package = "flowSpy")
 #' vignette("Quick_start", package = "flowSpy")
@@ -148,10 +150,11 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #'                    markers = markers,
 #'                    meta.data = test.meta.data,
 #'                    normalization.method = "log",
-#'                    verbose = T)
+#'                    verbose = TRUE)
 #'
 #' fspy
 #'
+#' }
 #'
 createFSPY <- function(raw.data, markers, meta.data,
                        batch = NULL, batch.correct = FALSE,
@@ -210,11 +213,12 @@ createFSPY <- function(raw.data, markers, meta.data,
   # normalization and Log-normalize the data
   if (normalization.method == "log") {
     if (verbose) message(paste0(Sys.time(), " [INFO] Determining normalization factors"))
-    cs <- apply(raw.data[, markers.idx], 2, sum)
+    log.data <- abs(raw.data[,markers.idx])
+    cs <- apply(log.data, 2, sum)
     norm_factors <- (10**ceiling(log10(median(cs))))/cs
     # Log-normalize the data
     if (verbose) message(paste0(Sys.time(), " [INFO] Normalization and log-transformation."))
-    object@log.data <- round(log10(sweep(abs(raw.data[,markers.idx]), 2, norm_factors, "*")+1), digits=3)
+    object@log.data <- round(log10(sweep(log.data, 2, norm_factors, "*")+1), digits=3)
   } else if (normalization.method == "none") {
     if (verbose) message(Sys.time(), " [INFO] No normalization and transformation ")
     object@log.data <- raw.data[, markers.idx]

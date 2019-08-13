@@ -39,6 +39,9 @@ Calculate Principal Components Analysis (PCA), t-Distributed
    Approximation and Projection (UMAP) of clusters calculated by runCluster.
 }
 \examples{
+
+if (F) {
+
 # After running clustering
 set.seed(1)
 fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
@@ -52,6 +55,8 @@ fspy <- processingCluster(fspy, perplexity = 2, downsampling.size = 0.5)
 
 # Processing clusters without downsampling step
 fspy <- processingCluster(fspy, perplexity = 2, force.resample = FALSE)
+
+}
 
 }
 \seealso{

@@ -22,7 +22,12 @@ plotMarkerDensity(object, cutoff = -1, markers = NULL, adjust = 0.5,
 plotMarkerDensity
 }
 \examples{
+
+if (F) {
+
 plotMarkerDensity(fspy)
 plotMarkerDensity(fspy, adjust = 1)
+
+}
 
 }

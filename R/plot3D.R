@@ -13,10 +13,11 @@
 #' @param scale.y numeric. scale of y axis related to x- and z axis
 #' @param category character. numeric or categorical
 #' @param main character. title of the plot
+#' @param color.theme vector. Color themes use in the plot.
 #' @param ... options to pass on to the \code{\link[scatterplot3d]{scatterplot3d}} function.
 #'
 #' @import scatterplot3d
-#' @importFrom grDevices rainbow
+#' @importFrom grDevices rainbow colorRampPalette
 #'
 #' @export
 #'
@@ -30,6 +31,7 @@ plot3D <- function(object,
                    scale.y = 0.8,
                    category = "categorical",
                    main = "3D plot of FSPY",
+                   color.theme = NULL,
                    ...) {
 
   # update and fetch plot meta information
@@ -78,10 +80,20 @@ plot3D <- function(object,
     } else {
       plot.data$color.by <- factor(as.character(plot.data$color.by), levels = order.by)
     }
-    plot.data$color.by.3d <- factor(plot.data$color.by, labels = rainbow(length(levels(plot.data$color.by))))
+    if (is.null(color.theme)) {
+      plot.data$color.by.3d <- factor(plot.data$color.by, labels = rainbow(length(levels(plot.data$color.by))))
+    } else {
+      plot.data$color.by.3d <- factor(plot.data$color.by, labels = colorRampPalette(color.theme)(length(levels(plot.data$color.by))) )
+    }
+
   } else if (category == "numeric") {
     if (!is.numeric(plot.data$color.by)) plot.data$color.by <- as.numeric(factor(plot.data$color.by))
-    color.lib <- rainbow(102)
+
+    if (is.null(color.theme)) {
+      color.lib <- rainbow(102)
+    } else {
+      color.lib <- colorRampPalette(color.theme)(102)
+    }
     plot.data$color.by.sd <- plot.data$color.by - min(plot.data$color.by)
     plot.data$color.by.3d <- color.lib[ ceiling( plot.data$color.by.sd/max(plot.data$color.by.sd) * 100 ) + 1 ]
   } else {

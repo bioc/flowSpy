@@ -29,6 +29,9 @@ plotPseudotimeTraj(object, cutoff = -1, markers = NULL, size = 0.5,
 plotPseudotimeTraj
 }
 \examples{
+
+if (F) {
+
 plotPseudotimeTraj(fspy)
 plotPseudotimeTraj(fspy, print.curve = F)
 plotPseudotimeTraj(fspy, var.cols = T)
@@ -38,5 +41,7 @@ plotPseudotimeTraj(fspy) +
 
 plotPseudotimeTraj(fspy, markers = c("CD43", "CD34")) +
 scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+}
 
 }
