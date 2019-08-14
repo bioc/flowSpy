@@ -138,6 +138,8 @@ plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "CD45RA",
 plotTree(fspy, color.by = "CD45RA", show.node.name = T, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
+plotTree(fspy, color.by = "cluster.id", show.node.name = T, cex.size = 1) 
+
 plotTree(fspy, color.by = "D0.percent", show.node.name = T, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 

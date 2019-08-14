@@ -194,6 +194,7 @@ plot2D <- function(object,
 #' @param plot.theme themes from \code{ggplot2}
 #'
 #' @import ggplot2
+#' @importFrom stats aggregate
 #'
 #' @export
 #'
@@ -246,9 +247,10 @@ plotViolin <- function(object,
   if (is.null(order.by)) {
     plot.data$color.by <- factor(plot.data$color.by)
   } else if (order.by == "pseudotime") {
-    cluster.meta <- fetchClustMeta(object, verbose = F)
-    order.by <- cluster.meta$cluster[order(cluster.meta$pseudotime)]
-    plot.data$color.by <- factor(as.character(plot.data$color.by), levels = order.by)
+    sub <- plot.meta[, c("pseudotime", color.by)]
+    colnames(sub) <- c("pseudotime", "color.by.tag")
+    sub <- aggregate(sub, list(color.by = sub$color.by.tag), mean)
+    plot.data$color.by <- factor(as.character(plot.data$color.by), levels = sub$color.by.tag[order(sub$pseudotime)])
   }
   else {
     plot.data$color.by <- factor(as.character(plot.data$color.by), levels = order.by)
@@ -517,6 +519,51 @@ plotClusterHeatmap <- function(object,
 
   mat <- plot.meta.data[, object@markers]
   rownames(mat) <- plot.meta.data$cluster
+  gg <- pheatmap(t(mat), color = color, scale = scale, border_color = NA, ...)
+
+  return(gg)
+
+}
+
+#'
+#' Visualization heatmap of branch data of FSPY
+#'
+#' @name plotBranchHeatmap
+#'
+#' @param object An FSPY object
+#' @param color vector. Colors used in heatmap.
+#' @param scale character. Whether the values should be centered and scaled in either
+#'    the row direction or the column direction, or none. Corresponding values are
+#'    "row", "column" and "none"
+#' @param ... options to pass on to the \code{\link[pheatmap]{pheatmap}} function.
+#'
+#' @import pheatmap
+#' @importFrom grDevices colorRampPalette
+#' @importFrom stats aggregate
+#'
+#' @export
+#'
+#' @examples
+#'
+#' if (F) {
+#'
+#' plotBranchHeatmap(fspy)
+#' plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
+#' plotBranchHeatmap(fspy, cluster_row = F)
+#' plotBranchHeatmap(fspy, cluster_row = F, cluster_col = F)
+#'
+#' }
+#'
+plotBranchHeatmap <- function(object,
+                              color = colorRampPalette(c("blue","white","red"))(100),
+                              scale = "row", ...) {
+
+  # update plot meta information
+  plot.meta.data <- fetchClustMeta(object, verbose = F)
+  branch = NULL
+  mat <- aggregate(plot.meta.data[, object@markers], list(branch = plot.meta.data[, "branch.id"]), mean)
+  rownames(mat) <- mat$branch
+  mat <- mat[, -1]
   gg <- pheatmap(t(mat), color = color, scale = scale, border_color = NA, ...)
 
   return(gg)

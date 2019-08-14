@@ -172,12 +172,6 @@ processingCluster <- function(object, perplexity = 5, k = 5,
   object@cluster <- data.frame(pca.info$rotation, tsne.info$Y, dm.info@eigenvectors, umap.info$layout)
   rownames(object@cluster) <- rownames(object@tree.meta$cluster)
 
-  # identify branch
-  branch.id <- suppressMessages(Rphenograph(cluster.mat, k = ceiling(dim(cluster.mat)[1]**0.5)))
-  object@cluster$branch.id <- membership(branch.id[[2]])
-
-  object@meta.data$branch.id <- object@cluster$branch.id[match(object@meta.data$cluster.id,rownames(object@cluster))]
-
   if (force.resample) {
     # Initialization
     object@network <- list()
@@ -189,6 +183,7 @@ processingCluster <- function(object, perplexity = 5, k = 5,
     object@meta.data$traj.value.log <- 0
     object@meta.data$is.root.cells <- 0
     object@meta.data$is.leaf.cells <- 0
+    object@meta.data$branch.id <- 0
     object@pca.sdev <- vector()
     object@umap.value <- object@tsne.value <- object@pca.scores <- object@pca.value <- matrix()
     object@dm <- new("DiffusionMap")
@@ -605,7 +600,7 @@ Rphenograph <- function(data, k=30){
   #    cluster_fast_greedy, cluster_label_prop
   # cat("DONE ~",t3[3],"s\n", " Run louvain clustering on the graph ...")
   t4 <- system.time(community <- cluster_louvain(g))
-  cat("DONE ~",t4[3],"s\n")
+  # cat("DONE ~",t4[3],"s\n")
 
   message("Run Rphenograph DONE, totally takes ", sum(c(t1[3],t2[3],t3[3],t4[3])), "s.")
   # cat("  Return a community class\n  -Modularity value:", modularity(community),"\n")

@@ -68,11 +68,11 @@ library(flowSpy)
 
 ## 4 Version History
 
-Aug 13, 2019
+Aug 14, 2019
   - Version 1.2.5
   - Changes:
     - Fixed some bugs
-    - Add branch analysis
+    - Add branch analysis and differentially expressed markers analysis
 
 Aug 08, 2019
   - Version 1.2.4

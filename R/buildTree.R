@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @importFrom stats aggregate
+#' @importFrom igraph cluster_louvain membership graph.adjacency minimum.spanning.tree
 #'
 #' @return An FSPY object
 #'
@@ -67,12 +68,17 @@ buildTree <- function(object, method = "euclidean",
   fullGraph <- simplify(fullGraph)
   tree.graph <- igraph::minimum.spanning.tree(fullGraph)
 
+
+  # identify branch
+  object@meta.data$branch.id <- membership(cluster_louvain(tree.graph))[match(object@meta.data$cluster.id,names(membership(cluster_louvain(tree.graph))))]
+
   # Storing network information
   object@network <- list(mst = tree.graph,
                          method = method,
                          dim.type = dim.type,
                          dim.use = dim.use,
-                         mst.mat = mst.mat)
+                         mst.mat = mst.mat,
+                         branch.id = membership(cluster_louvain(tree.graph)))
 
   # Initialization for root.cells and leaf cells
   if (verbose) message(Sys.time(), " [INFO] Initialization for root.cells and leaf cells")

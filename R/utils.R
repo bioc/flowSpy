@@ -78,10 +78,12 @@ updateClustMeta <- function(object, verbose = TRUE) {
   idx.redim <- match(c(object@markers, "pseudotime", "traj.value", "traj.value.log"), colnames(plot.data))
   idx.redim <- unique(idx.redim)
   tree.meta <- stats::aggregate(plot.data[, idx.redim], list(cluster = plot.data[, "cluster.id"]), mean)
-  tree.meta <- data.frame(tree.meta, cell.count,
+  tree.meta.1 <- data.frame(cell.count,
                           cell.number = cell.total.number,
                           cell.number.percent = cell.total.number.percent,
                           cell.percent)
+  tree.meta <- cbind(tree.meta, tree.meta.1)
+  tree.meta$branch.id <- plot.data$branch.id[match(tree.meta$cluster, plot.data$cluster.id)]
 
   object@tree.meta <- tree.meta
   if (verbose) message(Sys.time(), " [INFO] Columns can be used in plotTree: ", paste(colnames(tree.meta), collapse = " "))
