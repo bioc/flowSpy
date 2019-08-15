@@ -17,6 +17,7 @@
 #' @return An FSPY object with cluster.id in meta.data
 #'
 #' @import limma
+#' @importFrom stringr str_replace_all
 #'
 #' @export
 #'
@@ -44,7 +45,7 @@ runDiff <- function(object, branch.id = NULL, branch.id.2 = NULL, verbose = F) {
         pdata$contrast <- "go"
         pdata$contrast[which(pdata$branch.id == bid)] = "ga"
         design <- model.matrix(~ 0 + as.factor(contrast), data = pdata)
-        colnames(design) <- str_replace_all(colnames(design), fixed("as.factor(contrast)"), "")
+        colnames(design) <- stringr::str_replace_all(colnames(design), fixed("as.factor(contrast)"), "")
         fit <- lmFit(t(edata), design)
         contrast <- makeContrasts(ga_go = ga - go,
                                   levels = design)

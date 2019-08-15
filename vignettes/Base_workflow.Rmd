@@ -39,6 +39,7 @@ library(LSD)
 library(flowCore)
 library(flowViz)
 library(flowSpy)
+library(stringr)
 })
 
 #########################
@@ -91,7 +92,7 @@ fspy <- runCluster(fspy, cluster.method = "som", xdim = 10, ydim = 10, verbose =
 # computation load and improve computation time.
 # Downsampling by setting downsampleing.size 0.1
 set.seed(1)
-fspy <- processingCluster(fspy, downsampling.size = 0.1)
+fspy <- processingCluster(fspy, perplexity = 5,downsampling.size = 0.1)
 
 # Now only 23,664 cells are enrolled in the dimensionality reduction
 fspy
@@ -110,7 +111,9 @@ fspy <- runDiffusionMap(fspy, verbose = T)
 fspy <- runUMAP(fspy, verbose = T)
 
 # build minimum spanning tree based on tsne
-fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2, verbose = T)
+fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2, verbose = T)
+
+diff.info <- runDiff(fspy)
 
 ###########################################
 # This is visualization module
@@ -142,9 +145,34 @@ plot3D(fspy, item.use = c("UMAP_1", "UMAP_2", "UMAP_3"), color.by = "CD45RA",
 plotTree(fspy, color.by = "cell.number", show.node.name = T, cex.size = 1) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
+plotTree(fspy, color.by = "CD3", show.node.name = F, cex.size = 1) + 
+  scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+plotTree(fspy, color.by = "branch.id", show.node.name = T, cex.size = 1) + 
+  scale_colour_gradientn(colors = rainbow(12))
+
+
 plotTree(fspy, color.by = "CD3", show.node.name = T, cex.size = 1, 
          as.tree = T, root.id = 25) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
+
+
+############# rematch branch id
+fspy@meta.data$branch.id[fspy@meta.data$cluster.id %in% c(9,25,90,30)] = 12
+fspy@meta.data$branch.id[fspy@meta.data$cluster.id %in% c(5,62)] = 6
+fspy@meta.data$branch.id[fspy@meta.data$cluster.id %in% c(38,87)] = 3
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(12)] = "HSCs"
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(1,2)] = "CD8 T cells"
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(4,5)] = "CD4 T cells"
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(3,9,11)] = "Megakaryocytic"
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(6)] = "NK cells"
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(7)] = "B cells"
+fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(8,10)] = "Myeloid"
+
+plotTree(fspy, color.by = "branch.id", show.node.name = F, cex.size = 1) 
+
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "categorical",
+            size = 100, color.by = "branch.id", show.cluser.id = T) 
 
 # plot Clusters 
 plotCluster(fspy, item.use = c("PC_1", "PC_2"), category = "numeric",
@@ -159,8 +187,29 @@ plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
             size = 100, color.by = "CD3", show.cluser.id = T) + 
   scale_colour_gradientn(colors = c("#00599F", "#EEEEEE", "#FF3222"))
 
+plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "categorical",
+            size = 100, color.by = "branch.id", show.cluser.id = T)
+
+
+# Plot 2D tSNE. And cells are colored by branch id
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "branch.id", 
+       alpha = 1, main = "tSNE", category = "categorical", show.cluser.id = F)
+
+plot2D(fspy, item.use = c("PC_1", "PC_2"), color.by = "branch.id", 
+       alpha = 1, main = "tSNE", category = "categorical", show.cluser.id = F)
+
+plot2D(fspy, item.use = c("DC_1", "DC_2"), color.by = "branch.id", 
+       alpha = 1, main = "tSNE", category = "categorical", show.cluser.id = F)
+
+plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "branch.id", 
+       alpha = 1, main = "tSNE", category = "categorical", show.cluser.id = F)
+
+
 # plot heatmap of cluster
 plotClusterHeatmap(fspy)
+plotBranchHeatmap(fspy, clustering_method = "ward.D")
+
+
 
 
 ```
