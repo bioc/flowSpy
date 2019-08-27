@@ -32,7 +32,7 @@
 #'
 runWalk <- function(object, mode = "undirected",
                     max.run.forward = 20,
-                    backward.walk = TRUE, max.run.backward = 20,
+                    backward.walk = FALSE, max.run.backward = 20,
                     verbose = FALSE, ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing.")
@@ -50,7 +50,7 @@ runWalk <- function(object, mode = "undirected",
   pseudotime <- object@meta.data$pseudotime[which(object@meta.data$dowsample == 1)]
 
   # generating a adjacency matrix by nearest neighbors
-  if (verbose) message(Sys.time(), " [INFO] Generating a adjacency matrix.")
+  if (verbose) message(Sys.time(), " [INFO] Generating an adjacency matrix.")
   for(i in seq_len(nrow(knn.index))) {
     idx <- knn.index[i,][ pseudotime[knn.index[i,]] > pseudotime[i]  ]
     adj[i, rownames(knn.index)[idx]] <- 1
@@ -87,10 +87,10 @@ runWalk <- function(object, mode = "undirected",
   object@meta.data$traj.value <- 0
   object@meta.data$traj.value.log <- 0
 
-  cell.info <- object@meta.data$cell[unlist(c(walk.forward, walk.backward))]
-  cell.info <- as.data.frame(table(cell.info))
+  cell.info <- unlist(c(walk.forward, walk.backward))
+  cell.info <- as.data.frame(table(names(cell.info)))
 
-  object@meta.data$traj.value <- cell.info$Freq[match( object@meta.data$cell, cell.info$cell.info)] / (max.run.forward + max.run.backward)
+  object@meta.data$traj.value[match(cell.info$Var1, object@meta.data$cell)] <- cell.info$Freq / (max.run.forward + max.run.backward)
   object@meta.data$traj.value[object@root.cells] = 0
   object@meta.data$traj.value[object@leaf.cells] = 0
 

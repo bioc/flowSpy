@@ -118,9 +118,9 @@ plotPseudotimeTraj <- function(object,
     }
   }
   if (is.null(markers)) markers <- object@markers
-  if (length(markers) > 10) {
-    warning(Sys.time(), " [WARNING] only the first 10 markers will be plot")
-    markers <- markers[1:10]
+  if (length(markers) > 30) {
+    warning(Sys.time(), " [WARNING] only the first 30 markers will be plot")
+    markers <- markers[1:30]
   }
 
   plot.data <- NULL
@@ -208,9 +208,9 @@ plotMarkerDensity <- function(object,
     }
   }
   if (is.null(markers)) markers <- object@markers
-  if (length(markers) > 10) {
-    warning(Sys.time(), " [WARNING] only the first 10 markers will be plot")
-    markers <- markers[1:10]
+  if (length(markers) > 30) {
+    warning(Sys.time(), " [WARNING] only the first 30 markers will be plot")
+    markers <- markers[1:30]
   }
 
   plot.data <- NULL

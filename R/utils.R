@@ -187,15 +187,15 @@ fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
     for (i in 1:length(param.list)) {
       sub <- param.list[[i]]
       sub.name <- names(param.list)[i]
-      if (sub.name %in% c("cell", "stage", "is.root.cells", "is.leaf.cells")) {
+      if (sub.name %in% c("cell", "stage")) {
         cell.sub <- plot.meta[plot.meta[, sub.name] %in% sub, "cell"]
       } else if (grepl(".id$", sub.name)) {
         cell.sub <- plot.meta[plot.meta[, sub.name] %in% sub, "cell"]
       } else if (is.numeric(sub)) {
         if (length(sub) == 1) {
-          cell.sub <- plot.meta[which(plot.meta[, sub.name] > sub[1]), "cell"]
+          cell.sub <- plot.meta[which(plot.meta[, sub.name] >= sub[1]), "cell"]
         } else {
-          cell.sub <- plot.meta[which((plot.meta[, sub.name] > sub[1]) & (plot.meta[, sub.name] < sub[2])), "cell"]
+          cell.sub <- plot.meta[which((plot.meta[, sub.name] >= sub[1]) & (plot.meta[, sub.name] < sub[2])), "cell"]
         }
       } else {
         cell.sub <- NULL

@@ -237,7 +237,7 @@ plotPseudotimeTraj(fspy, cutoff = 0.01, var.cols = T) +
  scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
 
 plotHeatmap(fspy, downsize = 12000, cluster_rows = T,
-            olor = colorRampPalette(c("blue","blue", "white","red","red"))(100))
+            color = colorRampPalette(c("blue","blue", "white","red","red"))(100))
 
 # plot cluster
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "traj.value.log", 

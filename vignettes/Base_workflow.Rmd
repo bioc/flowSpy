@@ -111,7 +111,7 @@ fspy <- runDiffusionMap(fspy, verbose = T)
 fspy <- runUMAP(fspy, verbose = T)
 
 # build minimum spanning tree based on tsne
-fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2, verbose = T)
+fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2, verbose = T)
 
 diff.info <- runDiff(fspy)
 
@@ -171,6 +171,8 @@ fspy@meta.data$branch.id[fspy@meta.data$branch.id %in% c(8,10)] = "Myeloid"
 
 plotTree(fspy, color.by = "branch.id", show.node.name = F, cex.size = 1) 
 
+plotTree(fspy, color.by = "branch.id", show.node.name = T, cex.size = 1) 
+
 plotCluster(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "categorical",
             size = 100, color.by = "branch.id", show.cluser.id = T) 
 
@@ -209,6 +211,126 @@ plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), color.by = "branch.id",
 plotClusterHeatmap(fspy)
 plotBranchHeatmap(fspy, clustering_method = "ward.D")
 
+########################
+fspy@meta.data$stage <- fspy@meta.data$branch.id
+fspy <- defRootCells(fspy, root.cells = c(9,25,90,30), verbose = T)
+fspy <- runPseudotime(fspy, verbose = T, dim.type = "raw")
+
+###### CD8T
+fspy <- defLeafCells(fspy, leaf.cells = c(23,28,51), verbose = T)
+fspy <- runWalk(fspy, backward.walk = F, verbose = T)
+fspy@meta.data$traj.value.log.CD8T <- fspy@meta.data$traj.value.log
+
+###### CD4T
+fspy <- defLeafCells(fspy, leaf.cells = c(52,78,46), verbose = T)
+fspy <- runWalk(fspy, backward.walk = F, verbose = T)
+fspy@meta.data$traj.value.log.CD4T <- fspy@meta.data$traj.value.log
+
+###### NK
+fspy <- defLeafCells(fspy, leaf.cells = c(54,48), verbose = T)
+fspy <- runWalk(fspy, backward.walk = F, verbose = T)
+fspy@meta.data$traj.value.log.NK <- fspy@meta.data$traj.value.log
+
+###### B
+fspy <- defLeafCells(fspy, leaf.cells = c(11,89,94), verbose = T)
+fspy <- runWalk(fspy, backward.walk = F, verbose = T)
+fspy@meta.data$traj.value.log.B <- fspy@meta.data$traj.value.log
+
+###### Myle
+fspy <- defLeafCells(fspy, leaf.cells = c(49,93,42), verbose = T)
+fspy <- runWalk(fspy, backward.walk = F, verbose = T)
+fspy@meta.data$traj.value.log.MY <- fspy@meta.data$traj.value.log
+
+###### ME
+fspy <- defLeafCells(fspy, leaf.cells = c(14,31,100,63,98), verbose = T)
+fspy <- runWalk(fspy, backward.walk = F, verbose = T)
+fspy@meta.data$traj.value.log.ME <- fspy@meta.data$traj.value.log
+
+# Plot 2D tSNE. 
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), color.by = "branch.id", 
+       alpha = 1, main = "tSNE", show.cluser.id = F)
+
+plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
+            size = 1, color.by = "pseudotime") + 
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+# Tree plot
+plotTree(fspy, color.by = "pseudotime", cex.size = 1) + 
+ scale_colour_gradientn(colors = c("#F4D31D","#FF3222","#7A06A0"))
+
+plotTree(fspy, color.by = "traj.value.log", cex.size = 1) + 
+ scale_colour_gradientn(colors = c("#F4D31D","#FF3222","#7A06A0"))
+
+
+plotPseudotimeDensity(fspy, adjust = 2)
+
+plotPseudotimeTraj(fspy, var.cols = T) + 
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+plotPseudotimeTraj(fspy, cutoff = 0.2, var.cols = T) + 
+ scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+
+################### subset
+markers <- fspy@markers
+plot.meta <- fetchPlotMeta(fspy, markers = markers)
+plot.meta <- plot.meta[which((plot.meta$traj.value.log.CD8T > 0) | (plot.meta$is.root.cells == 1)), ]
+plot.meta <- plot.meta[order(plot.meta$pseudotime), ]
+
+p <- pheatmap(t(plot.meta[, markers]), scale  = "row",
+         cluster_rows = T, cluster_cols = F, cluster_method = "ward.D",
+         color = colorRampPalette(c("blue","blue","white","red","red"))(100),
+         fontsize_col = 0.01)
+ggsave("../../flowSpy-dataset/Fig/usecase1/heatmap.CD8T.pdf", p, width = 10, height = 5)
+
+plot.meta <- fetchPlotMeta(fspy, markers = markers)
+plot.meta <- plot.meta[which(plot.meta$traj.value.log.CD4T > 0), ]
+plot.meta <- plot.meta[order(plot.meta$pseudotime), ]
+
+p <- pheatmap(t(plot.meta[, markers]), scale  = "row",
+         cluster_rows = T, cluster_cols = F, cluster_method = "ward.D",
+         color = colorRampPalette(c("blue","blue","white","red","red"))(100),
+         fontsize_col = 0.01)
+ggsave("../../flowSpy-dataset/Fig/usecase1/heatmap.CD4T.pdf", p, width = 10, height = 5)
+
+plot.meta <- fetchPlotMeta(fspy, markers = markers)
+plot.meta <- plot.meta[which(plot.meta$traj.value.log.NK > 0), ]
+plot.meta <- plot.meta[order(plot.meta$pseudotime), ]
+
+p <- pheatmap(t(plot.meta[, markers]), scale  = "row",
+         cluster_rows = T, cluster_cols = F, cluster_method = "ward.D",
+         color = colorRampPalette(c("blue","blue","white","red","red"))(100),
+         fontsize_col = 0.01)
+ggsave("../../flowSpy-dataset/Fig/usecase1/heatmap.NK.pdf", p, width = 10, height = 5)
+
+plot.meta <- fetchPlotMeta(fspy, markers = markers)
+plot.meta <- plot.meta[which(plot.meta$traj.value.log.B > 0), ]
+plot.meta <- plot.meta[order(plot.meta$pseudotime), ]
+
+p <- pheatmap(t(plot.meta[, markers]), scale  = "row",
+         cluster_rows = T, cluster_cols = F, cluster_method = "ward.D",
+         color = colorRampPalette(c("blue","blue","white","red","red"))(100),
+         fontsize_col = 0.01)
+ggsave("../../flowSpy-dataset/Fig/usecase1/heatmap.B.pdf", p, width = 10, height = 5)
+
+plot.meta <- fetchPlotMeta(fspy, markers = markers)
+plot.meta <- plot.meta[which(plot.meta$traj.value.log.MY > 0), ]
+plot.meta <- plot.meta[order(plot.meta$pseudotime), ]
+
+p <- pheatmap(t(plot.meta[, markers]), scale  = "row",
+         cluster_rows = T, cluster_cols = F, cluster_method = "ward.D",
+         color = colorRampPalette(c("blue","blue","white","red","red"))(100),
+         fontsize_col = 0.01)
+ggsave("../../flowSpy-dataset/Fig/usecase1/heatmap.MY.pdf", p, width = 10, height = 5)
+
+plot.meta <- fetchPlotMeta(fspy, markers = markers)
+plot.meta <- plot.meta[which(plot.meta$traj.value.log.ME > 0), ]
+plot.meta <- plot.meta[order(plot.meta$pseudotime), ]
+
+p <- pheatmap(t(plot.meta[, markers]), scale  = "row",
+         cluster_rows = T, cluster_cols = F, cluster_method = "ward.D",
+         color = colorRampPalette(c("blue","blue","white","red","red"))(100),
+         fontsize_col = 0.01)
+ggsave("../../flowSpy-dataset/Fig/usecase1/heatmap.ME.pdf", p, width = 10, height = 5)
 
 
 
