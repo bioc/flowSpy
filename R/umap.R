@@ -22,8 +22,8 @@
 #'
 #' if (FALSE) {
 #'
-#' fspy <- runUMAP(fspy, verbose = T)
-#' fspy <- runUMAP(fspy, n_neighbors = 20, verbose = T)
+#' fspy <- runUMAP(fspy, verbose = TRUE)
+#' fspy <- runUMAP(fspy, n_neighbors = 20, verbose = TRUE)
 #'
 #' }
 #'

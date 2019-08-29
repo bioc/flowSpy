@@ -25,13 +25,13 @@
 #' @examples
 #'
 #' if (FALSE) {
-#' fspy <- runDiffusionMap(fspy, verbose = T)
+#' fspy <- runDiffusionMap(fspy, verbose = TRUE)
 #' }
 #'
 runDiffusionMap <- function(object, sigma.use = NULL,
                             distance = c("euclidean", "cosine", "rankcor"),
                             k = 30,
-                            density.norm = TRUE,  verbose = F,
+                            density.norm = TRUE,  verbose = FALSE,
                             ...) {
 
   if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")
@@ -41,14 +41,14 @@ runDiffusionMap <- function(object, sigma.use = NULL,
   # Figure out sigma
   # this function refered to URD calcDM function.
   if (is.null(sigma.use)) {
-    sigma.use <- find_sigmas(dm.data, verbose=F)@optimal_sigma
+    sigma.use <- find_sigmas(dm.data, verbose = FALSE)@optimal_sigma
     if (verbose) message(Sys.time(), " [INFO] Destiny determined an optimal global sigma: ", round(sigma.use, digits=3))
   } else if (is.numeric(sigma.use)) {
     if (verbose) message(Sys.time(), " [INFO] Using provided global sigma: ", round(sigma.use, digits=3))
   } else if (sigma.use == "local") {
     if (verbose) message(Sys.time(), " [INFO] Using local sigma ")
   } else {
-    sigma.use <- find_sigmas(dm.data, verbose=F)@optimal_sigma
+    sigma.use <- find_sigmas(dm.data, verbose = FALSE)@optimal_sigma
     warning(Sys.time(), " [WARNING] Invalid sigma value. Using an optimal global sigma instead.")
   }
   # Calculate the Diffusion Map

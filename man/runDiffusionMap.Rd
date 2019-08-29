@@ -5,7 +5,7 @@
 \title{Calculate diffusion map in FSPY}
 \usage{
 runDiffusionMap(object, sigma.use = NULL, distance = c("euclidean",
-  "cosine", "rankcor"), k = 30, density.norm = TRUE, verbose = F,
+  "cosine", "rankcor"), k = 30, density.norm = TRUE, verbose = FALSE,
   ...)
 }
 \arguments{
@@ -34,7 +34,7 @@ Calculate diffusion map in FSPY
 \examples{
 
 if (FALSE) {
-fspy <- runDiffusionMap(fspy, verbose = T)
+fspy <- runDiffusionMap(fspy, verbose = TRUE)
 }
 
 }

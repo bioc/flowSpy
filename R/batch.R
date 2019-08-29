@@ -10,7 +10,7 @@
 #' @param mean.only logical. FALSE If TRUE ComBat only corrects the mean of the batch
 #'    effect (no scale adjustment)
 #' @param verbose logical. Whether to show log information
-#' @param ... Parameters passing to \code{\link[ComBat]{sva}} function
+#' @param ... Parameters passing to \code{\link[sva]{ComBat}} function
 #'
 #' @seealso \code{\link[BiocNeighbors]{findKNN}}
 #'

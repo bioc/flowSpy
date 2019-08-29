@@ -24,11 +24,11 @@
 #' @examples
 #'
 #' if (FALSE) {
-#' fspy <- runFastPCA(fspy, verbose = T)
+#' fspy <- runFastPCA(fspy, verbose = TRUE)
 #' }
 #'
 runFastPCA <- function(object, center = FALSE, scale. = TRUE,
-                       verbose = F, ...) {
+                       verbose = FALSE, ...) {
   # PCA calculation
   if (verbose) message(Sys.time(), " [INFO] Calculating PCA.")
   if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampleing.size paramter. ")

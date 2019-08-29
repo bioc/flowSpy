@@ -35,7 +35,7 @@ plot3D <- function(object,
                    ...) {
 
   # update and fetch plot meta information
-  plot.meta <- fetchPlotMeta(object, verbose = F)
+  plot.meta <- fetchPlotMeta(object, verbose = FALSE)
   idx <- match(c(color.by, item.use), colnames(object@log.data))
   idx <- idx[which(!is.na(idx))]
   if (length(idx) > 0) {

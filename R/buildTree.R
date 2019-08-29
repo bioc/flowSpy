@@ -87,7 +87,7 @@ buildTree <- function(object, method = "euclidean",
   object@meta.data$is.leaf.cells <- 0
 
   # update tree meta information
-  object <- updateClustMeta(object, verbose = F)
+  object <- updateClustMeta(object, verbose = FALSE)
 
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree completed.")
   return(object)

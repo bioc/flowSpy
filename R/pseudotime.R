@@ -14,17 +14,20 @@
 #' @export
 #'
 #' @examples
+#'
+#' if (FALSE) {
 #' # Define root cells by cluster
-#' fspy <- defRootCells(fspy, root.cells = 6, verbose = T)
-#' fspy <- defRootCells(fspy, root.cells = c(6,8), verbose = T)
+#' fspy <- defRootCells(fspy, root.cells = 6, verbose = TRUE)
+#' fspy <- defRootCells(fspy, root.cells = c(6,8), verbose = TRUE)
 #'
 #' # Define root cells by cell names
 #' cells <- test.meta.data$cell[which(test.meta.data$stage == "D0")]
 #' cells <- as.character(cells)
-#' fspy <- defRootCells(fspy, root.cells = cells, verbose = T)
+#' fspy <- defRootCells(fspy, root.cells = cells, verbose = TRUE)
+#' }
 #'
 #'
-defRootCells <- function(object, root.cells = NULL, verbose = F) {
+defRootCells <- function(object, root.cells = NULL, verbose = FALSE) {
   if (length(object@root.cells) != 0) message(Sys.time(), " [INFO] root.cells in FSPY object exist, they will be replaced.")
 
   if (!is.vector(root.cells)) stop(Sys.time(), " [ERROR] root.cells must be a vector")
@@ -72,17 +75,19 @@ defRootCells <- function(object, root.cells = NULL, verbose = F) {
 #'
 #' @examples
 #'
+#' if (FALSE) {
 #' # Define leaf cells by cluster
-#' fspy <- defLeafCells(fspy, leaf.cells = 1, verbose = T)
-#' fspy <- defLeafCells(fspy, leaf.cells = c(1,3), verbose = T)
+#' fspy <- defLeafCells(fspy, leaf.cells = 1, verbose = TRUE)
+#' fspy <- defLeafCells(fspy, leaf.cells = c(1,3), verbose = TRUE)
 #'
 #' # Define root cells by cell names
 #' cells <- test.meta.data$cell[which(test.meta.data$stage == "D10")]
 #' cells <- as.character(cells)
-#' fspy <- defLeafCells(fspy, leaf.cells = cells, verbose = T)
+#' fspy <- defLeafCells(fspy, leaf.cells = cells, verbose = TRUE)
+#' }
 #'
 #'
-defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = F) {
+defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = FALSE) {
   if (length(object@leaf.cells) != 0) message(Sys.time(), " [INFO] leaf.cells in FSPY object exist, they will be replaced.")
 
   if (!is.vector(leaf.cells)) stop(Sys.time(), " [ERROR] leaf.cells must be a vector")
@@ -147,11 +152,11 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' @examples
 #'
 #' if (FALSE) {
-#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
-#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "tsne", dim.use = 1:2)
-#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:3)
-#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "pca", dim.use = 1:3)
-#' fspy <- runPseudotime(fspy, verbose = T, dim.type = "raw")
+#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "umap", dim.use = 1:2)
+#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "tsne", dim.use = 1:2)
+#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "dc", dim.use = 1:3)
+#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "pca", dim.use = 1:3)
+#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "raw")
 #'
 #'
 #' # tSNE plot colored by pseudotime

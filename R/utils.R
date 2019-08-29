@@ -59,7 +59,7 @@ updatePlotMeta <- function(object, verbose = TRUE) {
 updateClustMeta <- function(object, verbose = TRUE) {
 
   # Generating tree meta information
-  plot.data <- fetchPlotMeta(object, verbose = F)
+  plot.data <- fetchPlotMeta(object, verbose = FALSE)
   plot.data <- cbind(plot.data, object@log.data[which(object@meta.data$dowsample == 1), ])
 
   if (length(unique(plot.data$stage)) > 1) {
@@ -126,7 +126,7 @@ updateClustMeta <- function(object, verbose = TRUE) {
 fetchPlotMeta <- function(object, markers = NULL, verbose = FALSE) {
 
     # update and fetch plot meta information
-  object <- updatePlotMeta(object, verbose = F)
+  object <- updatePlotMeta(object, verbose = FALSE)
   plot.meta <- object@plot.meta
   idx <- match(markers, colnames(object@log.data))
   idx <- idx[which(!is.na(idx))]

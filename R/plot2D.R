@@ -106,7 +106,7 @@ plot2D <- function(object,
                    plot.theme = theme_bw()) {
 
   # update and fetch plot meta information
-  plot.meta <- fetchPlotMeta(object, verbose = F)
+  plot.meta <- fetchPlotMeta(object, verbose = FALSE)
   idx <- match(c(color.by, item.use), colnames(object@log.data))
   idx <- idx[which(!is.na(idx))]
   if (length(idx) > 0) {
@@ -215,7 +215,7 @@ plotViolin <- function(object,
                        plot.theme = theme_bw()) {
 
   # update plot meta information
-  plot.meta <- fetchPlotMeta(object, verbose = F)
+  plot.meta <- fetchPlotMeta(object, verbose = FALSE)
 
   if (missing(marker)) stop(Sys.time(), " [ERROR] marker is missing.")
   # check item.use parameter in plot.meta data.frame
@@ -317,7 +317,7 @@ plotPieCluster <- function(object,
   if (length(unique(object@meta.data$stage)) <= 1) stop(Sys.time(), " [ERROR] plotPieTree only fits elements in stage over 2!")
 
   # update plot meta information
-  plot.data <- fetchClustMeta(object, verbose = F)
+  plot.data <- fetchClustMeta(object, verbose = FALSE)
 
   # check item.use parameter in cluster data.frame
   if ( !all(item.use %in% colnames(object@cluster)) ) stop(Sys.time(), " [ERROR] item.use is not in plot.meta of FSPY, please run updatePlotMeta first.")
@@ -408,7 +408,7 @@ plotCluster <- function(object,
                         plot.theme = theme_bw()) {
 
   # update plot meta information
-  plot.meta.data <- fetchClustMeta(object, verbose = F)
+  plot.meta.data <- fetchClustMeta(object, verbose = FALSE)
   plot.meta.data <- data.frame(plot.meta.data, object@cluster)
 
   # check item.use parameter in plot.meta data.frame
@@ -515,7 +515,7 @@ plotClusterHeatmap <- function(object,
                                scale = "row", ...) {
 
   # update plot meta information
-  plot.meta.data <- fetchClustMeta(object, verbose = F)
+  plot.meta.data <- fetchClustMeta(object, verbose = FALSE)
 
   mat <- plot.meta.data[, object@markers]
   rownames(mat) <- plot.meta.data$cluster
@@ -549,8 +549,8 @@ plotClusterHeatmap <- function(object,
 #'
 #' plotBranchHeatmap(fspy)
 #' plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
-#' plotBranchHeatmap(fspy, cluster_row = F)
-#' plotBranchHeatmap(fspy, cluster_row = F, cluster_col = F)
+#' plotBranchHeatmap(fspy, cluster_row = FALSE)
+#' plotBranchHeatmap(fspy, cluster_row = FALSE, cluster_col = FALSE)
 #'
 #' }
 #'
@@ -561,7 +561,7 @@ plotBranchHeatmap <- function(object,
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
 
   # update plot meta information
-  plot.meta.data <- fetchClustMeta(object, verbose = F)
+  plot.meta.data <- fetchClustMeta(object, verbose = FALSE)
   branch = NULL
   mat <- aggregate(plot.meta.data[, object@markers], list(branch = plot.meta.data[, "branch.id"]), mean)
   rownames(mat) <- mat$branch
@@ -598,8 +598,8 @@ plotBranchHeatmap <- function(object,
 #'
 #' plotTrajHeatmap(fspy)
 #' plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
-#' plotBranchHeatmap(fspy, cluster_row = F)
-#' plotBranchHeatmap(fspy, cluster_row = F, cluster_col = F)
+#' plotBranchHeatmap(fspy, cluster_row = FALSE)
+#' plotBranchHeatmap(fspy, cluster_row = FALSE, cluster_col = FALSE)
 #'
 #' }
 #'
@@ -610,10 +610,10 @@ plotTrajHeatmap <- function(object,
                             scale = "row", ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
-  object <- updatePlotMeta(object, verbose = F)
+  object <- updatePlotMeta(object, verbose = FALSE)
 
   # update plot meta information
-  plot.meta.data <- fetchClustMeta(object, verbose = F)
+  plot.meta.data <- fetchClustMeta(object, verbose = FALSE)
   if (sum(plot.meta.data$traj.value.log) == 0) {
     stop(Sys.time(), " [ERROR] please run runWalk first")
   }
@@ -676,10 +676,10 @@ plotHeatmap <- function(object,
                         cluster_cols = FALSE,
                         ...) {
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
-  object <- updatePlotMeta(object, verbose = F)
+  object <- updatePlotMeta(object, verbose = FALSE)
 
   # update plot meta information
-  plot.meta.data <- fetchPlotMeta(object, verbose = F)
+  plot.meta.data <- fetchPlotMeta(object, verbose = FALSE)
 
   if (downsize > dim(plot.meta.data)[1]) {
     downsize = dim(plot.meta.data)[1]

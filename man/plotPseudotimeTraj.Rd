@@ -30,7 +30,7 @@ plotPseudotimeTraj
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotPseudotimeTraj(fspy)
 plotPseudotimeTraj(fspy, print.curve = F)

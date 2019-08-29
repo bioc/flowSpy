@@ -31,7 +31,7 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
                                   adjust = 0.5,
                                   plot.theme = theme_bw()) {
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
-  object <- updatePlotMeta(object, verbose = F)
+  object <- updatePlotMeta(object, verbose = FALSE)
 
   pseudotime = Pseudotime = Signal = Marker = Stage = NULL
 
@@ -82,7 +82,7 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotPseudotimeTraj(fspy)
 #' plotPseudotimeTraj(fspy, print.curve = F)
@@ -162,7 +162,7 @@ plotPseudotimeTraj <- function(object,
   }
 
   if (print.curve) {
-    gg <- gg + geom_smooth(color="black", method="loess", se = F)
+    gg <- gg + geom_smooth(color="black", method="loess", se = FALSE)
   }
 
   return(gg)
@@ -216,7 +216,7 @@ plotMarkerDensity <- function(object,
 
   plot.data <- NULL
   Pseudotime = IsRoot = IsLeaf = Marker = Signal = Stage = TrajValue = LogTrajValue = NULL
-  plot.meta <- fetchPlotMeta(object, verbose = F)
+  plot.meta <- fetchPlotMeta(object, verbose = FALSE)
   for (i in 1:length(markers)) {
     sub <- data.frame(Pseudotime = plot.meta$pseudotime,
                       IsRoot = plot.meta$is.root.cells,

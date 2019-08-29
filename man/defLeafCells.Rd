@@ -5,7 +5,7 @@
 \title{definition of leaf cells}
 \usage{
 defLeafCells(object, leaf.cells = NULL, pseudotime.cutoff = 0,
-  verbose = F)
+  verbose = FALSE)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -26,14 +26,16 @@ definition of root cells
 }
 \examples{
 
+if (FALSE) {
 # Define leaf cells by cluster
-fspy <- defLeafCells(fspy, leaf.cells = 1, verbose = T)
-fspy <- defLeafCells(fspy, leaf.cells = c(1,3), verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = 1, verbose = TRUE)
+fspy <- defLeafCells(fspy, leaf.cells = c(1,3), verbose = TRUE)
 
 # Define root cells by cell names
 cells <- test.meta.data$cell[which(test.meta.data$stage == "D10")]
 cells <- as.character(cells)
-fspy <- defLeafCells(fspy, leaf.cells = cells, verbose = T)
+fspy <- defLeafCells(fspy, leaf.cells = cells, verbose = TRUE)
+}
 
 
 }

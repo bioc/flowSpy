@@ -31,11 +31,11 @@ calculation of Pseudotime based on KNN
 \examples{
 
 if (FALSE) {
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "tsne", dim.use = 1:2)
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:3)
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "pca", dim.use = 1:3)
-fspy <- runPseudotime(fspy, verbose = T, dim.type = "raw")
+fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "umap", dim.use = 1:2)
+fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "tsne", dim.use = 1:2)
+fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "dc", dim.use = 1:3)
+fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "pca", dim.use = 1:3)
+fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "raw")
 
 
 # tSNE plot colored by pseudotime

@@ -32,8 +32,8 @@ if (FALSE) {
 
 plotTrajHeatmap(fspy)
 plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
-plotBranchHeatmap(fspy, cluster_row = F)
-plotBranchHeatmap(fspy, cluster_row = F, cluster_col = F)
+plotBranchHeatmap(fspy, cluster_row = FALSE)
+plotBranchHeatmap(fspy, cluster_row = FALSE, cluster_col = FALSE)
 
 }
 

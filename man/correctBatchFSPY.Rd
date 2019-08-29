@@ -20,7 +20,7 @@ effect (no scale adjustment)}
 
 \item{verbose}{logical. Whether to show log information}
 
-\item{...}{Parameters passing to \code{\link[ComBat]{sva}} function}
+\item{...}{Parameters passing to \code{\link[sva]{ComBat}} function}
 }
 \value{
 An FSPY object after removing batch effect

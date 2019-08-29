@@ -16,14 +16,14 @@ createFSPY(raw.data, markers, meta.data, batch = NULL,
 \item{meta.data}{data.frame. Raw metadata of each cell. Columns "cell" and "stage" are required.}
 
 \item{batch}{vector. Batch covariate (only one batch allowed). Method to correct batch effect
-function is refered to \code{\link[ComBat]{sva}}.}
+function is refered to \code{\link[sva]{ComBat}}.}
 
 \item{batch.correct}{logical. Whether to correct batch effect. If TRUE, batch must be provided.}
 
 \item{normalization.method}{character. Normalization and transformation method.
 Whether to normalize and log transformed of raw.data. In flowSpy workflow, it's better
-to perform transformation of FCS data using \code{runExprsExtract} or \code{runExprsMerge} or
-\code{\link[transformation]{flowCore}} before creating an FSPY object.
+to perform transformation of FCS data using \code{runExprsExtract} or \code{runExprsMerge}
+ before creating an FSPY object.
 \code{flowSpy} only provide log transforma method. If you need to using truncateTransform,
 scaleTransform, linearTransform, quadraticTransform and lnTransform, see \code{flowCore} for more
 information. And \code{runExprsExtract} in \code{flowSpy}, autoLgcl, cytofAsinh, logicle, arcsinh,
@@ -42,7 +42,7 @@ This function is about how to build an FSPY object. An FSPY object is the base
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 ## See vignette tutorials
 vignette(package = "flowSpy")
 vignette("Quick_start", package = "flowSpy")

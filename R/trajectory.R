@@ -24,8 +24,8 @@
 #' @examples
 #'
 #' if (FALSE) {
-#'   fspy <- runWalk(fspy, verbose = T)
-#'   fspy <- runWalk(fspy, backward.walk = FALSE, verbose = T)
+#'   fspy <- runWalk(fspy, verbose = TRUE)
+#'   fspy <- runWalk(fspy, backward.walk = FALSE, verbose = TRUE)
 #' }
 #'
 #'

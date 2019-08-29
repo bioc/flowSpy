@@ -6,7 +6,7 @@
 \usage{
 processingCluster(object, perplexity = 5, k = 5,
   downsampling.size = 1, seed = 1, force.resample = TRUE,
-  umap.config = umap.defaults, verbose = F, ...)
+  umap.config = umap.defaults, verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

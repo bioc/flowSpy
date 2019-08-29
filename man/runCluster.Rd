@@ -5,7 +5,7 @@
 \title{Specific Clustering Method Toolkits}
 \usage{
 runCluster(object, cluster.method = c("som", "kmeans", "clara",
-  "phenograph", "hclust", "mclust"), verbose = F, ...)
+  "phenograph", "hclust", "mclust"), verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -22,37 +22,40 @@ An FSPY object with cluster.id in meta.data
 }
 \description{
 Compute a specific clustering using the combined flow
-   cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
+   cytometry data. "som" \code{\link[FlowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
    "clara" \code{\link[cluster]{clara}}, "phenograph", "kmeans" \code{\link[stats]{kmeans}} are
    provided.
 }
 \examples{
+
+if (FALSE) {
 # After building an FSPY object
 # Set random seed to make results reproducible
 data(FSPYdata)
 set.seed(1)
-fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = TURE)
 
 # K-means clustering
-fspy <- runCluster(fspy, cluster.method = "kmeans", k = 9, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "kmeans", k = 9, verbose = TRUE)
 
 # Clara clustering
-fspy <- runCluster(fspy, cluster.method = "clara", k = 9, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "clara", k = 9, verbose = TRUE)
 
 # phenoGraph clustering
-fspy <- runCluster(fspy, cluster.method = "phenograph", verbose = T)
+fspy <- runCluster(fspy, cluster.method = "phenograph", verbose = TRUE)
 
 # hclust clustering
 # not recommended for large cell size
-fspy <- runCluster(fspy, cluster.method = "hclust", k = 9, verbose = T)
+fspy <- runCluster(fspy, cluster.method = "hclust", k = 9, verbose = TRUE)
 
 # mclust clustering
 # not recommended for large cell size
-fspy <- runCluster(fspy, cluster.method = "mclust", verbose = T)
+fspy <- runCluster(fspy, cluster.method = "mclust", verbose = TRUE)
+}
 
 }
 \seealso{
-\code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+\code{\link[FlowSOM]{SOM}}, \code{\link[stats]{hclust}},
    \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}.
    You can use \code{runSOM}, \code{runClara},
    \code{runPhenotype}, \code{runKmeans}, \code{runMclust} and

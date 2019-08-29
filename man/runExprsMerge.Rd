@@ -52,7 +52,7 @@ Apply preprocessing on each FCS file including compensation
 \examples{
 
 
-if (F) {
+if (FALSE) {
   # See vignette tutorials for more information
   vignette("Quick_start", package = "flowSpy")
   vignette("Base_workflow", package = "flowSpy")

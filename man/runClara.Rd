@@ -5,8 +5,8 @@
 \title{runClara}
 \usage{
 runClara(object, k = 25, metric = c("euclidean", "manhattan",
-  "jaccard"), stand = FALSE, samples = 5, scale = T, trace = 0,
-  verbose = F, ...)
+  "jaccard"), stand = FALSE, samples = 5, scale = TRUE, trace = 0,
+  verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object}

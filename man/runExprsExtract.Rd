@@ -60,13 +60,14 @@ Extract the FCS expresssion data with preprocessing of
    (customizable) and \code{arcsinh} (customizable).
 }
 \examples{
+
+if (FALSE) {
 # See vignette tutorials for more information
 vignette(package = "flowSpy")
 vignette("Quick_start", package = "flowSpy")
 vignette("Base_workflow", package = "flowSpy")
 vignette("Time_course_workflow", package = "flowSpy")
 
-if (F) {
   # Path to your FCS files
   fcs.path <- "flowSpy-dataset/FCS/usecase1/"
   fcs.file <- paste0(fcs.path, "FR-FCM-ZY9R-Bone_Marrow_cytof.fcs")

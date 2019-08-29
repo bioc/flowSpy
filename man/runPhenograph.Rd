@@ -4,7 +4,7 @@
 \alias{runPhenograph}
 \title{RphenoGraph clustering}
 \usage{
-runPhenograph(object, knn = 30, scale = F, verbose = F, ...)
+runPhenograph(object, knn = 30, scale = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object.}

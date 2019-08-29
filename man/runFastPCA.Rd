@@ -4,7 +4,8 @@
 \alias{runFastPCA}
 \title{Calculate principal components in FSPY}
 \usage{
-runFastPCA(object, center = FALSE, scale. = TRUE, verbose = F, ...)
+runFastPCA(object, center = FALSE, scale. = TRUE, verbose = FALSE,
+  ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -31,7 +32,7 @@ Calculate principal components in FSPY
 \examples{
 
 if (FALSE) {
-fspy <- runFastPCA(fspy, verbose = T)
+fspy <- runFastPCA(fspy, verbose = TRUE)
 }
 
 }

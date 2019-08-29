@@ -4,7 +4,7 @@
 #' @name runCluster
 #'
 #' @description Compute a specific clustering using the combined flow
-#'    cytometry data. "som" \code{\link[flowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
+#'    cytometry data. "som" \code{\link[FlowSOM]{SOM}}, "hclust" \code{\link[stats]{hclust}},
 #'    "clara" \code{\link[cluster]{clara}}, "phenograph", "kmeans" \code{\link[stats]{kmeans}} are
 #'    provided.
 #'
@@ -14,7 +14,7 @@
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the clustering functions.
 #'
-#' @seealso \code{\link[flowSOM]{SOM}}, \code{\link[stats]{hclust}},
+#' @seealso \code{\link[FlowSOM]{SOM}}, \code{\link[stats]{hclust}},
 #'    \code{\link[cluster]{clara}}, \code{\link[stats]{kmeans}}.
 #'    You can use \code{runSOM}, \code{runClara},
 #'    \code{runPhenotype}, \code{runKmeans}, \code{runMclust} and
@@ -25,31 +25,34 @@
 #' @export
 #'
 #' @examples
+#'
+#' if (FALSE) {
 #' # After building an FSPY object
 #' # Set random seed to make results reproducible
 #' data(FSPYdata)
 #' set.seed(1)
-#' fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = T)
+#' fspy <- runCluster(fspy, cluster.method = "som", xdim = 3, ydim = 3, verbose = TURE)
 #'
 #' # K-means clustering
-#' fspy <- runCluster(fspy, cluster.method = "kmeans", k = 9, verbose = T)
+#' fspy <- runCluster(fspy, cluster.method = "kmeans", k = 9, verbose = TRUE)
 #'
 #' # Clara clustering
-#' fspy <- runCluster(fspy, cluster.method = "clara", k = 9, verbose = T)
+#' fspy <- runCluster(fspy, cluster.method = "clara", k = 9, verbose = TRUE)
 #'
 #' # phenoGraph clustering
-#' fspy <- runCluster(fspy, cluster.method = "phenograph", verbose = T)
+#' fspy <- runCluster(fspy, cluster.method = "phenograph", verbose = TRUE)
 #'
 #' # hclust clustering
 #' # not recommended for large cell size
-#' fspy <- runCluster(fspy, cluster.method = "hclust", k = 9, verbose = T)
+#' fspy <- runCluster(fspy, cluster.method = "hclust", k = 9, verbose = TRUE)
 #'
 #' # mclust clustering
 #' # not recommended for large cell size
-#' fspy <- runCluster(fspy, cluster.method = "mclust", verbose = T)
+#' fspy <- runCluster(fspy, cluster.method = "mclust", verbose = TRUE)
+#' }
 #'
 runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phenograph", "hclust", "mclust"),
-                       verbose = F, ...) {
+                       verbose = FALSE, ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
@@ -140,7 +143,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 processingCluster <- function(object, perplexity = 5, k = 5,
                               downsampling.size = 1, seed = 1,
                               force.resample = TRUE,
-                              umap.config = umap.defaults, verbose = F, ...) {
+                              umap.config = umap.defaults, verbose = FALSE, ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
@@ -151,7 +154,7 @@ processingCluster <- function(object, perplexity = 5, k = 5,
   }
 
   # checking index of markers in cluster
-  cluster.meta <- fetchClustMeta(object, verbose = F)
+  cluster.meta <- fetchClustMeta(object, verbose = FALSE)
   cluster.mat <- cluster.meta[, match(object@markers, colnames(cluster.meta))]
 
   # run PCA
@@ -240,7 +243,7 @@ processingCluster <- function(object, perplexity = 5, k = 5,
 #'
 runHclust <- function(object, k = 25,
                       hclust.method = "complete", dist.method = "euclidean",
-                      verbose = F) {
+                      verbose = FALSE) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Hclust.")
 
@@ -302,14 +305,14 @@ runHclust <- function(object, k = 25,
 #'
 runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
                       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-                      trace=FALSE, scale = F, verbose = F, ...) {
+                      trace=FALSE, scale = FALSE, verbose = FALSE, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans.")
 
   if (scale) kmeans.data <- scale(object@log.data) else kmeans.data = object@log.data
 
   kmeans.info <- kmeans(kmeans.data, centers = k, iter.max = iter.max, nstart = nstart,
-                        algorithm = algorithm, trace=FALSE)
+                        algorithm = algorithm, trace = FALSE)
 
   object@meta.data$kmeans.id <- object@meta.data$cluster.id  <- kmeans.info$cluster
 
@@ -348,8 +351,8 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 #'
 runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jaccard"),
-                     stand = FALSE, samples = 5, scale = T,
-                     trace = 0, verbose = F, ...) {
+                     stand = FALSE, samples = 5, scale = TRUE,
+                     trace = 0, verbose = FALSE, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Clara")
 
@@ -387,8 +390,8 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 #' @importFrom mclust Mclust mclustBIC
 #'
 #'
-runMclust <- function(object, scale = F,
-                      verbose = F, ...) {
+runMclust <- function(object, scale = FALSE,
+                      verbose = FALSE, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating Mclust.")
 
@@ -446,10 +449,10 @@ runMclust <- function(object, scale = F,
 runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
                    alpha = c(0.05,  0.01), radius = 1, init = FALSE,
                    distf = 2, codes = NULL, importance = NULL,
-                   method = "euclidean", verbose= F, ...) {
+                   method = "euclidean", verbose= FALSE, ...) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating FlowSOM.")
-  # flowSOM
+  # FlowSOM
   flowset <- as.matrix(object@log.data)
   flowsom <- FlowSOM::SOM(flowset,
                           xdim = xdim, ydim = ydim, rlen = rlen, mst = mst,
@@ -494,7 +497,7 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #'
 #' @export
 #'
-runPhenograph <- function(object, knn = 30, scale = F, verbose = F, ...){
+runPhenograph <- function(object, knn = 30, scale = FALSE, verbose = FALSE, ...){
 
 
   if (verbose) message(Sys.time(), " [INFO] Calculating phenoGraph")
@@ -592,7 +595,7 @@ Rphenograph <- function(data, k=30){
   links <- links[links[,1]>0, ]
   relations <- as.data.frame(links)
   colnames(relations)<- c("from","to","weight")
-  t3 <- system.time(g <- graph.data.frame(relations, directed=FALSE))
+  t3 <- system.time(g <- graph.data.frame(relations, directed = FALSE))
 
   # Other community detection algorithms:
   #    cluster_walktrap, cluster_spinglass,

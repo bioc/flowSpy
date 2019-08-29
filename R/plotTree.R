@@ -51,7 +51,7 @@ plotTree <- function(object,
   mst <- object@network$mst
 
   # update plot meta information
-  node.attr <- fetchClustMeta(object, verbose = F)
+  node.attr <- fetchClustMeta(object, verbose = FALSE)
 
   edge.attr <- igraph::as_data_frame(mst)
 
@@ -132,7 +132,7 @@ plotPieTree <- function(object,
   mst <- object@network$mst
 
   # update plot meta information
-  node.attr <- fetchClustMeta(object, verbose = F)
+  node.attr <- fetchClustMeta(object, verbose = FALSE)
 
   edge.attr <- igraph::as_data_frame(mst)
   pos.x <- pos.y <- cluster <- cell.number.percent <- NULL
