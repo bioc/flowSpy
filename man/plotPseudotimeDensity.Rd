@@ -24,7 +24,7 @@ plot Pseudotime density of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotPseudotimeDensity(fspy)
 

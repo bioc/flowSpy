@@ -22,9 +22,12 @@ a vector containing cell names
 Fetching cellls of FSPY
 }
 \examples{
+
+if (FALSE) {
 cell.fetch <- fetchCell(fspy, traj.value.log = 0.01)
 cell.fetch <- fetchCell(fspy, stage = c("D0", "D10"))
 cell.fetch <- fetchCell(fspy, stage = c("D0", "D10"), traj.value.log = 0.01,
                         logical.connect = "or")
+}
 
 }

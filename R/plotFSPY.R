@@ -13,7 +13,7 @@
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotPseudotimeDensity(fspy)
 #'
@@ -101,12 +101,12 @@ plotPseudotimeTraj <- function(object,
                                markers = NULL,
                                size = 0.5,
                                alpha = 0.6,
-                               print.curve = T,
-                               var.cols = F,
+                               print.curve = TRUE,
+                               var.cols = FALSE,
                                plot.theme = theme_bw()) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
-  object <- updatePlotMeta(object, verbose = F)
+  object <- updatePlotMeta(object, verbose = FALSE)
 
   # checking items
   if ( !all("pseudotime" %in% colnames(object@plot.meta)) ) stop(Sys.time(), " [ERROR] pseudotime is not in plot.meta of FSPY, please run Pseudotime first.")
@@ -125,6 +125,7 @@ plotPseudotimeTraj <- function(object,
 
   plot.data <- NULL
   plot.meta <- object@plot.meta
+  Pseudotime <- Signal <- Marker <- Stage <- NULL
   for (i in 1:length(markers)) {
     sub <- data.frame(Pseudotime = plot.meta$pseudotime,
                       IsRoot = plot.meta$is.root.cells,
@@ -185,7 +186,7 @@ plotPseudotimeTraj <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotMarkerDensity(fspy)
 #' plotMarkerDensity(fspy, adjust = 1)
@@ -199,7 +200,7 @@ plotMarkerDensity <- function(object,
                               plot.theme = theme_bw()) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
-  object <- updatePlotMeta(object, verbose = F)
+  object <- updatePlotMeta(object, verbose = FALSE)
 
   # checking items
   if (cutoff > 0) {

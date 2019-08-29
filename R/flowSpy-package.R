@@ -26,7 +26,7 @@
 #' @keywords package
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #' ## examples go here
 #' ## See vignette tutorials
 #' vignette(package = "flowSpy")

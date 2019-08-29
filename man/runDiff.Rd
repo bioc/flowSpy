@@ -4,7 +4,8 @@
 \alias{runDiff}
 \title{Calculate differential expression markers}
 \usage{
-runDiff(object, branch.id = NULL, branch.id.2 = NULL, verbose = F)
+runDiff(object, branch.id = NULL, branch.id.2 = NULL,
+  verbose = FALSE)
 }
 \arguments{
 \item{object}{an FSPY object}

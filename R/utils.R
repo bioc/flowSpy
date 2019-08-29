@@ -9,7 +9,10 @@
 #' @export
 #'
 #' @examples
+#'
+#' if (FALSE) {
 #' fspy <- updatePlotMeta(fspy)
+#' }
 #'
 #'
 updatePlotMeta <- function(object, verbose = TRUE) {
@@ -48,7 +51,10 @@ updatePlotMeta <- function(object, verbose = TRUE) {
 #' @importFrom stats aggregate
 #'
 #' @examples
+#'
+#' if (FALSE) {
 #' fspy <- updateClustMeta(fspy)
+#' }
 #'
 updateClustMeta <- function(object, verbose = TRUE) {
 
@@ -107,15 +113,17 @@ updateClustMeta <- function(object, verbose = TRUE) {
 #'
 #' @examples
 #'
+#' if (FALSE) {
 #' plot.data <- fetchPlotMeta(fspy)
 #' head(plot.data)
 #'
 #' plot.data <- fetchPlotMeta(fspy, markers = c("CD43", "CD34"))
 #' head(plot.data)
+#' }
 #'
 #'
 #'
-fetchPlotMeta <- function(object, markers = NULL, verbose = F) {
+fetchPlotMeta <- function(object, markers = NULL, verbose = FALSE) {
 
     # update and fetch plot meta information
   object <- updatePlotMeta(object, verbose = F)
@@ -141,11 +149,13 @@ fetchPlotMeta <- function(object, markers = NULL, verbose = F) {
 #'
 #' @examples
 #'
+#' if (FALSE) {
 #' clust.data <- fetchClustMeta(fspy)
 #' head(clust.data)
+#' }
 #'
 #'
-fetchClustMeta <- function(object, verbose = F) {
+fetchClustMeta <- function(object, verbose = FALSE) {
 
   object <- updateClustMeta(object, verbose = verbose)
 
@@ -168,10 +178,13 @@ fetchClustMeta <- function(object, verbose = F) {
 #' @export
 #'
 #' @examples
+#'
+#' if (FALSE) {
 #' cell.fetch <- fetchCell(fspy, traj.value.log = 0.01)
 #' cell.fetch <- fetchCell(fspy, stage = c("D0", "D10"))
 #' cell.fetch <- fetchCell(fspy, stage = c("D0", "D10"), traj.value.log = 0.01,
 #'                         logical.connect = "or")
+#' }
 #'
 fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 
@@ -234,6 +247,7 @@ fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 #' @export
 #'
 #' @examples
+#'
 #' mat <- matrix(runif(10000), nrow = 1000, ncol = 10)
 #' colnames(mat) <- LETTERS[1:10]
 #' dim(mat)

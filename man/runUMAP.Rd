@@ -5,7 +5,7 @@
 \title{Calculating UMAP}
 \usage{
 runUMAP(object, umap.config = umap.defaults, n_neighbors = 30,
-  dims = 2, verbose = F, ...)
+  dims = 2, verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -25,7 +25,7 @@ Calculate Uniform Manifold Approximation and Projection in FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 fspy <- runUMAP(fspy, verbose = T)
 fspy <- runUMAP(fspy, n_neighbors = 20, verbose = T)

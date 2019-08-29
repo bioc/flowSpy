@@ -4,7 +4,7 @@
 \alias{fetchClustMeta}
 \title{Fetching clusters' metadata of FSPY}
 \usage{
-fetchClustMeta(object, verbose = F)
+fetchClustMeta(object, verbose = FALSE)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -19,8 +19,10 @@ Fetching clusters' metadata of FSPY
 }
 \examples{
 
+if (FALSE) {
 clust.data <- fetchClustMeta(fspy)
 head(clust.data)
+}
 
 
 }

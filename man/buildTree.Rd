@@ -26,6 +26,7 @@ buildTree
 }
 \examples{
 
+if (FALSE) {
 # build minimum spanning tree (MST) based on tsne
 fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2)
 
@@ -37,6 +38,6 @@ fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2)
 
 # Using Diffusion Maps
 fspy <- buildTree(fspy, dim.type = "dc", dim.use = 1:3)
-
+}
 
 }

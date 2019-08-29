@@ -21,7 +21,7 @@
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' cells <- test.meta.data$cell[which(test.meta.data$stage == "D0")]
 #' sub.fspy <- subsetFSPY(fspy, cells = cells)

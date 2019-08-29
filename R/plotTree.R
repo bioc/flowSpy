@@ -17,7 +17,7 @@
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotTree(fspy)
 #'
@@ -41,9 +41,9 @@ plotTree <- function(object,
                      cex.size = 1,
                      color.by = "cell.number",
                      size.by = "cell.number",
-                     as.tree = F,
+                     as.tree = FALSE,
                      root.id = NULL,
-                     show.node.name = F) {
+                     show.node.name = FALSE) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")
@@ -110,7 +110,7 @@ plotTree <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' # Runs only have two or more stages
 #' plotPieTree(fspy, cex.size = 1, size.by.cell.number = T) +
@@ -120,10 +120,10 @@ plotTree <- function(object,
 #'
 plotPieTree <- function(object,
                         cex.size = 2,
-                        size.by.cell.number = T,
-                        as.tree = F,
+                        size.by.cell.number = TRUE,
+                        as.tree = FALSE,
                         root.id = NULL,
-                        show.node.name = F) {
+                        show.node.name = FALSE) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")
@@ -135,7 +135,7 @@ plotPieTree <- function(object,
   node.attr <- fetchClustMeta(object, verbose = F)
 
   edge.attr <- igraph::as_data_frame(mst)
-
+  pos.x <- pos.y <- cluster <- cell.number.percent <- NULL
   ##### layout
   if (as.tree) {
     if (is.null(root.id)) {

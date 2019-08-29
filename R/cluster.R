@@ -119,7 +119,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' # After running clustering
 #' set.seed(1)

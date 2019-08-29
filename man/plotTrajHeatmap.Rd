@@ -28,7 +28,7 @@ Visualization heatmap of intermediate cells of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotTrajHeatmap(fspy)
 plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))

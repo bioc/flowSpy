@@ -25,9 +25,9 @@ correctBatchFSPY <- function(object, batch = NULL, par.prior = TRUE,
   log.data <- object@log.data
 
   # correct batch effect using ComBat
-  log.data.combat <- ComBat(dat = t(log.data), batch = batch,
-                            par.prior = par.prior,
-                            mean.only = mean.only, ...)
+  log.data.combat <- sva::ComBat(dat = t(log.data), batch = batch,
+                                 par.prior = par.prior,
+                                 mean.only = mean.only, ...)
 
   object@log.data <- t(log.data.combat)
   return(object)

@@ -23,7 +23,7 @@
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' data(FSPYdata)
 #'
@@ -100,7 +100,7 @@ plot2D <- function(object,
                    size = 1,
                    alpha = 1,
                    category = "categorical",
-                   show.cluser.id = F,
+                   show.cluser.id = FALSE,
                    show.cluser.id.size = 4,
                    main = "2D plot of FSPY",
                    plot.theme = theme_bw()) {
@@ -200,7 +200,7 @@ plot2D <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #' plotViolin(fspy, marker = "CD34")
 #' plotViolin(fspy, marker = "CD34", order.by = "pseudotime")
 #' }
@@ -288,7 +288,7 @@ plotViolin <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #' # Runs only have more than two stages
 #' plotPieCluster(fspy, cex.size = 0.5)
 #'
@@ -308,7 +308,7 @@ plotViolin <- function(object,
 plotPieCluster <- function(object,
                            item.use = c("PC_1", "PC_2"),
                            cex.size = 1,
-                           size.by.cell.number = T,
+                           size.by.cell.number = TRUE,
                            main = "2D pie plot of FSPY",
                            plot.theme = theme_bw()) {
 
@@ -377,7 +377,7 @@ plotPieCluster <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #' plotCluster(fspy)
 #'
 #' plotCluster(fspy, item.use = c("PC_1", "PC_2"))
@@ -402,7 +402,7 @@ plotCluster <- function(object,
                         size = 1,
                         alpha = 1,
                         category = "categorical",
-                        show.cluser.id = F,
+                        show.cluser.id = FALSE,
                         show.cluser.id.size = 4,
                         main = "2D plot of cluster in FSPY",
                         plot.theme = theme_bw()) {
@@ -501,7 +501,7 @@ plotCluster <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotClusterHeatmap(fspy)
 #' plotClusterHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
@@ -545,7 +545,7 @@ plotClusterHeatmap <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotBranchHeatmap(fspy)
 #' plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
@@ -594,7 +594,7 @@ plotBranchHeatmap <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotTrajHeatmap(fspy)
 #' plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
@@ -657,7 +657,7 @@ plotTrajHeatmap <- function(object,
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' plotHeatmap(fspy)
 #' plotHeatmap(fspy, cluster_rows = T)
@@ -672,8 +672,8 @@ plotHeatmap <- function(object,
                         color = colorRampPalette(c("blue","white","red"))(100),
                         scale = "row",
                         downsize = 1000,
-                        cluster_rows = F,
-                        cluster_cols = F,
+                        cluster_rows = FALSE,
+                        cluster_cols = FALSE,
                         ...) {
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   object <- updatePlotMeta(object, verbose = F)

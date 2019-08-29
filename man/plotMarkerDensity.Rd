@@ -23,7 +23,7 @@ plotMarkerDensity
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotMarkerDensity(fspy)
 plotMarkerDensity(fspy, adjust = 1)

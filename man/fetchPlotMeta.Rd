@@ -4,7 +4,7 @@
 \alias{fetchPlotMeta}
 \title{Fetching plot metadata of FSPY}
 \usage{
-fetchPlotMeta(object, markers = NULL, verbose = F)
+fetchPlotMeta(object, markers = NULL, verbose = FALSE)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -21,11 +21,13 @@ Fetching plot metadata of FSPY
 }
 \examples{
 
+if (FALSE) {
 plot.data <- fetchPlotMeta(fspy)
 head(plot.data)
 
 plot.data <- fetchPlotMeta(fspy, markers = c("CD43", "CD34"))
 head(plot.data)
+}
 
 
 

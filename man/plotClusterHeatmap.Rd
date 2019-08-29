@@ -23,7 +23,7 @@ Visualization heatmap of cluster data of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotClusterHeatmap(fspy)
 plotClusterHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))

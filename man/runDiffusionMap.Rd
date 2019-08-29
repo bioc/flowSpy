@@ -32,7 +32,10 @@ For the allowed values, see \code{\link[destiny]{find_knn}}}
 Calculate diffusion map in FSPY
 }
 \examples{
+
+if (FALSE) {
 fspy <- runDiffusionMap(fspy, verbose = T)
+}
 
 }
 \seealso{

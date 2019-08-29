@@ -18,7 +18,8 @@ Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
         flowUtils, Biobase, Matrix, flowCore, sva,
         matrixStats, methods, mclust, prettydoc, 
         RANN(>= 2.5), Rcpp (>= 0.12.0), BiocNeighbors,
-        cluster, pheatmap, scatterpie, umap, scatterplot3d
+        cluster, pheatmap, scatterpie, umap, scatterplot3d,
+        limma, stringr
 Suggests: BiocGenerics, knitr, RColorBrewer,
         rmarkdown, testthat, BiocStyle
 biocViews: Clustering, GeneExpression, flowCytometry,

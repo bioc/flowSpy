@@ -23,7 +23,7 @@ Visualization heatmap of branch data of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotBranchHeatmap(fspy)
 plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))

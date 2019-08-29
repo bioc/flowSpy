@@ -17,14 +17,15 @@
 #' @return An FSPY object with cluster.id in meta.data
 #'
 #' @import limma
-#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_replace_all fixed
+#' @importFrom stats model.matrix
 #'
 #' @export
 #'
 #'
 #'
 #'
-runDiff <- function(object, branch.id = NULL, branch.id.2 = NULL, verbose = F) {
+runDiff <- function(object, branch.id = NULL, branch.id.2 = NULL, verbose = FALSE) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating differentially expressed markers.")
   if (missing(object)) stop(Sys.time(), " [ERROR] FSPY object is missing.")
@@ -34,6 +35,7 @@ runDiff <- function(object, branch.id = NULL, branch.id.2 = NULL, verbose = F) {
 
   total.deg.list <- NULL
   branch.contrast <- NULL
+  ga <- go <- NULL
   if (length(all.branch.ids) == 1) {
     stop(Sys.time(), " [ERROR] There is only one branch in the tree.")
   } else {

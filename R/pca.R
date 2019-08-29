@@ -23,7 +23,7 @@
 #' @export
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #' fspy <- runFastPCA(fspy, verbose = T)
 #' }
 #'

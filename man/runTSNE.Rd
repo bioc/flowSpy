@@ -38,7 +38,7 @@ Calculate t-Distributed Stochastic Neighbor Embedding in FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 fspy <- runTSNE(fspy, dims = 2, verbose = T)
 fspy <- runTSNE(fspy, dims = 2, perplexity = 20, verbose = T)

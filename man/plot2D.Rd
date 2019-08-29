@@ -6,7 +6,7 @@
 \usage{
 plot2D(object, item.use = c("PC_1", "PC_2"), color.by = "stage",
   order.by = NULL, size = 1, alpha = 1, category = "categorical",
-  show.cluser.id = F, show.cluser.id.size = 4,
+  show.cluser.id = FALSE, show.cluser.id.size = 4,
   main = "2D plot of FSPY", plot.theme = theme_bw())
 }
 \arguments{
@@ -38,7 +38,7 @@ Visualization of 2D data of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 data(FSPYdata)
 

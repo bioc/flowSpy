@@ -31,7 +31,7 @@ Visualization violin plot of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 plotViolin(fspy, marker = "CD34")
 plotViolin(fspy, marker = "CD34", order.by = "pseudotime")
 }

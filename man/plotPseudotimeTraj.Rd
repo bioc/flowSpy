@@ -5,7 +5,7 @@
 \title{plotPseudotimeTraj}
 \usage{
 plotPseudotimeTraj(object, cutoff = -1, markers = NULL, size = 0.5,
-  alpha = 0.6, print.curve = T, var.cols = F,
+  alpha = 0.6, print.curve = TRUE, var.cols = FALSE,
   plot.theme = theme_bw())
 }
 \arguments{

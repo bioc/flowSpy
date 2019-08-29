@@ -5,8 +5,8 @@
 \title{plot MST of FSPY}
 \usage{
 plotTree(object, cex.size = 1, color.by = "cell.number",
-  size.by = "cell.number", as.tree = F, root.id = NULL,
-  show.node.name = F)
+  size.by = "cell.number", as.tree = FALSE, root.id = NULL,
+  show.node.name = FALSE)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -28,7 +28,7 @@ plot MST of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 plotTree(fspy)
 

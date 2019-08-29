@@ -20,7 +20,7 @@
 #'
 #' @examples
 #'
-#' if (F) {
+#' if (FALSE) {
 #'
 #' fspy <- runUMAP(fspy, verbose = T)
 #' fspy <- runUMAP(fspy, n_neighbors = 20, verbose = T)
@@ -28,7 +28,8 @@
 #' }
 #'
 #'
-runUMAP <- function(object, umap.config = umap.defaults, n_neighbors = 30, dims = 2, verbose = F, ...) {
+runUMAP <- function(object, umap.config = umap.defaults,
+                    n_neighbors = 30, dims = 2, verbose = FALSE, ...) {
   if (verbose) message(Sys.time(), " [INFO] Calculating Umap.")
   if (length(which(object@meta.data$dowsample == 1)) < 10) stop(Sys.time, " [ERROR] Not enough cells, please run processingCluster and choose correct downsampling.size paramter. ")
   mat <- as.matrix(object@log.data[which(object@meta.data$dowsample == 1), ])

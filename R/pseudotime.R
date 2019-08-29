@@ -146,6 +146,7 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #'
 #' @examples
 #'
+#' if (FALSE) {
 #' fspy <- runPseudotime(fspy, verbose = T, dim.type = "umap", dim.use = 1:2)
 #' fspy <- runPseudotime(fspy, verbose = T, dim.type = "tsne", dim.use = 1:2)
 #' fspy <- runPseudotime(fspy, verbose = T, dim.type = "dc", dim.use = 1:3)
@@ -161,9 +162,11 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' plot2D(fspy, item.use = c("UMAP_1", "UMAP_2"), category = "numeric",
 #'        size = 1, color.by = "pseudotime") +
 #'        scale_colour_gradientn(colors = c("#F4D31D", "#FF3222","#7A06A0"))
+#' }
 #'
-#'
-runPseudotime <- function(object, mode = "undirected", dim.type = "tsne", dim.use = 1:2, verbose = F, ...) {
+runPseudotime <- function(object, mode = "undirected",
+                          dim.type = "tsne", dim.use = 1:2,
+                          verbose = FALSE, ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing.")
 
@@ -189,7 +192,7 @@ runPseudotime <- function(object, mode = "undirected", dim.type = "tsne", dim.us
     mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
   }
 
-  object <- runKNN(object, given.mat = mat, verbose = F)
+  object <- runKNN(object, given.mat = mat, verbose = FALSE)
 
   knn.index <- object@knn.index
   adj <- matrix(0, nrow(knn.index), nrow(knn.index))

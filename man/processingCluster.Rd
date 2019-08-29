@@ -40,7 +40,7 @@ Calculate Principal Components Analysis (PCA), t-Distributed
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 # After running clustering
 set.seed(1)

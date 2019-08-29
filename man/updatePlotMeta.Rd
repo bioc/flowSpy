@@ -15,7 +15,10 @@ updatePlotMeta(object, verbose = TRUE)
 Update plot meta information of FSPY
 }
 \examples{
+
+if (FALSE) {
 fspy <- updatePlotMeta(fspy)
+}
 
 
 }

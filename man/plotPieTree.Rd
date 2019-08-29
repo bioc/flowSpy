@@ -4,8 +4,8 @@
 \alias{plotPieTree}
 \title{plot MST pie of FSPY}
 \usage{
-plotPieTree(object, cex.size = 2, size.by.cell.number = T,
-  as.tree = F, root.id = NULL, show.node.name = F)
+plotPieTree(object, cex.size = 2, size.by.cell.number = TRUE,
+  as.tree = FALSE, root.id = NULL, show.node.name = FALSE)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -25,7 +25,7 @@ plot MST pie of FSPY
 }
 \examples{
 
-if (F) {
+if (FALSE) {
 
 # Runs only have two or more stages
 plotPieTree(fspy, cex.size = 1, size.by.cell.number = T) +
