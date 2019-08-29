@@ -142,7 +142,6 @@ FSPY <- methods::setClass("FSPY", slots = c(
 #' vignette("Time_course_workflow", package = "flowSpy")
 #'
 #' ## Build using test data
-#' data("FSPYdata")
 #' markers <- c("CD43", "CD34", "CD90", "CD45RA",
 #'              "CD31", "CD49f", "CD73", "FLK1", "CD38")
 #'

@@ -40,8 +40,6 @@ Visualization of 2D data of FSPY
 
 if (FALSE) {
 
-data(FSPYdata)
-
 # Default plot
 plot2D(fspy)
 

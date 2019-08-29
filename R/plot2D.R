@@ -25,8 +25,6 @@
 #'
 #' if (FALSE) {
 #'
-#' data(FSPYdata)
-#'
 #' # Default plot
 #' plot2D(fspy)
 #'

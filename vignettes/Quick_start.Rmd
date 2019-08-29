@@ -50,7 +50,7 @@ The flowSpy package is developed to complete the majority of standard analysis a
 - **Visualization**. The visualization module can provide clear and concise visualization of FCS data in an effective and easy-to-comprehend manner. flowSpy package offers various plotting functions to generate customizable and publication-quality plots. Two-dimensional or three-dimensional plot can fit most requirement from dimensionality reduction results. And tree-based plot can visualize cell trajectory as force-directed layout tree. Other special plots such as heatmap and violin plot are also provided in flowSpy.
 
 
-``` {r quick-build, eval = TRUE, fig.width = 6, fig.height = 5}
+``` {r quick-build, eval = FALSE, fig.width = 6, fig.height = 5}
 
 # Loading packages
 suppressMessages({
@@ -166,15 +166,6 @@ plotPseudotimeDensity(fspy, adjust = 1) +
 
 
 ```
-
-## Session Information
-
-``` {r}
-
-sessionInfo()
-
-```
-
 
 ## References
 
