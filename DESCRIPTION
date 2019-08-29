@@ -1,8 +1,8 @@
 Package: flowSpy
 Type: Package
 Title: A Toolkit for Flow And Mass Cytometry Data
-Version: 1.2.5
-Date: 2019-05-07
+Version: 1.2.6
+Date: 2019-08-29
 Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
             email = "forlynna@sjtu.edu.cn"))
 Author: Yuting Dai [aut, cre, cph]

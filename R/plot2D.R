@@ -558,6 +558,8 @@ plotBranchHeatmap <- function(object,
                               color = colorRampPalette(c("blue","white","red"))(100),
                               scale = "row", ...) {
 
+  if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
+
   # update plot meta information
   plot.meta.data <- fetchClustMeta(object, verbose = F)
   branch = NULL
@@ -570,6 +572,67 @@ plotBranchHeatmap <- function(object,
 
 }
 
+#'
+#' Visualization heatmap of intermediate cells of FSPY
+#'
+#' @name plotTrajHeatmap
+#'
+#' @param object An FSPY object
+#' @param cutoff numeric. value to identify intermediate state cells
+#' @param markers markers to plot on the heatmap
+#' @param color vector. Colors used in heatmap.
+#' @param scale character. Whether the values should be centered and scaled in either
+#'    the row direction or the column direction, or none. Corresponding values are
+#'    "row", "column" and "none"
+#' @param ... options to pass on to the \code{\link[pheatmap]{pheatmap}} function.
+#'
+#' @import pheatmap
+#' @importFrom grDevices colorRampPalette
+#' @importFrom stats aggregate
+#'
+#' @export
+#'
+#' @examples
+#'
+#' if (F) {
+#'
+#' plotTrajHeatmap(fspy)
+#' plotBranchHeatmap(fspy, color = colorRampPalette(c("purple","white","yellow"))(100))
+#' plotBranchHeatmap(fspy, cluster_row = F)
+#' plotBranchHeatmap(fspy, cluster_row = F, cluster_col = F)
+#'
+#' }
+#'
+plotTrajHeatmap <- function(object,
+                            cutoff = 0,
+                            markers = NULL,
+                            color = colorRampPalette(c("blue","white","red"))(100),
+                            scale = "row", ...) {
+
+  if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
+  object <- updatePlotMeta(object, verbose = F)
+
+  # update plot meta information
+  plot.meta.data <- fetchClustMeta(object, verbose = F)
+  if (sum(plot.meta.data$traj.value.log) == 0) {
+    stop(Sys.time(), " [ERROR] please run runWalk first")
+  }
+  plot.meta.data <- plot.meta.data[plot.meta.data$traj.value.log > cutoff, ]
+  plot.meta.data <- plot.meta.data[order(plot.meta.data$pseudotime), ]
+
+  if (is.null(markers)) {
+    markers <- object@markers
+  } else {
+    markers <- markers[markers %in% object@markers]
+  }
+  mat <- object@log.data[match(plot.meta.data$cell, rownames(object@log.data)), ]
+  gg <- pheatmap(t(mat), color = color, scale = scale, border_color = NA, ...)
+
+  return(gg)
+
+}
+
+
 
 #'
 #' Visualization heatmap of data of FSPY
@@ -578,6 +641,7 @@ plotBranchHeatmap <- function(object,
 #'
 #' @param object An FSPY object
 #' @param color vector. Colors used in heatmap.
+#' @param markers vector. markers to plot on the heatmap
 #' @param scale character. Whether the values should be centered and scaled in either
 #'    the row direction or the column direction, or none. Corresponding values are
 #'    "row", "column" and "none"
@@ -604,12 +668,15 @@ plotBranchHeatmap <- function(object,
 #'
 #'
 plotHeatmap <- function(object,
+                        markers = NULL,
                         color = colorRampPalette(c("blue","white","red"))(100),
                         scale = "row",
                         downsize = 1000,
                         cluster_rows = F,
                         cluster_cols = F,
                         ...) {
+  if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
+  object <- updatePlotMeta(object, verbose = F)
 
   # update plot meta information
   plot.meta.data <- fetchPlotMeta(object, verbose = F)
@@ -622,6 +689,12 @@ plotHeatmap <- function(object,
   if (max(plot.meta.data$pseudotime) > 0) plot.meta.data <- plot.meta.data[order(plot.meta.data$pseudotime), ]
 
   mat <- object@log.data[match(plot.meta.data$cell, rownames(object@log.data)), ]
+  if (is.null(markers)) {
+    markers <- object@markers
+  } else {
+    markers <- markers[markers %in% object@markers]
+  }
+  mat <- mat[, markers]
   gg <- pheatmap(t(mat), color = color, scale = scale, cluster_rows = cluster_rows,
                  cluster_cols = cluster_cols, border_color = NA, fontsize_col = 0.01, ...)
 

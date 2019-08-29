@@ -4,12 +4,14 @@
 \alias{plotHeatmap}
 \title{Visualization heatmap of data of FSPY}
 \usage{
-plotHeatmap(object, color = colorRampPalette(c("blue", "white",
-  "red"))(100), scale = "row", downsize = 1000, cluster_rows = F,
-  cluster_cols = F, ...)
+plotHeatmap(object, markers = NULL, color = colorRampPalette(c("blue",
+  "white", "red"))(100), scale = "row", downsize = 1000,
+  cluster_rows = F, cluster_cols = F, ...)
 }
 \arguments{
 \item{object}{An FSPY object}
+
+\item{markers}{vector. markers to plot on the heatmap}
 
 \item{color}{vector. Colors used in heatmap.}
 

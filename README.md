@@ -1,5 +1,5 @@
 
-# flowSpy v1.2.5  <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
+# flowSpy v1.2.6  <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
 
 flowSpy is a trajectory inference and visualization toolkit of flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
 
@@ -68,6 +68,13 @@ library(flowSpy)
 
 ## 4 Version History
 
+Aug 29, 2019
+  - Version 1.2.6
+  - Changes:
+    - Fixed some bugs
+    - Add trajectory plot function
+    - Update vignette tutorial
+
 Aug 14, 2019
   - Version 1.2.5
   - Changes:
@@ -77,7 +84,7 @@ Aug 14, 2019
 Aug 08, 2019
   - Version 1.2.4
   - Changes:
-    - Fixed some bugs and finished Vignette tutorial
+    - Fixed some bugs and finished vignette tutorial
 
 July 24, 2019
   - Version 1.2.3
