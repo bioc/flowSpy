@@ -60,7 +60,7 @@ updateClustMeta <- function(object, verbose = TRUE) {
 
   # Generating tree meta information
   plot.data <- fetchPlotMeta(object, verbose = FALSE)
-  plot.data <- cbind(plot.data, object@log.data[which(object@meta.data$dowsample == 1), ])
+  plot.data <- cbind(plot.data, object@raw.data[which(object@meta.data$dowsample == 1), ])
 
   if (length(unique(plot.data$stage)) > 1) {
     cell.count <- table(plot.data[, match(c("cluster.id", "stage"), colnames(plot.data)) ])
@@ -81,13 +81,13 @@ updateClustMeta <- function(object, verbose = TRUE) {
     colnames(cell.percent) <- paste0(unique(plot.data$stage), ".percent")
   }
 
-  idx.redim <- match(c(object@markers, "pseudotime", "traj.value", "traj.value.log"), colnames(plot.data))
+  idx.redim <- match(c(colnames(object@raw.data), "pseudotime", "traj.value", "traj.value.log"), colnames(plot.data))
   idx.redim <- unique(idx.redim)
   tree.meta <- stats::aggregate(plot.data[, idx.redim], list(cluster = plot.data[, "cluster.id"]), mean)
   tree.meta.1 <- data.frame(cell.count,
-                          cell.number = cell.total.number,
-                          cell.number.percent = cell.total.number.percent,
-                          cell.percent)
+                           cell.number = cell.total.number,
+                           cell.number.percent = cell.total.number.percent,
+                           cell.percent)
   tree.meta <- cbind(tree.meta, tree.meta.1)
   tree.meta$branch.id <- plot.data$branch.id[match(tree.meta$cluster, plot.data$cluster.id)]
 
@@ -128,9 +128,12 @@ fetchPlotMeta <- function(object, markers = NULL, verbose = FALSE) {
     # update and fetch plot meta information
   object <- updatePlotMeta(object, verbose = FALSE)
   plot.meta <- object@plot.meta
-  idx <- match(markers, colnames(object@log.data))
+  idx <- match(markers, colnames(object@raw.data))
   idx <- idx[which(!is.na(idx))]
-  if (length(idx) > 0) plot.meta <- data.frame(plot.meta, object@log.data[which(object@meta.data$dowsample == 1), idx])
+  if (length(idx) > 0) {
+    plot.meta <- cbind(plot.meta, object@raw.data[which(object@meta.data$dowsample == 1), idx])
+  }
+
 
   return(plot.meta)
 }

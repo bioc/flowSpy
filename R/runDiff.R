@@ -40,7 +40,7 @@ runDiff <- function(object, branch.id = NULL, branch.id.2 = NULL, verbose = FALS
     stop(Sys.time(), " [ERROR] There is only one branch in the tree.")
   } else {
     pdata <- object@meta.data[which(object@meta.data$dowsample == 1), c("cell", "branch.id")]
-    edata <- object@log.data[which(object@meta.data$dowsample == 1), ]
+    edata <- object@raw.data[which(object@meta.data$dowsample == 1), ]
     if (is.null(branch.id) & is.null(branch.id.2)) {
       if (verbose) message(Sys.time(), " [INFO] All branches will be calculated.")
       for (bid in all.branch.ids) {

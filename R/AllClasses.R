@@ -212,12 +212,17 @@ createFSPY <- function(raw.data, markers, meta.data,
   # normalization and Log-normalize the data
   if (normalization.method == "log") {
     if (verbose) message(paste0(Sys.time(), " [INFO] Determining normalization factors"))
-    log.data <- abs(raw.data[,markers.idx])
-    cs <- apply(log.data, 2, sum)
+    all.log.data <- abs(raw.data)
+    cs <- apply(all.log.data, 2, sum)
     norm_factors <- (10**ceiling(log10(median(cs))))/cs
-    # Log-normalize the data
+    norm_factors_idx <- which(!is.na(norm_factors))
+    if (length(which(is.na(norm_factors))) > 0) {
+      warning(paste0(Sys.time(), " [WARNING] Unavailable log data column, please check your data"))
+    }
     if (verbose) message(paste0(Sys.time(), " [INFO] Normalization and log-transformation."))
-    object@log.data <- round(log10(sweep(log.data, 2, norm_factors, "*")+1), digits=3)
+    object@raw.data[, norm_factors_idx] <- round(log10(sweep(all.log.data[, norm_factors_idx], 2, norm_factors[norm_factors_idx], "*")+1), digits=3)
+
+    object@log.data <- object@raw.data[, markers.idx]
   } else if (normalization.method == "none") {
     if (verbose) message(Sys.time(), " [INFO] No normalization and transformation ")
     object@log.data <- raw.data[, markers.idx]

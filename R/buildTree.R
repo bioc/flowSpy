@@ -52,7 +52,7 @@ buildTree <- function(object, method = "euclidean",
     tree.mat <- object@umap.value[, dim.name]
   } else {
     if (verbose) message(Sys.time(), " [INFO] The log data will be used to calculate trajectory")
-    tree.mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
+    tree.mat <- object@raw.data[which(object@meta.data$dowsample == 1), ]
   }
 
   if (! "cluster.id" %in% colnames(object@meta.data)) {

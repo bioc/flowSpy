@@ -105,12 +105,13 @@ plot2D <- function(object,
 
   # update and fetch plot meta information
   plot.meta <- fetchPlotMeta(object, verbose = FALSE)
-  idx <- match(c(color.by, item.use), colnames(object@log.data))
+
+  idx <- match(c(color.by, item.use), colnames(object@raw.data))
   idx <- idx[which(!is.na(idx))]
   if (length(idx) > 0) {
-    sub <- as.data.frame(object@log.data[which(object@meta.data$dowsample == 1), idx])
-    colnames(sub) <- colnames(object@log.data)[idx]
-    plot.meta <- data.frame(plot.meta, sub)
+    sub <- as.data.frame(object@raw.data[which(object@meta.data$dowsample == 1), idx])
+    colnames(sub) <- colnames(object@raw.data)[idx]
+    plot.meta <- cbind(plot.meta, sub)
   }
 
   # check item.use parameter in plot.meta data.frame
@@ -221,8 +222,12 @@ plotViolin <- function(object,
     warning(Sys.time(), " [WARNING] marker has more than two elements. Only the first two will be used")
     marker <- marker[1]
   }
-  if ( !all(marker %in% colnames(object@log.data)) ) stop(Sys.time(), " [ERROR] marker name is not correct")
-  plot.meta <- data.frame(plot.meta, marker = object@log.data[which(object@meta.data$dowsample == 1), marker])
+  if ( marker %in% colnames(object@raw.data) ) {
+    plot.meta <- data.frame(plot.meta, marker = object@raw.data[which(object@meta.data$dowsample == 1), marker])
+  } else {
+    stop(Sys.time(), " [ERROR] marker name is not correct")
+  }
+
 
   # check color.by parameter in plot.meta data.frame
   if ( !all(color.by %in% colnames(plot.meta)) ) stop(Sys.time(), " [ERROR] color.by is not in plot.meta of FSPY, please run updatePlotMeta first.")
@@ -407,7 +412,7 @@ plotCluster <- function(object,
 
   # update plot meta information
   plot.meta.data <- fetchClustMeta(object, verbose = FALSE)
-  plot.meta.data <- data.frame(plot.meta.data, object@cluster)
+  plot.meta.data <- cbind(plot.meta.data, object@cluster)
 
   # check item.use parameter in plot.meta data.frame
   if ( !all(item.use %in% colnames(plot.meta.data)) ) stop(Sys.time(), " [ERROR] item.use is not in cluster data of FSPY, please run processingCluster first.")
@@ -623,7 +628,7 @@ plotTrajHeatmap <- function(object,
   } else {
     markers <- markers[markers %in% object@markers]
   }
-  mat <- object@log.data[match(plot.meta.data$cell, rownames(object@log.data)), ]
+  mat <- object@raw.data[match(plot.meta.data$cell, rownames(object@raw.data)), ]
   gg <- pheatmap(t(mat), color = color, scale = scale, border_color = NA, ...)
 
   return(gg)
@@ -686,7 +691,7 @@ plotHeatmap <- function(object,
 
   if (max(plot.meta.data$pseudotime) > 0) plot.meta.data <- plot.meta.data[order(plot.meta.data$pseudotime), ]
 
-  mat <- object@log.data[match(plot.meta.data$cell, rownames(object@log.data)), ]
+  mat <- object@raw.data[match(plot.meta.data$cell, rownames(object@raw.data)), ]
   if (is.null(markers)) {
     markers <- object@markers
   } else {

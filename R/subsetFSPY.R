@@ -34,10 +34,10 @@ subsetFSPY <- function(object, cells = NULL,
                        verbose = FALSE) {
   if (is.null(cells)) {
     warning(Sys.time(), " [WARNING] cells must be provided.")
-    cells <- rownames(object@log.data)
+    cells <- rownames(object@raw.data)
   }
   # Make sure all cells are actually in the object
-  cells.keep <- intersect(cells, rownames(object@log.data))
+  cells.keep <- intersect(cells, rownames(object@raw.data))
 
   raw.data <- object@raw.data[cells.keep, ]
   log.data <- object@log.data[cells.keep, ]
