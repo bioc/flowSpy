@@ -53,7 +53,47 @@ library(flowSpy)
 
 **Trajectory construction and pseudotime estimation of flowSpy workflow**
 
-## 4 Reported bugs and solutions
+## 4 Quick start (Standard Workflow)
+
+``` {r}
+
+# Loading packages
+suppressMessages({
+library(ggplot2)
+library(flowCore)
+library(flowSpy)
+library(stringr)
+})
+
+# Read your FCS files
+fcs.file <- "path to your fcs file (*.fcs)"
+exp.data <- runExprsExtract(fcs.file)
+# Or for more than one fcs file
+fcs.data <- runExprsMerge(fcs.file)
+
+# Build FSPY object
+meta.data <- data.frame(cell = rownames(fcs.data),
+                        stage = "D0" )
+markers <- colnames(fcs.file)[grep("^CD", colnames(fcs.file))]
+fspy <- createFSPY(raw.data = fcs.data, markers = markers, meta.data = meta.data)
+
+# Workflow of flowSpy
+fspy <- runCluster(fspy)
+fspy <- processingCluster(fspy)
+fspy <- runFastPCA(fspy)
+fspy <- runTSNE(fspy)
+fspy <- runDiffusionMap(fspy)
+fspy <- runUMAP(fspy)
+fspy <- buildTree(fspy, dim.type = "umap", dim.use = 1:2)
+fspy <- defRootCells(fspy, root.cells = "Root cells")
+fspy <- runPseudotime(fspy)
+fspy <- defLeafCells(fspy, leaf.cells = "Leaf cells")
+fspy <- runWalk(fspy)
+
+
+```
+
+## 5 Reported bugs and solutions
 
 
 
