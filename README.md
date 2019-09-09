@@ -1,7 +1,7 @@
 
 # flowSpy v1.2.7  <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
 
-flowSpy is a trajectory inference and visualization toolkit of flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
+flowSpy is an R package to implement cellular subpopulations identification, trajectory inference, pseudotime estimation and visualization for flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
 
 Instructions, documentation, and tutorials can be found at:
 
@@ -13,17 +13,17 @@ https://github.com/JhuangLab/flowSpy
 
 ## 1 Introduction
 
-High throughput cell-based assays with flow cytometric signals enable ones to analyze multiple single-cell parameters and identify cellular populations. 
+Multidimensional single-cell-based flow and mass cytometry  enable ones to analyze multiple single-cell parameters and identify cellular populations. 
 Based on classical software for analyzing [Flow Cytometry Standard](https://en.wikipedia.org/wiki/Flow_Cytometry_Standard) (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for inferencing cellular trajectory during a biological process are very important. 
-To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/JhuangLab/flowSpy), a trajectory inference and visualization toolkit of FCS data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. 
+To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/JhuangLab/flowSpy), a trajectory inference and visualization toolkit for flow and mass cytometry data. 
 
 `flowSpy` can help you to perform four main types of analysis:
 
 - **Clustering**. `flowSpy` can help you to discover and identify subtypes of cells. 
 
-- **Dimensionality Reduction**. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP).
+- **Dimensionality Reduction**. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP). flowSpy provides both cell-based and cluster-based dimensionality reduction.
 
-- **Trajectory Inference**. `flowSpy` can help you to construct the cellular differential based on Minimum Spanning Tree (MST) algorithm. 
+- **Trajectory Inference**. `flowSpy` can help you to construct the cellular differential based on minimum spanning tree (MST) algorithm. 
 
 - **Pseudotime and Intermediate states definition**. The root cells need to be defined by users. The trajctroy value will be calculated based on Shortest Path from root cells and leaf cells using R `igraph` package. Subset FCS data set in `flowSpy` and find the key intermediate cell states based on trajectory value.
 
@@ -47,7 +47,9 @@ library(flowSpy)
 
 <center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
-## 4 Version History
+## 4 Reported bugs
+
+## 5 Version History
 
 Aug 29, 2019
   - Version 1.2.6
@@ -78,7 +80,7 @@ July 19, 2019
     - Fixed some bugs on cluster based downsampling
 
 
-## 5 Reference
+## 6 Reference
 
 [1] Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2019). FlowSOM: Using
   self-organizing maps for visualization and interpretation of cytometry data.
