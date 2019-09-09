@@ -1,21 +1,21 @@
 
-# flowSpy v1.2.6  <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
+# flowSpy v1.2.7  <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
 
 flowSpy is a trajectory inference and visualization toolkit of flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
 
 Instructions, documentation, and tutorials can be found at:
 
-https://github.com/ytdai/flowSpy/tree/master/vignettes
+https://github.com/JhuangLab/flowSpy/tree/master/vignettes
 
 You can view and clone the repository of flowSpy on GitHub at:
 
-https://github.com/ytdai/flowSpy
+https://github.com/JhuangLab/flowSpy
 
 ## 1 Introduction
 
 High throughput cell-based assays with flow cytometric signals enable ones to analyze multiple single-cell parameters and identify cellular populations. 
 Based on classical software for analyzing [Flow Cytometry Standard](https://en.wikipedia.org/wiki/Flow_Cytometry_Standard) (FCS) data such as [`flowSOM`](https://bioconductor.org/packages/release/bioc/html/FlowSOM.html)[1] and [`SPADE`](https://github.com/nolanlab/spade)[2], methods for inferencing cellular trajectory during a biological process are very important. 
-To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/ytdai/flowSpy), a trajectory inference and visualization toolkit of FCS data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. 
+To objectively inference differential trajectory based on time courses FCS data, we present [`flowSpy`](https://github.com/JhuangLab/flowSpy), a trajectory inference and visualization toolkit of FCS data. In this tutorial, we will present how to complete an analysis workflow of time courses FCS data using `flowSpy` package. 
 
 `flowSpy` can help you to perform four main types of analysis:
 
@@ -29,26 +29,7 @@ To objectively inference differential trajectory based on time courses FCS data,
 
 ## 2 Installation
 
-`flowSpy` can be installed in one of two ways:
-
-### 2.1 From Bioconductor 
-
-The `flowSpy` package is not uploaded to Bioconductor server yet, so now you can only download it through Github.
-
-`flowSpy` runs in the [R statistical computing environment](https://www.r-project.org/). You will need R version 3.5 or higher to have access to the latest features. 
-
-```
-
-# The flowSpy package is not uploaded to Bioconductor server yet
-# Please install it through GitHub.
-if (!requireNamespace("BiocManager", quietly=TRUE))
-    install.packages("BiocManager")
-BiocManager::install("flowSpy")
-
-library(flowSpy)
-
-```
-### 2.2 From Github
+### 2.1 From Github
 
 This requires the `devtools` package to be installed first.
 
@@ -56,7 +37,7 @@ This requires the `devtools` package to be installed first.
 
 # If not already installed
 install.packages("devtools") 
-devtools::install_github("ytdai/flowSpy")
+devtools::install_github("JhuangLab/flowSpy")
 
 library(flowSpy)
 
@@ -64,7 +45,7 @@ library(flowSpy)
 
 ## 3 Workflow of flowSpy
 
-<center> <img src="https://github.com/ytdai/flowSpy/blob/master/inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
+<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
 ## 4 Version History
 
