@@ -3,13 +3,18 @@
 
 flowSpy is an R package to implement cellular subpopulations identification, trajectory inference, pseudotime estimation and visualization for flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
 
-Instructions, documentation, and tutorials can be found at:
+Instructions and standard workflow can be found at:
 
 https://github.com/JhuangLab/flowSpy/tree/master/vignettes
+
+Use cases could be found at: 
+
+https://github.com/JhuangLab/flowSpy-dataset
 
 You can view and clone the repository of flowSpy on GitHub at:
 
 https://github.com/JhuangLab/flowSpy
+
 
 ## 1 Introduction
 
