@@ -49,7 +49,7 @@ library(flowSpy)
 
 **Workflow of flowSpy**
 
-<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.png" alt="Algorithm of flowSpy" align="center" height=50% width=50% /> </center>
+<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.png" alt="Algorithm of flowSpy" height=70% width=70% /> </center>
 
 **Trajectory construction and pseudotime estimation of flowSpy workflow**
 
