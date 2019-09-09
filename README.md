@@ -47,7 +47,15 @@ library(flowSpy)
 
 <center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
 
-## 4 Reported bugs
+**Workflow of flowSpy**
+
+<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.png" alt="Algorithm of flowSpy" /> </center>
+
+**Trajectory construction and pseudotime estimation of flowSpy workflow**
+
+## 4 Reported bugs and solutions
+
+
 
 ## 5 Version History
 
