@@ -97,7 +97,7 @@ fspy <- runWalk(fspy)
 
 
 
-## 5 Version History
+## 6 Version History
 
 Aug 29, 2019
   - Version 1.2.6
@@ -128,7 +128,7 @@ July 19, 2019
     - Fixed some bugs on cluster based downsampling
 
 
-## 6 Reference
+## 7 Reference
 
 [1] Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2019). FlowSOM: Using
   self-organizing maps for visualization and interpretation of cytometry data.
