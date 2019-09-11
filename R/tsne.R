@@ -20,6 +20,7 @@
 #'
 #' @import Rtsne
 #' @seealso \code{\link[Rtsne]{Rtsne}}
+#' @return An FSPY object
 #'
 #' @references
 #'    Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based

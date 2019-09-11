@@ -26,6 +26,9 @@ The value is passed to scale. See \code{\link[gmodels]{fast.prcomp}}}
 
 \item{...}{Parameters passing to \code{\link[gmodels]{fast.prcomp}} function}
 }
+\value{
+An FSPY object with PCA
+}
 \description{
 Calculate principal components in FSPY
 }

@@ -36,7 +36,6 @@
 #'    (with replacement when the total number of cell is less than fixedNum)
 #'    from each fcs file and combined for analysis.
 #' @param fixedNum The fixed number of cells to be extracted from each FCS file.
-#' @param sampleSeed A sampling seed for reproducible expression matrix merging.
 #' @param ... Other arguments passed to \code{runExprsExtract}
 #'
 #' @return A matrix containing the merged expression data, with selected markers.
@@ -54,8 +53,6 @@
 #' if (FALSE) {
 #'   # See vignette tutorials for more information
 #'   vignette("Quick_start", package = "flowSpy")
-#'   vignette("Base_workflow", package = "flowSpy")
-#'   vignette("Time_course_workflow", package = "flowSpy")
 #'
 #'   # Path to your FCS files
 #'   fcs.path <- "flowSpy-dataset/FCS/usecase2/"
@@ -72,8 +69,7 @@ runExprsMerge <- function(fcsFiles,
                           transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
                           scaleTo = NULL,
                           mergeMethod = c("ceil", "all", "fixed", "min"),
-                          fixedNum = 2000,
-                          sampleSeed = 1, ...) {
+                          fixedNum = 2000, ...) {
 
   transformMethod <- match.arg(transformMethod)
   mergeMethod <- match.arg(mergeMethod)
@@ -84,8 +80,6 @@ runExprsMerge <- function(fcsFiles,
                                    scaleTo = scaleTo, ...),
                    SIMPLIFY = FALSE)
 
-  if(is.numeric(sampleSeed))
-    set.seed(sampleSeed)
   ## test if number of events in any fcs less than fixedNum
   eventCountTest <- suppressWarnings(any(lapply(exprsL, function(x) if (nrow(x) < fixedNum) {1} else {0})))
   ## solution 1: change mergeMethod from fixed to ceil
@@ -182,13 +176,11 @@ runExprsMerge <- function(fcsFiles,
 #'    an Integrated Mass Cytometry Data Analysis Pipeline. PLoS Comput Biol, 2016.
 #'
 #' @examples
-#' 
+#'
 #' if (FALSE) {
 #' # See vignette tutorials for more information
 #' vignette(package = "flowSpy")
 #' vignette("Quick_start", package = "flowSpy")
-#' vignette("Base_workflow", package = "flowSpy")
-#' vignette("Time_course_workflow", package = "flowSpy")
 #'
 #'   # Path to your FCS files
 #'   fcs.path <- "flowSpy-dataset/FCS/usecase1/"

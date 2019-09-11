@@ -14,7 +14,7 @@
 #' @importFrom stats aggregate
 #' @importFrom igraph cluster_louvain membership graph.adjacency minimum.spanning.tree
 #'
-#' @return An FSPY object
+#' @return An FSPY object with tree
 #'
 #' @examples
 #'

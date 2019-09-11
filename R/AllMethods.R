@@ -6,6 +6,7 @@
 #' @param object An FSPY object
 #'
 #' @exportMethod show
+#' @export
 #'
 #' @name show
 #'
@@ -13,6 +14,12 @@
 #'
 #' @keywords internal
 #'
+#' @return Cell number of FSPY object
+#'
+#' @examples
+#' if (FALSE) {
+#'   fspy
+#' }
 #'
 setMethod(
   f = "show",

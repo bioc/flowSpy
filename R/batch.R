@@ -19,6 +19,14 @@
 #' @importFrom sva ComBat
 #' @export
 #'
+#' @return An FSPY object with corrected batch effects
+#' @examples
+#'
+#' if (FALSE) {
+#'   plot.meta <- fetchPlotMeta(fspy)
+#'   batch <- as.numeric(plot.meta$stage)
+#'   fspy <- correctBatchFSPY(object, batch = batch)
+#' }
 #'
 correctBatchFSPY <- function(object, batch = NULL, par.prior = TRUE,
                              mean.only = TRUE, verbose = FALSE, ...) {

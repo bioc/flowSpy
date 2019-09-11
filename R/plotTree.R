@@ -14,6 +14,7 @@
 #'
 #' @export
 #' @importFrom igraph layout_as_tree layout.kamada.kawai as_data_frame
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -107,6 +108,7 @@ plotTree <- function(object,
 #' @export
 #' @importFrom igraph layout_as_tree layout.kamada.kawai as_data_frame
 #' @import scatterpie
+#' @return ggplot2 figure
 #'
 #' @examples
 #'

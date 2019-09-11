@@ -10,8 +10,17 @@
 \arguments{
 \item{object}{An FSPY object}
 }
+\value{
+Cell number of FSPY object
+}
 \description{
 Prevents R from crashing by trying to print all slots of an FSPY object
 if a returned object is not stored in a variable.
+}
+\examples{
+if (FALSE) {
+  fspy
+}
+
 }
 \keyword{internal}

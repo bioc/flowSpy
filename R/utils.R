@@ -7,6 +7,7 @@
 #' @param verbose logical. Whether to print calculation progress.
 #'
 #' @export
+#' @return An FSPY object
 #'
 #' @examples
 #'
@@ -47,6 +48,7 @@ updatePlotMeta <- function(object, verbose = TRUE) {
 #' @param verbose logical. Whether to print calculation progress.
 #'
 #' @export
+#' @return An FSPY object
 #'
 #' @importFrom stats aggregate
 #'
@@ -248,6 +250,7 @@ fetchCell <- function(object, logical.connect = "or", verbose = FALSE, ... ) {
 #'    "canberra", "binary" or "minkowski".
 #'
 #' @export
+#' @return  a matrix
 #'
 #' @examples
 #'

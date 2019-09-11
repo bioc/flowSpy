@@ -17,10 +17,18 @@ runMclust(object, scale = FALSE, verbose = FALSE, ...)
 }
 \value{
 an FSPY object with mclust.id in meta.data
+
+An FSPY object with cluster
 }
 \description{
 Model-based clustering based on parameterized finite Gaussian mixture models.
    This function is based on \code{\link[mclust]{Mclust}}.
+}
+\examples{
+if (FALSE) {
+fspy <- runMclust(fspy, verbose = TRUE)
+}
+
 }
 \seealso{
 \code{\link[mclust]{Mclust}}

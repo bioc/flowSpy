@@ -10,6 +10,7 @@
 #' @param plot.theme themes from \code{ggplot2}
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -79,6 +80,7 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
 #' @importFrom stats predict
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -183,6 +185,7 @@ plotPseudotimeTraj <- function(object,
 #' @importFrom stats predict
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'

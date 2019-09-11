@@ -26,6 +26,12 @@ or "minkowski". Or you can specify an equation as input, for example
 }
 \value{
 An FSPY object with hclust.id in FSPY object
+
+An FSPY object with cluster
+
+if (FALSE) {
+fspy <- runHclust(fspy, k = 9, verbose = TRUE)
+}
 }
 \description{
 Hierarchical cluster analysis on a set of dissimilarities

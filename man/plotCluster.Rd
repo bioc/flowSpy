@@ -36,6 +36,9 @@ of plot.meta, or it can be just "density" (the default value).}
 
 \item{plot.theme}{themes from \code{ggplot2}}
 }
+\value{
+ggplot2 figure
+}
 \description{
 Visualization of cluster data of FSPY
 }

@@ -18,6 +18,9 @@ plotMarkerDensity(object, cutoff = -1, markers = NULL, adjust = 0.5,
 
 \item{plot.theme}{themes from \code{ggplot2}}
 }
+\value{
+ggplot2 figure
+}
 \description{
 plotMarkerDensity
 }

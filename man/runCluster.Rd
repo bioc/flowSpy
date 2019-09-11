@@ -19,6 +19,8 @@ Clustering method "hclust" and "mclust" are not recommended because of long comp
 }
 \value{
 An FSPY object with cluster.id in meta.data
+
+An FSPY object with cluster
 }
 \description{
 Compute a specific clustering using the combined flow

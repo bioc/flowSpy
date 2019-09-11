@@ -28,6 +28,9 @@ For the allowed values, see \code{\link[destiny]{find_knn}}}
 
 \item{...}{options to pass on to the \code{\link[destiny]{DiffusionMap}} function}
 }
+\value{
+An FSPY object
+}
 \description{
 Calculate diffusion map in FSPY
 }

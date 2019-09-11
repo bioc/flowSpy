@@ -19,6 +19,8 @@ runPhenograph(object, knn = 30, scale = FALSE, verbose = FALSE, ...)
 }
 \value{
 an FSPY object
+
+An FSPY object with cluster
 }
 \description{
 A simple R implementation of the phenograph
@@ -29,4 +31,10 @@ A simple R implementation of the phenograph
    coefficient between nearest-neighbor sets, and then identifying communities
    using the well known [Louvain method](https://sites.google.com/site/findcommunities/)
    in this graph.
+}
+\examples{
+if (FALSE) {
+fspy <- runPhenograph(fspy, knn = 30, verbose = TRUE)
+}
+
 }

@@ -23,6 +23,9 @@ plotTree(object, cex.size = 1, color.by = "cell.number",
 
 \item{show.node.name}{logical. whether to show node name}
 }
+\value{
+ggplot2 figure
+}
 \description{
 plot MST of FSPY
 }

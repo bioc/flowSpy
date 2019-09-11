@@ -21,7 +21,15 @@
 #' @importFrom stats model.matrix
 #'
 #' @export
+#' @return a data.frame with differential expressed markers
 #'
+#' @examples
+#'
+#' if (FALSE) {
+#'
+#' DEG.table <- runDiff(fspy)
+#'
+#' }
 #'
 #'
 #'

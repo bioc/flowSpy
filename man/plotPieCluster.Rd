@@ -21,6 +21,9 @@ plotPieCluster(object, item.use = c("PC_1", "PC_2"), cex.size = 1,
 
 \item{plot.theme}{themes from \code{ggplot2}}
 }
+\value{
+ggplot2 figure
+}
 \description{
 Visualization pie plot of cluster data of FSPY
 }

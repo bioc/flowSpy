@@ -33,6 +33,19 @@ of plot.meta, or it can be just "density" (the default value).}
 
 \item{...}{options to pass on to the \code{\link[scatterplot3d]{scatterplot3d}} function.}
 }
+\value{
+gplots figure
+}
 \description{
 Visualization of 3D data of FSPY
+}
+\examples{
+
+if (FALSE) {
+
+ plot3D(fspy, item.use = c("DC_2","DC_1","DC_3"), color.by = "stage",
+        size = 0.5, angle = 60, color.theme = c("#FF99FF","#7A06A0","#FF3222"))
+
+}
+
 }

@@ -5,7 +5,7 @@
 \title{processingCluster}
 \usage{
 processingCluster(object, perplexity = 5, k = 5,
-  downsampling.size = 1, seed = 1, force.resample = TRUE,
+  downsampling.size = 1, force.resample = TRUE,
   umap.config = umap.defaults, verbose = FALSE, ...)
 }
 \arguments{
@@ -20,8 +20,6 @@ for more information.}
 \item{downsampling.size}{numeric. Percentage of sample size of downsampling.
 This parameter is from 0 to 1. by default is 1.}
 
-\item{seed}{numeric. Random seed for downsampling}
-
 \item{force.resample}{logical. Whether to do resample if downsampling.size < 1}
 
 \item{umap.config}{object of class umap.config. See \code{\link[umap]{umap}}.}
@@ -32,6 +30,8 @@ This parameter is from 0 to 1. by default is 1.}
 }
 \value{
 An FSPY object with cluster.id in meta.data
+
+An FSPY object with dimensionality reduction of clusters
 }
 \description{
 Calculate Principal Components Analysis (PCA), t-Distributed

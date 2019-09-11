@@ -24,9 +24,20 @@ effect (no scale adjustment)}
 }
 \value{
 An FSPY object after removing batch effect
+
+An FSPY object with corrected batch effects
 }
 \description{
 Remove batch effect in FSPY object
+}
+\examples{
+
+if (FALSE) {
+  plot.meta <- fetchPlotMeta(fspy)
+  batch <- as.numeric(plot.meta$stage)
+  fspy <- correctBatchFSPY(object, batch = batch)
+}
+
 }
 \seealso{
 \code{\link[BiocNeighbors]{findKNN}}

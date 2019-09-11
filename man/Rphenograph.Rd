@@ -30,6 +30,8 @@ a list contains an igraph graph object for \code{graph_from_data_frame}
 \item{code_len}{returns a numeric scalar for communities found with the InfoMAP
     method and NULL for other methods.}
 \item{plot}{for communities objects returns NULL, invisibly.}
+
+cluster information
 }
 \description{
 R implementation of the PhenoGraph algorithm

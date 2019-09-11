@@ -11,6 +11,9 @@ updateClustMeta(object, verbose = TRUE)
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }
+\value{
+An FSPY object
+}
 \description{
 Update clusters' meta information of FSPY
 }

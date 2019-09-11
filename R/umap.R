@@ -15,6 +15,7 @@
 #'
 #' @import umap
 #' @seealso \code{\link[umap]{umap}}
+#' @return An FSPY object
 #'
 #' @export
 #'

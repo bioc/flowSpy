@@ -23,6 +23,9 @@ the row direction or the column direction, or none. Corresponding values are
 
 \item{...}{options to pass on to the \code{\link[pheatmap]{pheatmap}} function.}
 }
+\value{
+ggplot2 figure
+}
 \description{
 Visualization heatmap of intermediate cells of FSPY
 }

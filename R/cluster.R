@@ -23,6 +23,7 @@
 #' @return An FSPY object with cluster.id in meta.data
 #'
 #' @export
+#' @return An FSPY object with cluster
 #'
 #' @examples
 #'
@@ -105,7 +106,6 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' @param k numeric. The parameter k in k-Nearest Neighbor.
 #' @param downsampling.size numeric. Percentage of sample size of downsampling.
 #'    This parameter is from 0 to 1. by default is 1.
-#' @param seed numeric. Random seed for downsampling
 #' @param force.resample logical. Whether to do resample if downsampling.size < 1
 #' @param umap.config object of class umap.config. See \code{\link[umap]{umap}}.
 #' @param verbose logic. Whether to print calculation progress.
@@ -119,6 +119,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' @importFrom stats cutree
 #'
 #' @export
+#' @return An FSPY object with dimensionality reduction of clusters
 #'
 #' @examples
 #'
@@ -141,7 +142,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' }
 #'
 processingCluster <- function(object, perplexity = 5, k = 5,
-                              downsampling.size = 1, seed = 1,
+                              downsampling.size = 1,
                               force.resample = TRUE,
                               umap.config = umap.defaults, verbose = FALSE, ...) {
 
@@ -198,7 +199,6 @@ processingCluster <- function(object, perplexity = 5, k = 5,
       warning(Sys.time(), " [WARNING] The value of downsampling.size must be larger than 0 ")
       cell.name <- object@meta.data$cell
     } else {
-      set.seed(seed)
       cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampling.size )) )
       cell.name <- unlist(cell.name)
     }
@@ -239,6 +239,11 @@ processingCluster <- function(object, perplexity = 5, k = 5,
 #'
 #' @return An FSPY object with hclust.id in FSPY object
 #' @export
+#' @return An FSPY object with cluster
+#'
+#' if (FALSE) {
+#' fspy <- runHclust(fspy, k = 9, verbose = TRUE)
+#' }
 #'
 #'
 runHclust <- function(object, k = 25,
@@ -301,7 +306,12 @@ runHclust <- function(object, k = 25,
 #'
 #' @importFrom stats kmeans
 #' @export
+#' @return An FSPY object with cluster
+#' @examples
 #'
+#' if (FALSE) {
+#' fspy <- runKmeans(fspy, k = 25, verbose = TRUE)
+#' }
 #'
 runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
                       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
@@ -348,7 +358,11 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 #' @importFrom cluster clara
 #' @export
-#'
+#' @return An FSPY object with cluster
+#' @examples
+#' if (FALSE) {
+#' fspy <- runClara(fspy, k = 25, verbose = TRUE)
+#' }
 #'
 runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jaccard"),
                      stand = FALSE, samples = 5, scale = TRUE,
@@ -388,7 +402,11 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 #' @export
 #'
 #' @importFrom mclust Mclust mclustBIC
-#'
+#' @return An FSPY object with cluster
+#' @examples
+#' if (FALSE) {
+#' fspy <- runMclust(fspy, verbose = TRUE)
+#' }
 #'
 runMclust <- function(object, scale = FALSE,
                       verbose = FALSE, ...) {
@@ -443,8 +461,11 @@ runMclust <- function(object, scale = FALSE,
 #'
 #' @export
 #'
-#'
-#'
+#' @return An FSPY object with cluster
+#' @examples
+#' if (FALSE) {
+#' fspy <- runSOM(fspy, xdim = 10, ydim = 10, verbose = TRUE)
+#' }
 #'
 runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
                    alpha = c(0.05,  0.01), radius = 1, init = FALSE,
@@ -494,8 +515,13 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #' @return an FSPY object
 #'
 #' @importFrom igraph graph.adjacency simplify distances
+#' @return An FSPY object with cluster
 #'
 #' @export
+#' @examples
+#' if (FALSE) {
+#' fspy <- runPhenograph(fspy, knn = 30, verbose = TRUE)
+#' }
 #'
 runPhenograph <- function(object, knn = 30, scale = FALSE, verbose = FALSE, ...){
 
@@ -566,6 +592,7 @@ runPhenograph <- function(object, knn = 30, scale = FALSE, verbose = FALSE, ...)
 #' @useDynLib flowSpy
 #'
 #' @export
+#' @return cluster information
 #'
 #' @author Hao Chen <chen_hao@immunol.a-star.edu.sg>
 #'
@@ -638,6 +665,7 @@ Rphenograph <- function(data, k=30){
 #'
 #' @importFrom RANN nn2
 #' @export
+#'
 #'
 find_neighbors <- function(data, k){
   nearest <- nn2(data, data, k, searchtype = "standard")

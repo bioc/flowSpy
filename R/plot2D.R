@@ -20,6 +20,7 @@
 #' @importFrom stats aggregate
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -196,6 +197,7 @@ plot2D <- function(object,
 #' @importFrom stats aggregate
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -286,6 +288,7 @@ plotViolin <- function(object,
 #' @param plot.theme themes from \code{ggplot2}
 #'
 #' @import ggplot2
+#' @return ggplot2 figure
 #'
 #' @export
 #'
@@ -317,7 +320,7 @@ plotPieCluster <- function(object,
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing")
   if (is.null(object@network)) stop(Sys.time(), " [ERROR] network is missing, please run runCluster first!")
-  if (length(unique(object@meta.data$stage)) <= 1) stop(Sys.time(), " [ERROR] plotPieTree only fits elements in stage over 2!")
+  if (length(unique(object@meta.data$stage)) <= 1) stop(Sys.time(), " [ERROR] plotPieCluster only fits elements in stage over 2!")
 
   # update plot meta information
   plot.data <- fetchClustMeta(object, verbose = FALSE)
@@ -375,6 +378,7 @@ plotPieCluster <- function(object,
 #' @param plot.theme themes from \code{ggplot2}
 #'
 #' @import ggplot2
+#' @return ggplot2 figure
 #'
 #' @export
 #'
@@ -501,6 +505,7 @@ plotCluster <- function(object,
 #' @importFrom grDevices colorRampPalette
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -545,6 +550,7 @@ plotClusterHeatmap <- function(object,
 #' @importFrom stats aggregate
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -594,6 +600,7 @@ plotBranchHeatmap <- function(object,
 #' @importFrom stats aggregate
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'
@@ -657,6 +664,7 @@ plotTrajHeatmap <- function(object,
 #' @importFrom grDevices colorRampPalette
 #'
 #' @export
+#' @return ggplot2 figure
 #'
 #' @examples
 #'

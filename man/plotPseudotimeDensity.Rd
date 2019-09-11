@@ -19,6 +19,9 @@ plotPseudotimeDensity(object, color.by = "stage",
 
 \item{plot.theme}{themes from \code{ggplot2}}
 }
+\value{
+ggplot2 figure
+}
 \description{
 plot Pseudotime density of FSPY
 }

@@ -21,6 +21,7 @@
 #' @import destiny
 #'
 #' @export
+#' @return An FSPY object
 #'
 #' @examples
 #'

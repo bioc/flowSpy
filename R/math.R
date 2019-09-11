@@ -72,7 +72,7 @@ inv.logistic <- function(x, x0, k, c=1) {
 
 # Determining preference between a pair of values
 #
-preference <- function(x, y, signed=F) {
+preference <- function(x, y, signed = FALSE) {
   z <- as.data.frame(cbind(x, y))
   if (signed) {
     z$p <- apply(z, 1, function(q) (q[1]-q[2])/(q[1]+q[2]))

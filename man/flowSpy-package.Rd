@@ -10,7 +10,7 @@ Functions and methods to visualize and analyze flow cytometry data.
 }
 \details{
 \tabular{ll}{ Package: \tab flowSpy\cr Type: \tab Package\cr Version: \tab
-1.2.6\cr Date: \tab 2019-08-26\cr License: \tab GPL-3.0\cr }
+1.2.7\cr Date: \tab 2019-09-04\cr License: \tab GPL-3.0\cr }
 While high-dimensional single-cell based flow and mass cytometry data has
 demonstrated increased applications in microenvironment composition and
 stem-cell research, integrated analyzing workflow design for experimental
@@ -29,8 +29,6 @@ if (FALSE) {
 ## See vignette tutorials
 vignette(package = "flowSpy")
 vignette("Quick_start", package = "flowSpy")
-vignette("Base_workflow", package = "flowSpy")
-vignette("Time_course_workflow", package = "flowSpy")
 }
 
 }

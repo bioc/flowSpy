@@ -20,7 +20,15 @@
 #' @importFrom grDevices rainbow colorRampPalette
 #'
 #' @export
+#' @return gplots figure
+#' @examples
 #'
+#' if (FALSE) {
+#'
+#'  plot3D(fspy, item.use = c("DC_2","DC_1","DC_3"), color.by = "stage",
+#'         size = 0.5, angle = 60, color.theme = c("#FF99FF","#7A06A0","#FF3222"))
+#'
+#' }
 #'
 plot3D <- function(object,
                    item.use = c("PC1", "PC2", "PC3"),

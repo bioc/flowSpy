@@ -28,6 +28,15 @@ Calculates and stores a k-nearest neighbor graph based on Euclidean
    distance with (KMKNN) algorithm using log-transformed signaling matrix of
    flow cytometry data. The base function are base on \code{\link[BiocNeighbors]{findKNN}}.
 }
+\examples{
+if (FALSE) {
+
+fspy <- runKNN(fspy)
+
+}
+
+
+}
 \seealso{
 \code{\link[BiocNeighbors]{findKNN}}
 }

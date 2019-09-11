@@ -20,6 +20,9 @@ runUMAP(object, umap.config = umap.defaults, n_neighbors = 30,
 
 \item{...}{Options to pass on to the \code{\link[umap]{umap}} function}
 }
+\value{
+An FSPY object
+}
 \description{
 Calculate Uniform Manifold Approximation and Projection in FSPY
 }

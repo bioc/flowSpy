@@ -22,6 +22,13 @@
 #'
 #' @export
 #'
+#' @examples
+#' if (FALSE) {
+#'
+#' fspy <- runKNN(fspy)
+#'
+#' }
+#'
 #'
 runKNN <- function(object,
                    given.mat = NULL,

@@ -29,9 +29,18 @@ runKmeans(object, k = 25, iter.max = 10, nstart = 1,
 }
 \value{
 an FSPY object with kmeans.id in meta.data
+
+An FSPY object with cluster
 }
 \description{
 Perform k-means clustering on a data matrix.
+}
+\examples{
+
+if (FALSE) {
+fspy <- runKmeans(fspy, k = 25, verbose = TRUE)
+}
+
 }
 \seealso{
 \code{\link[stats]{kmeans}}

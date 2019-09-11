@@ -65,8 +65,6 @@ if (FALSE) {
 # See vignette tutorials for more information
 vignette(package = "flowSpy")
 vignette("Quick_start", package = "flowSpy")
-vignette("Base_workflow", package = "flowSpy")
-vignette("Time_course_workflow", package = "flowSpy")
 
   # Path to your FCS files
   fcs.path <- "flowSpy-dataset/FCS/usecase1/"

@@ -21,6 +21,7 @@
 #' @seealso \code{\link[gmodels]{fast.prcomp}}
 #'
 #' @export
+#' @return An FSPY object with PCA
 #' @examples
 #'
 #' if (FALSE) {

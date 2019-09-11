@@ -44,9 +44,17 @@ Any unambiguous substring can be given. See \code{\link[stats]{dist}}}
 }
 \value{
 an FSPY object with som.id in FSPY object
+
+An FSPY object with cluster
 }
 \description{
 Build a self-organizing map
+}
+\examples{
+if (FALSE) {
+fspy <- runSOM(fspy, xdim = 10, ydim = 10, verbose = TRUE)
+}
+
 }
 \references{
 This code is strongly based on the \code{\link[FlowSOM]{SOM}} function.

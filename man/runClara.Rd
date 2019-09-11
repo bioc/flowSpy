@@ -33,9 +33,17 @@ The default is N = 5,}
 }
 \value{
 an FSPY object with clara.id in meta.data
+
+An FSPY object with cluster
 }
 \description{
 Clustering a data matrix into k clusters
+}
+\examples{
+if (FALSE) {
+fspy <- runClara(fspy, k = 25, verbose = TRUE)
+}
+
 }
 \seealso{
 \code{\link[cluster]{clara}}

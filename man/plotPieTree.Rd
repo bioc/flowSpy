@@ -20,6 +20,9 @@ plotPieTree(object, cex.size = 2, size.by.cell.number = TRUE,
 
 \item{show.node.name}{logical. whether to show node name}
 }
+\value{
+ggplot2 figure
+}
 \description{
 plot MST pie of FSPY
 }

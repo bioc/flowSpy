@@ -18,6 +18,9 @@ constraintMatrix(x, cutoff = 0.99, markers = NULL,
 This must be one of "euclidean", "maximum", "manhattan",
 "canberra", "binary" or "minkowski".}
 }
+\value{
+a matrix
+}
 \description{
 constraint FCS data by a provid cutoff
 }

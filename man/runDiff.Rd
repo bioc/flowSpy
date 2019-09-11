@@ -21,9 +21,22 @@ markers in compare with branch.id}
 }
 \value{
 An FSPY object with cluster.id in meta.data
+
+a data.frame with differential expressed markers
 }
 \description{
 Calculating differentially expressed markers
+}
+\examples{
+
+if (FALSE) {
+
+DEG.table <- runDiff(fspy)
+
+}
+
+
+
 }
 \seealso{
 \code{bulidTree}

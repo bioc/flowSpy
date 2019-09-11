@@ -6,8 +6,7 @@
 \usage{
 runExprsMerge(fcsFiles, comp = FALSE, transformMethod = c("autoLgcl",
   "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"), scaleTo = NULL,
-  mergeMethod = c("ceil", "all", "fixed", "min"), fixedNum = 2000,
-  sampleSeed = 1, ...)
+  mergeMethod = c("ceil", "all", "fixed", "min"), fixedNum = 2000, ...)
 }
 \arguments{
 \item{fcsFiles}{A vector of FCS file names.}
@@ -36,8 +35,6 @@ from each fcs file and combined for analysis.}
 
 \item{fixedNum}{The fixed number of cells to be extracted from each FCS file.}
 
-\item{sampleSeed}{A sampling seed for reproducible expression matrix merging.}
-
 \item{...}{Other arguments passed to \code{runExprsExtract}}
 }
 \value{
@@ -55,8 +52,6 @@ Apply preprocessing on each FCS file including compensation
 if (FALSE) {
   # See vignette tutorials for more information
   vignette("Quick_start", package = "flowSpy")
-  vignette("Base_workflow", package = "flowSpy")
-  vignette("Time_course_workflow", package = "flowSpy")
 
   # Path to your FCS files
   fcs.path <- "flowSpy-dataset/FCS/usecase2/"

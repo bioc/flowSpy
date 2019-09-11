@@ -19,7 +19,7 @@ buildTree(object, method = "euclidean", dim.type = "umap",
 \item{verbose}{logical. Whether to print calculation progress.}
 }
 \value{
-An FSPY object
+An FSPY object with tree
 }
 \description{
 buildTree

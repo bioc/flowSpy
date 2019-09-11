@@ -33,6 +33,9 @@ See \code{\link[Rtsne]{Rtsne}}}
 
 \item{...}{Parameters passing to \code{\link[Rtsne]{Rtsne}} function}
 }
+\value{
+An FSPY object
+}
 \description{
 Calculate t-Distributed Stochastic Neighbor Embedding in FSPY
 }

@@ -11,6 +11,9 @@ updatePlotMeta(object, verbose = TRUE)
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }
+\value{
+An FSPY object
+}
 \description{
 Update plot meta information of FSPY
 }
