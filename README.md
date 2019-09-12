@@ -60,13 +60,10 @@ library(flowSpy)
 
 ## 3 Workflow of flowSpy
 
-<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
+<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.jpg" alt="Workflow of flowSpy" /> </center>
 
 **Workflow of flowSpy**
 
-<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.png" alt="Algorithm of flowSpy" height=70% width=70% /> </center>
-
-**Trajectory construction and pseudotime estimation of flowSpy workflow**
 
 ## 4 Quick start (Standard Workflow)
 
@@ -75,24 +72,43 @@ library(flowSpy)
 # Loading packages
 suppressMessages({
 library(ggplot2)
-library(flowCore)
 library(flowSpy)
+library(flowCore)
 library(stringr)
 })
 
-# Read your FCS files
-fcs.file <- "path to your fcs file (*.fcs)"
-exp.data <- runExprsExtract(fcs.file)
-# Or for more than one fcs file
-fcs.data <- runExprsMerge(fcs.file)
+# Read fcs files
+fcs.path <- system.file("extdata", package = "flowSpy")
+fcs.files <- list.files(fcs.path, pattern = '.FCS$', full = TRUE)
 
-# Build FSPY object
+fcs.data <- runExprsMerge(fcs.files, comp = FALSE, transformMethod = "none")
+
+# Refine colnames of fcs data
+recol <- c(`FITC-A<CD43>` = "CD43", `APC-A<CD34>` = "CD34", 
+           `BV421-A<CD90>` = "CD90", `BV510-A<CD45RA>` = "CD45RA", 
+           `BV605-A<CD31>` = "CD31", `BV650-A<CD49f>` = "CD49f",
+           `BV 735-A<CD73>` = "CD73", `BV786-A<CD45>` = "CD45", 
+           `PE-A<FLK1>` = "FLK1", `PE-Cy7-A<CD38>` = "CD38")
+colnames(fcs.data)[match(names(recol), colnames(fcs.data))] = recol
+fcs.data <- fcs.data[, recol]
+
+day.list <- c("D0", "D2", "D4", "D6", "D8", "D10")
 meta.data <- data.frame(cell = rownames(fcs.data),
-                        stage = "D0" )
-markers <- colnames(fcs.file)[grep("^CD", colnames(fcs.file))]
-fspy <- createFSPY(raw.data = fcs.data, markers = markers, meta.data = meta.data)
+                        stage = str_replace(rownames(fcs.data), regex(".FCS.+"), "") )
+meta.data$stage <- factor(as.character(meta.data$stage), levels = day.list)
 
-# Workflow of flowSpy
+markers <- c("CD43","CD34","CD90","CD45RA","CD31","CD49f","CD73","CD45","FLK1","CD38")
+
+# Build the FSPY object
+fspy <- createFSPY(raw.data = fcs.data, markers = markers,
+                   meta.data = meta.data,
+                   normalization.method = "log",
+                   verbose = TRUE)
+
+# See information
+fspy
+
+# Standard workflow of flowSpy
 fspy <- runCluster(fspy)
 fspy <- processingCluster(fspy)
 fspy <- runFastPCA(fspy)

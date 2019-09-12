@@ -25,30 +25,33 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, eval = TRUE,
                       warning = FALSE, message = TRUE)
 ```
 
-## Abstract
+## Introduction
 
-Although multidimensional single-cell-based flow and mass cytometry have been increasingly applied to microenvironmental composition and stem-cell research, integrated analysis workflows to facilitate the interpretation of experimental cytometry data remain underdeveloped. We present flowSpy, a comprehensive R package designed for the analysis and interpretation of flow and mass cytometry data. We applied flowSpy to mass cytometry and time-course flow cytometry data to demonstrate the usage and practical utility of its computational modules. flowSpy is a reliable tool for multidimensional cytometry data workflows and produces compelling results for trajectory construction and pseudotime estimation.
+Although multidimensional single-cell-based flow and mass cytometry have been increasingly applied to microenvironmental composition and stem-cell research, integrated analysis workflows to facilitate the interpretation of experimental cytometry data remain underdeveloped. We present flowSpy, a comprehensive R package designed for the analysis and interpretation of flow and mass cytometry data. We applied flowSpy to mass cytometry and time-course flow cytometry data to demonstrate the usage and practical utility of its computational modules. flowSpy is a reliable tool for multidimensional cytometry data workflows and produces compelling results for trajectory construction and pseudotime estimation. 
 
 <img src="../inst/figures/logo.png" align="right" height=150 width=150/>
 
-
-## Introduction
-
-Multidimensional single-cell-based assays with flow or mass cytometric signals are widely used in cellular subpopulations identification, tissue microenvironment composition, clinical immunophenotyping and differential lineage reconstruction [1]. Moden fluorescence-based flow cytometers typically can detect up to 20 features on the single-cell level in one routine case, whereas mass cytometers promise to increase this capacity towards 50 [2]. Despite the traditional manual gating strategies in flow cytometry data, effective analysis methods on multi-dimensional cytometric data still require promotion on trajectory inference, pseudotime estimation, visualization and workflow standardization. Especialy for human hematopoietic differentiation and cancer research, reconstructing lineage relationships between cells within a tissue is a long-standing aim. With the fast development of Single-cell RNA Sequencing (scRNA-seq), some effective computational modules and methods refined from scRNA-seq can be enrolled in the design of flow and mass cytometry analysis workflow, such as Seurat [3], Monocle [4] and scmap [5]. However, different from scRNA-seq data, flow and mass cytometry data do not contain a large proportion of zeros for expression genes and only make concentration on a subset of cellular makers on protein expression levels [3]. Generally, most automated pipelines designed for scRNA-seq do not perform well for flow and mass cytometry data, while several basic algorithms can be enrolled in the flow and mass cytometry workflow. For example, linear or nonlinear dimensionality reduction techniques such as principal component analysis (PCA), t-distributed stochastic neighbor embedding (t-SNE, renamed viSNE) [6] and diffusion maps [7]. Recently, uniform manifold approximation and projection (UMAP) has claimed good performance on dimensionality reduction as well as visualization for single-cell data [8]. It brings new insights into flow and mass cytometry data analysis.
-
-Both flow and mass cytometry data are stored in the standard format which called Flow Cytometry Standard (FCS). FCS file can be read and written by tools on different operating platforms [9]. Several classical tools developed for characterizing performance standardization, calibration and gating control of FCS data such as flowCore [10], flowVis [11], FlowSOM [12], SPADE [13] and Cytofkit [14]. Most of them run in the R statistical computing environment and perform well on gating, clustering and visualization. Facing with increasing degrees of multi-dimensional FCS data, several emerging research areas such as developmental trajectory inference and lineage tracing are still under challenge [15]. In accordance with well-established standards and practices [10-14, 16, 17], we present flowSpy, a trajectory reconstruction, pseudotime estimation and visualization toolkit for flow and mass cytometry data. The flowSpy package is built in R and can complete analyzing workflow for flow and mass cytometry data such as subpopulation classfication, dimensionality reduction, trajectory inference, pseudotime estimation, intermediate states identification and visualization. flowSpy runs across platforms such as UNIX, Windows and MacOS and provides an up-to-date, feature-rich and readily scalable workflow. 
-
 ## Overview of flowSpy workflow
 
-<center> <img src="../inst/figures/Workflow.png" alt="Workflow of flowSpy" /> </center>
-
-<center> **Workflow of flowSpy** </center>
-
 The flowSpy package is developed to complete the majority of standard analysis and visualization workflow for FCS data. In flowSpy workflow, an S4 object in R is built to implement the statistical and computational approach, and all computational modules are integrated into one single channel which only requires a specified input data format. Computational modules of flowSpy can be divided into four main parts (Fig. 1): preprocessing, trajectory, analysis and visualization. 
+
+
 - **Preprocessing**. Data import, compensation, quality control, filtration, normalization and merge cells from different samples can be implemented in the preprocessing module. After preprocessing, a matrix contains clean cytometric signaling data, a data.frame containing meta-information of the experiment and a vector contains all markers enrolled in the computational process are required to build an FPSY object. 
+
+
 - **Trajectory**. Cells built in the FSPY object are classfied into different clusters based on the expression level of input markers. You can choose different clustering methods by inputting different parameters. After clustering, cells are downsampled in a cluster-dependent fashion to reduce the total cell size and avoid small cluster deletion. Dimensionality reduction for both cells and clusters are also implemented in the clustering procedure. After dimensionality reduction, we use Minimus Spanning Tree (MST) to construct cell trajectory.
+
+
 - **Analysis**. This module is design for time couse FCS data. Before running pseudotime, root cells must be defined first based on users' priori knowledge. Root cells in flowSpy workflow are the initial cells of the trajectory tree. So it can be set using one vertex node of the tree or a cluster of cells with specific antibodies combination. Intermediate state evaluation is also envolved in the pseudotime module. Leaf cells are defined by the end node of trajectory tree or the end stage of the experiment. Intermediate state cells are cells with higher betweenness in the graph built on cell-cell connection, which play an important role between the connection of root cells and leaf cells.
+
+
 - **Visualization**. The visualization module can provide clear and concise visualization of FCS data in an effective and easy-to-comprehend manner. flowSpy package offers various plotting functions to generate customizable and publication-quality plots. Two-dimensional or three-dimensional plot can fit most requirement from dimensionality reduction results. And tree-based plot can visualize cell trajectory as force-directed layout tree. Other special plots such as heatmap and violin plot are also provided in flowSpy.
+
+
+<center> <img src="../inst/figures/algorithm.jpg" alt="Workflow of flowSpy" /> </center>
+
+<center> **Fig. 1. Workflow of flowSpy** </center>
+
 
 
 ``` {r eval = TRUE, fig.width = 6, fig.height = 5}
@@ -93,7 +96,7 @@ fspy <- createFSPY(raw.data = fcs.data, markers = markers,
 fspy
 ```
 
-``` {r eval = FALSE, fig.width = 6, fig.height = 5}
+``` {r eval = TRUE, fig.width = 6, fig.height = 5}
 # Cluster cells by SOM algorithm
 # Set random seed to make results reproducible
 set.seed(1)
