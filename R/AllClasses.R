@@ -13,9 +13,9 @@
 NULL
 
 #'
-#' flowSpy class
+#' Class \code{FSPY}
 #'
-#' @name FSPY
+#' @aliases FSPYclass, FSPY-class, FSPY
 #'
 #' @description  All information stored in FSPY object.
 #'    You can use \code{creatFSPY} to   create an FSPY
@@ -41,6 +41,7 @@ NULL
 #'     the distance of its nearest neighbors.
 #' @slot som list. Store som network information calculated
 #'     using \code{\link[FlowSOM]{FlowSOM}}.
+#' @slot cluster data.frame. Cluster information
 #' @slot pca.sdev,pca.value,pca.scores PCA information of FSPY
 #'     object which are generated from \code{\link[gmodels]{fast.prcomp}}.
 #' @slot tsne.value matrix. tSNE coordinates information.
@@ -67,17 +68,16 @@ NULL
 #' @slot tree.meta data.frame. Tree meta information of FSPY object.
 #'
 #' @importClassesFrom destiny DiffusionMap DPT
+#'
 #' @useDynLib flowSpy
 #'
-#' @exportClass FSPY
 #' @export
 #'
-#' @aliases FSPYclass, FSPY-class, FSPY
 #'
 #' @return NULL
 #'
 #'
-FSPY <- methods::setClass("FSPY", slots = c(
+setClass("FSPY", slots = c(
     raw.data = "matrix",
     log.data = "matrix",
     meta.data = "data.frame",
@@ -124,6 +124,16 @@ FSPY <- methods::setClass("FSPY", slots = c(
     tree.meta = "data.frame"
     )
 )
+
+setValidity("FSPY", function(object) {
+  X <- object@log.data
+  n <- nrow(X)
+  p <- ncol(X)
+  if(!is.matrix(X)) {
+    return("Log data must be matrix.")
+  }
+  return(TRUE)
+})
 
 #' create an FSPY object
 #'
@@ -200,24 +210,20 @@ createFSPY <- function(raw.data, markers, meta.data,
   if (verbose) message(Sys.time(), " [INFO] Number of cells in processing: ", dim(raw.data)[1])
 
   # QC of metadata
-  if (missing(meta.data)) stop(Sys.time(), " [ERROR] meta.data
-                               must be a data.frame")
+  if (missing(meta.data)) stop(Sys.time(), " [ERROR] meta.data must be a data.frame")
   if (!is.data.frame(meta.data)) {
     warning(Sys.time(), " [WARNING] meta.data must be a data.frame")
     meta.data <- as.matrix(meta.data)
   }
 
   if (!all(c("cell", "stage") %in% colnames(meta.data))) {
-    stop(Sys.time(), " [ERROR] cell and stage information
-         must be provided in meta.data")
+    stop(Sys.time(), " [ERROR] cell and stage information must be provided in meta.data")
   }
 
   if (nrow(raw.data) != nrow(meta.data)) {
-    stop(Sys.time(), " [ERROR] cell number in raw.data is not
-         equal to that in meta.data")
+    stop(Sys.time(), " [ERROR] cell number in raw.data is not equal to that in meta.data")
   } else {
-    if (verbose) message(Sys.time(), " [INFO] rownames of meta.data and
-                         raw.data will be named using column cell")
+    if (verbose) message(Sys.time(), " [INFO] rownames of meta.data and raw.data will be named using column cell")
     rownames(raw.data) = meta.data$cell
     rownames(meta.data) = meta.data$cell
   }
@@ -254,8 +260,7 @@ createFSPY <- function(raw.data, markers, meta.data,
     norm_factors <- (10**ceiling(log10(median(cs))))/cs
     norm_factors_idx <- which(!is.na(norm_factors))
     if (length(which(is.na(norm_factors))) > 0) {
-      warning(paste0(Sys.time(), " [WARNING] Unavailable log data column,
-                     please check your data"))
+      warning(paste0(Sys.time(), " [WARNING] Unavailable log data column, please check your data"))
     }
     if (verbose) message(paste0(Sys.time(), " [INFO] Normalization and log-transformation."))
     object@raw.data[, norm_factors_idx] <- round(
