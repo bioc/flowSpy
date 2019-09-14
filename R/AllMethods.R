@@ -3,10 +3,12 @@
 #' Prevents R from crashing by trying to print all slots of an FSPY object  if a returned object is not stored in a variable.
 #'
 #' @param object An FSPY object
+#' @aliases show, show-method
 #'
 #' @export
 #'
 #' @docType methods
+#' @method flowSpy show
 #'
 #' @keywords internal
 #'

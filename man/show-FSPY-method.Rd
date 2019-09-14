@@ -3,6 +3,8 @@
 \docType{methods}
 \name{show,FSPY-method}
 \alias{show,FSPY-method}
+\alias{show,}
+\alias{show-method}
 \title{FSPY show method}
 \usage{
 \S4method{show}{FSPY}(object)
