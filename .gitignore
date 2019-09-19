@@ -12,17 +12,6 @@
 .Rhistory
 .Rapp.history
 
-
-
-# Other
-.gitattributes
-.Rhistory
-.Rbuildignore
-.gitignore
-
-flowSpy.Rproj
-
-
 # Session Data files
 .RData
 
