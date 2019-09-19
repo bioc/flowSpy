@@ -64,6 +64,7 @@ library(flowCore)
 library(stringr)
 })
 
+
 # Read fcs files
 fcs.path <- system.file("extdata", package = "flowSpy")
 fcs.files <- list.files(fcs.path, pattern = '.FCS$', full = TRUE)
