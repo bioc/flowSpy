@@ -132,6 +132,11 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 
 ## 6 Version History
 
+Sep 19, 2019
+  - Version 1.2.8
+  - Changes:
+    - Remove flowSpy.Rproj, .DS_Store and .gitattributes
+
 Sep 11, 2019
   - Version 1.2.7
   - Changes:
