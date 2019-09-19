@@ -12,6 +12,7 @@
 #' @import scatterpie
 NULL
 
+
 #'
 #' Class \code{FSPY}
 #'
