@@ -3,8 +3,7 @@ Type: Package
 Title: A Toolkit for Flow And Mass Cytometry Data
 Version: 1.2.7
 Date: 2019-09-04
-Authors@R: c(person("Yuting", "Dai", role = c("aut", "cre"),
-            email = "forlynna@sjtu.edu.cn"))
+Authors@R: person("Yuting", "Dai", role = c("aut", "cre"), email = "forlynna@sjtu.edu.cn")
 Author: Yuting Dai [aut, cre, cph]
 Maintainer: Yuting Dai <forlynna@sjtu.edu.cn>
 Description: A trajectory inference and visualization toolkit 
