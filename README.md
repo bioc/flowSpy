@@ -1,5 +1,5 @@
 
-# flowSpy v1.2.7  <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
+# flowSpy <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/logo.png" align="right" height=150 width=150/>
 
 flowSpy is an R package to implement cellular subpopulations identification, trajectory inference, pseudotime estimation and visualization for flow and mass cytometry data. This package is developed and maintained by [JhuangLab](https://github.com/JhuangLab) at Shanghai Institute of Hematology.
 
@@ -133,41 +133,41 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 ## 6 Version History
 
 Sep 19, 2019
-  - Version 1.2.8
+  - Version 0.2.8
   - Changes:
     - Remove flowSpy.Rproj, .DS_Store and .gitattributes
 
 Sep 11, 2019
-  - Version 1.2.7
+  - Version 0.2.7
   - Changes:
     - Fixed some bugs
     - Fixed errors and warnings in `R CMD check` and `R CMD BiocCheck`
 
 Aug 29, 2019
-  - Version 1.2.6
+  - Version 0.2.6
   - Changes:
     - Fixed some bugs
     - Add trajectory plot function
     - Update vignette tutorial
 
 Aug 14, 2019
-  - Version 1.2.5
+  - Version 0.2.5
   - Changes:
     - Fixed some bugs
     - Add branch analysis and differentially expressed markers analysis
 
 Aug 08, 2019
-  - Version 1.2.4
+  - Version 0.2.4
   - Changes:
     - Fixed some bugs and finished vignette tutorial
 
 July 24, 2019
-  - Version 1.2.3
+  - Version 0.2.3
   - Changes:
     - Add phenoGraph algorithm
 
 July 19, 2019
-  - Version 1.2.2
+  - Version 0.2.2
   - Changes:
     - Fixed some bugs on cluster based downsampling
 
