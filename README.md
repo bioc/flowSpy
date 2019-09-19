@@ -133,7 +133,7 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 ## 6 Version History
 
 Sep 19, 2019
-  - Version 0.2.9
+  - Version 0.99.0
   - Changes:
     - Fixed some bugs
 
