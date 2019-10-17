@@ -52,8 +52,8 @@ object which are generated from \code{\link[gmodels]{fast.prcomp}}.}
 \item{\code{tsne.value}}{matrix. tSNE coordinates information.
 See \code{\link[Rtsne]{Rtsne}}.}
 
-\item{\code{dm}}{DiffusionMap object. Diffusion map calculated by
-\code{\link[destiny]{DiffusionMap}}}
+\item{\code{dm}}{DiffusionMap object. Diffusion map calculated by package 
+\code{destiny}}
 
 \item{\code{umap.value}}{matrix umap coordinates information
 calculated using \code{\link[umap]{umap}}.}

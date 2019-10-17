@@ -112,7 +112,7 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' @param ... options to pass on to the dimensionality reduction functions.
 #'
 #' @seealso \code{\link[umap]{umap}}, \code{\link[gmodels]{fast.prcomp}},
-#'    \code{\link[Rtsne]{Rtsne}}, \code{\link[destiny]{DiffusionMap}}
+#'    \code{\link[Rtsne]{Rtsne}}, \code{destiny}
 #'
 #' @return An FSPY object with cluster.id in meta.data
 #'
@@ -512,7 +512,7 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #' @param scale logical. Whether to scale the expression matrix
 #' @param knn numeric. Number of nearest neighbours, default is 30.
 #' @param verbose logical. Whether to print calculation progress.
-#' @param ... Parameters passing to \code{\link[igraph]{graph.adjacency}} function
+#' @param ... Parameters passing to \code{igraph} function
 #'
 #' @return an FSPY object
 #'

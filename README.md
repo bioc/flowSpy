@@ -133,6 +133,11 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 ## 6 Version History
 
 Oct 17, 2019
+  - Version 0.99.3
+  - Changes:
+    - Fixed some warnings in the checking process of Bioc 3.10 
+
+Oct 17, 2019
   - Version 0.99.2
   - Changes:
     - Added documentation for some parameters

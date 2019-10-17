@@ -14,19 +14,19 @@ runDiffusionMap(object, sigma.use = NULL, distance = c("euclidean",
 \item{sigma.use}{numeric. Diffusion scale parameter of the Gaussian kernel. One of '\code{local}',
  '\code{global}', a \code{\link[base]{numeric}} global sigma or a Sigmas object.
  When choosing '\code{global}', a global sigma will be calculated using find_sigmas
- (See \code{\link[destiny]{find_sigmas}}). A larger sigma might be necessary if the eigenvalues can not
-be found because of a singularity in the matrix. See \code{\link[destiny]{DiffusionMap}}}
+ (See \code{destiny}). A larger sigma might be necessary if the eigenvalues can not
+be found because of a singularity in the matrix. See \code{destiny}.}
 
 \item{distance}{Distance measurement method applied to data or a distance matrix/dist.
-For the allowed values, see \code{\link[destiny]{find_knn}}}
+For the allowed values, see \code{destiny}}
 
-\item{k}{numeric. By default is 30. \code{\link[destiny]{find_dm_k}} can be used to specify k.}
+\item{k}{numeric. By default is 30. \code{destiny} can be used to specify k.}
 
-\item{density.norm}{logical. If TRUE, use density normalisation. See \code{\link[destiny]{DiffusionMap}}}
+\item{density.norm}{logical. If TRUE, use density normalisation. See \code{destiny}}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
-\item{...}{options to pass on to the \code{\link[destiny]{DiffusionMap}} function}
+\item{...}{options to pass on to the \code{destiny}.}
 }
 \value{
 An FSPY object
@@ -42,5 +42,5 @@ fspy <- runDiffusionMap(fspy, verbose = TRUE)
 
 }
 \seealso{
-\code{\link[destiny]{DiffusionMap}}
+\code{destiny}
 }

@@ -61,5 +61,5 @@ fspy <- processingCluster(fspy, perplexity = 2, force.resample = FALSE)
 }
 \seealso{
 \code{\link[umap]{umap}}, \code{\link[gmodels]{fast.prcomp}},
-   \code{\link[Rtsne]{Rtsne}}, \code{\link[destiny]{DiffusionMap}}
+   \code{\link[Rtsne]{Rtsne}}, \code{destiny}
 }

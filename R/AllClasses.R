@@ -47,8 +47,8 @@ NULL
 #'     object which are generated from \code{\link[gmodels]{fast.prcomp}}.
 #' @slot tsne.value matrix. tSNE coordinates information.
 #'     See \code{\link[Rtsne]{Rtsne}}.
-#' @slot dm DiffusionMap object. Diffusion map calculated by
-#'     \code{\link[destiny]{DiffusionMap}}
+#' @slot dm DiffusionMap object. Diffusion map calculated by package 
+#'     \code{destiny}
 #' @slot umap.value matrix umap coordinates information
 #'     calculated using \code{\link[umap]{umap}}.
 #' @slot root.cells vector, Names of root cells, which can

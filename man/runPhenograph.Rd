@@ -15,7 +15,7 @@ runPhenograph(object, knn = 30, scale = FALSE, verbose = FALSE, ...)
 
 \item{verbose}{logical. Whether to print calculation progress.}
 
-\item{...}{Parameters passing to \code{\link[igraph]{graph.adjacency}} function}
+\item{...}{Parameters passing to \code{igraph} function}
 }
 \value{
 an FSPY object
