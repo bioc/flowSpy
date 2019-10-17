@@ -4,8 +4,8 @@
 \alias{runPseudotime}
 \title{Calculation of Pseudotime}
 \usage{
-runPseudotime(object, mode = "undirected", dim.type = "tsne",
-  dim.use = 1:2, verbose = FALSE, ...)
+runPseudotime(object, mode = "undirected", dim.type = c("raw", "pca",
+  "tsne", "dc", "umap"), dim.use = 1:2, verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{An FSPY object}
@@ -14,7 +14,7 @@ runPseudotime(object, mode = "undirected", dim.type = "tsne",
 Possible values are: directed, undirected, upper, lower, max, min, plus.}
 
 \item{dim.type}{character. Type of dimensionality reduction method used to calculate
-pseudotime: umap, tsne, dc, pca or raw.}
+pseudotime: raw, umap, tsne, dc and pca. By default is raw.}
 
 \item{dim.use}{numeric. Dimensions used to calculate pseudotime}
 
@@ -31,12 +31,12 @@ calculation of Pseudotime based on KNN
 \examples{
 
 if (FALSE) {
+
+fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "raw")
 fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "umap", dim.use = 1:2)
 fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "tsne", dim.use = 1:2)
 fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "dc", dim.use = 1:3)
 fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "pca", dim.use = 1:3)
-fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "raw")
-
 
 # tSNE plot colored by pseudotime
 plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",

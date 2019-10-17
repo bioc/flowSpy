@@ -8,7 +8,8 @@
 #'
 #' @param object An FSPY object
 #' @param mode character. Specifies how igraph should interpret the supplied matrix.
-#'    Possible values are: directed, undirected, upper, lower, max, min, plus.
+#'    Possible values are: undirected, directed, upper, lower, max, min, plus. By 
+#'    default is undirected.
 #' @param max.run.forward numeric. Maximum cycles of forward walk.
 #' @param backward.walk logical. Whether to run backward walk.
 #' @param max.run.backward numeric. Maximum cycles of backward walk.
@@ -30,7 +31,7 @@
 #'
 #'
 #'
-runWalk <- function(object, mode = "undirected",
+runWalk <- function(object, mode = c("undirected", "directed", "max", "min", "upper", "lower", "plus"),
                     max.run.forward = 20,
                     backward.walk = FALSE, max.run.backward = 20,
                     verbose = FALSE, ...) {
@@ -55,6 +56,7 @@ runWalk <- function(object, mode = "undirected",
     idx <- knn.index[i,][ pseudotime[knn.index[i,]] > pseudotime[i]  ]
     adj[i, rownames(knn.index)[idx]] <- 1
   }
+  mode <- match.arg(mode)
   g <- igraph::graph.adjacency(adj, mode = mode, ...)
   # remove self loops
   g <- simplify(g)

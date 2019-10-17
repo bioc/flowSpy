@@ -17,7 +17,8 @@ runKmeans(object, k = 25, iter.max = 10, nstart = 1,
 
 \item{nstart}{numeric. If k is a number, how many random sets should be chosen.}
 
-\item{algorithm}{numeric.}
+\item{algorithm}{character. Type of algorithm that will be choosen to calculate 
+kmeans. Four algoritms are provided: Hartigan-Wong, Lloyd, Forgy, MacQueen.}
 
 \item{trace}{logical or integer number.}
 

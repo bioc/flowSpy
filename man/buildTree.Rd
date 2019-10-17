@@ -4,17 +4,21 @@
 \alias{buildTree}
 \title{buildTree}
 \usage{
-buildTree(object, method = "euclidean", dim.type = "umap",
-  dim.use = 1:2, verbose = FALSE)
+buildTree(object, method = "euclidean", dim.type = c("raw", "pca",
+  "tsne", "dc", "umap"), dim.use = 1:2, verbose = FALSE)
 }
 \arguments{
 \item{object}{an FSPY object}
 
 \item{method}{character. Mehtod to build MST.}
 
-\item{dim.type}{character.}
+\item{dim.type}{character. Type of dimensions that will be used to build the tree.
+Five \code{dim.type} are provided, 'raw', 'pca', 'tsne', 'dc' and 'umap'. 
+By default is 'raw'.}
 
-\item{dim.use}{numeric}
+\item{dim.use}{numeric. Number of dimensions that will be used to build the tree.
+For example. If \code{dim.use} is 'raw', there is no limit for \code{dim.type}. 
+And if the \code{dim.use} is 'tsne' or 'umap', the default \code{dim.use} is 1:2.}
 
 \item{verbose}{logical. Whether to print calculation progress.}
 }
@@ -27,6 +31,9 @@ buildTree
 \examples{
 
 if (FALSE) {
+# build minimum spanning tree (MST) based on raw expression matrix
+fspy <- buildTree(fspy, dim.type = "raw")
+
 # build minimum spanning tree (MST) based on tsne
 fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2)
 

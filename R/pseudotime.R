@@ -139,7 +139,7 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' @param mode character. Specifies how igraph should interpret the supplied matrix.
 #'    Possible values are: directed, undirected, upper, lower, max, min, plus.
 #' @param dim.type character. Type of dimensionality reduction method used to calculate
-#'    pseudotime: umap, tsne, dc, pca or raw.
+#'    pseudotime: raw, umap, tsne, dc and pca. By default is raw.
 #' @param dim.use numeric. Dimensions used to calculate pseudotime
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to calculation function.
@@ -152,12 +152,12 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' @examples
 #'
 #' if (FALSE) {
+#' 
+#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "raw")
 #' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "umap", dim.use = 1:2)
 #' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "tsne", dim.use = 1:2)
 #' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "dc", dim.use = 1:3)
 #' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "pca", dim.use = 1:3)
-#' fspy <- runPseudotime(fspy, verbose = TRUE, dim.type = "raw")
-#'
 #'
 #' # tSNE plot colored by pseudotime
 #' plot2D(fspy, item.use = c("tSNE_1", "tSNE_2"), category = "numeric",
@@ -170,7 +170,7 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' }
 #'
 runPseudotime <- function(object, mode = "undirected",
-                          dim.type = "tsne", dim.use = 1:2,
+                          dim.type = c("raw", "pca", "tsne", "dc", "umap"), dim.use = 1:2,
                           verbose = FALSE, ...) {
 
   if (missing(object)) stop(Sys.time(), " [ERROR] object is missing.")
@@ -180,6 +180,8 @@ runPseudotime <- function(object, mode = "undirected",
   if ("pseudotime" %in% colnames(object@meta.data)) message(Sys.time(), " [INFO] Pseudotime exists in meta.data, it will be replaced.")
 
   if (missing(object)) stop(Sys.time(), " [ERROR] FSPY object is missing.")
+
+  dim.type <- match.arg(dim.type)
   if (dim.type %in% c("tsne", "tSNE", "TSNE", "t-SNE","t_SNE", "t") ) {
     dim.name <- paste0("tSNE_", dim.use)
     mat <- object@tsne.value[, dim.name]

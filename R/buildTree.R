@@ -5,8 +5,12 @@
 #'
 #' @param object an FSPY object
 #' @param method character. Mehtod to build MST.
-#' @param dim.type character.
-#' @param dim.use numeric
+#' @param dim.type character. Type of dimensions that will be used to build the tree.
+#'    Five \code{dim.type} are provided, 'raw', 'pca', 'tsne', 'dc' and 'umap'. 
+#'    By default is 'raw'.
+#' @param dim.use numeric. Number of dimensions that will be used to build the tree.
+#'    For example. If \code{dim.use} is 'raw', there is no limit for \code{dim.type}. 
+#'    And if the \code{dim.use} is 'tsne' or 'umap', the default \code{dim.use} is 1:2.
 #' @param verbose logical. Whether to print calculation progress.
 #'
 #' @export
@@ -19,6 +23,9 @@
 #' @examples
 #'
 #' if (FALSE) {
+#' # build minimum spanning tree (MST) based on raw expression matrix
+#' fspy <- buildTree(fspy, dim.type = "raw")
+#'
 #' # build minimum spanning tree (MST) based on tsne
 #' fspy <- buildTree(fspy, dim.type = "tsne", dim.use = 1:2)
 #'
@@ -33,11 +40,14 @@
 #' }
 #'
 buildTree <- function(object, method = "euclidean",
-                      dim.type = "umap", dim.use = 1:2,
+                      dim.type = c("raw", "pca", "tsne", "dc", "umap"), 
+                      dim.use = 1:2,
                       verbose = FALSE) {
 
   if (verbose) message(Sys.time(), " [INFO] Calculating buildTree.")
   if (missing(object)) stop(Sys.time(), " [ERROR] FSPY object is missing.")
+
+  dim.type <- match.arg(dim.type)
   if (dim.type %in% c("tsne", "tSNE", "TSNE", "t-SNE","t_SNE", "t") ) {
     dim.name <- paste0("tSNE_", dim.use)
     tree.mat <- object@tsne.value[, dim.name]

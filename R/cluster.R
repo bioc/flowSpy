@@ -294,7 +294,8 @@ runHclust <- function(object, k = 25,
 #' @param k numeric. The number of clusters.
 #' @param iter.max numeric. The maximum number of iterations allowed.
 #' @param nstart numeric. If k is a number, how many random sets should be chosen.
-#' @param algorithm numeric.
+#' @param algorithm character. Type of algorithm that will be choosen to calculate 
+#'    kmeans. Four algoritms are provided: Hartigan-Wong, Lloyd, Forgy, MacQueen.
 #' @param trace logical or integer number.
 #' @param scale logical. Whether to use scaled data in kmeans.
 #' @param verbose logical. Whether to print calculation progress.
@@ -320,7 +321,8 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
   if (verbose) message(Sys.time(), " [INFO] Calculating Kmeans.")
 
   if (scale) kmeans.data <- scale(object@log.data) else kmeans.data = object@log.data
-
+  
+  algorithm <- match.arg(algorithm)
   kmeans.info <- kmeans(kmeans.data, centers = k, iter.max = iter.max, nstart = nstart,
                         algorithm = algorithm, trace = FALSE)
 

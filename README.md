@@ -132,6 +132,12 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 
 ## 6 Version History
 
+Oct 17, 2019
+  - Version 0.99.2
+  - Changes:
+    - Added documentation for some parameters
+    - Changed the default parameter to `raw` in `dim.type`, and add match.arg() to `dim.type` selection
+
 Sep 19, 2019
   - Version 0.99.1
   - Changes:
@@ -140,7 +146,7 @@ Sep 19, 2019
 Sep 19, 2019
   - Version 0.2.8
   - Changes:
-    - Remove flowSpy.Rproj, .DS_Store and .gitattributes
+    - Removed flowSpy.Rproj, .DS_Store and .gitattributes
 
 Sep 11, 2019
   - Version 0.2.7
