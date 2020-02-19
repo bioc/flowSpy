@@ -17,8 +17,6 @@ runMclust(object, scale = FALSE, verbose = FALSE, ...)
 }
 \value{
 an FSPY object with mclust.id in meta.data
-
-An FSPY object with cluster
 }
 \description{
 Model-based clustering based on parameterized finite Gaussian mixture models.

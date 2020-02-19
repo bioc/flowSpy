@@ -97,7 +97,7 @@ fspy <- createFSPY(raw.data = fcs.data, markers = markers,
 fspy
 ```
 
-``` {r eval = FALSE, fig.width = 6, fig.height = 5}
+``` {r eval = TRUE, fig.width = 6, fig.height = 5}
 # Cluster cells by SOM algorithm
 # Set random seed to make results reproducible
 set.seed(1)

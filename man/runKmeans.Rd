@@ -4,9 +4,17 @@
 \alias{runKmeans}
 \title{runKmeans}
 \usage{
-runKmeans(object, k = 25, iter.max = 10, nstart = 1,
+runKmeans(
+  object,
+  k = 25,
+  iter.max = 10,
+  nstart = 1,
   algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-  trace = FALSE, scale = FALSE, verbose = FALSE, ...)
+  trace = FALSE,
+  scale = FALSE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -30,8 +38,6 @@ kmeans. Four algoritms are provided: Hartigan-Wong, Lloyd, Forgy, MacQueen.}
 }
 \value{
 an FSPY object with kmeans.id in meta.data
-
-An FSPY object with cluster
 }
 \description{
 Perform k-means clustering on a data matrix.

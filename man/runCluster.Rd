@@ -4,8 +4,12 @@
 \alias{runCluster}
 \title{Specific Clustering Method Toolkits}
 \usage{
-runCluster(object, cluster.method = c("som", "kmeans", "clara",
-  "phenograph", "hclust", "mclust"), verbose = FALSE, ...)
+runCluster(
+  object,
+  cluster.method = c("som", "kmeans", "clara", "phenograph", "hclust", "mclust"),
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -18,8 +22,6 @@ Clustering method "hclust" and "mclust" are not recommended because of long comp
 \item{...}{options to pass on to the clustering functions.}
 }
 \value{
-An FSPY object with cluster.id in meta.data
-
 An FSPY object with cluster
 }
 \description{

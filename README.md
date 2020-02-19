@@ -44,7 +44,16 @@ To objectively inference differential trajectory based on time courses FCS data,
 
 ## 2 Installation
 
-### 2.1 From Github
+### 2.1 From Bioconductor
+
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("flowSpy")
+```
+
+### 2.2 From Github
 
 This requires the `devtools` package to be installed first.
 
@@ -131,6 +140,11 @@ To see the detail version, please see the vignettes [**Quick_start_of_flowSpy**]
 If there is any error in installing or librarying the `flowSpy` package, please contact us via e-mail forlynna@sjtu.edu.cn
 
 ## 6 Version History
+
+Feb 15, 2020
+  - Version 1.0.2
+  - Changes:
+    - Add uniform downsampling in function `processingCluster`
 
 Oct 17, 2019
   - Version 0.99.3

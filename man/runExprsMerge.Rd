@@ -4,9 +4,15 @@
 \alias{runExprsMerge}
 \title{Merge the expression matrix from multiple FCS files with preprocessing}
 \usage{
-runExprsMerge(fcsFiles, comp = FALSE, transformMethod = c("autoLgcl",
-  "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"), scaleTo = NULL,
-  mergeMethod = c("ceil", "all", "fixed", "min"), fixedNum = 2000, ...)
+runExprsMerge(
+  fcsFiles,
+  comp = FALSE,
+  transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
+  scaleTo = NULL,
+  mergeMethod = c("ceil", "all", "fixed", "min"),
+  fixedNum = 2000,
+  ...
+)
 }
 \arguments{
 \item{fcsFiles}{A vector of FCS file names.}

@@ -4,11 +4,22 @@
 \alias{runExprsExtract}
 \title{Extract the expression data from a FCS file with preprocessing}
 \usage{
-runExprsExtract(fcsFile, verbose = FALSE, comp = FALSE,
-  transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh",
-  "logAbs", "none"), scaleTo = NULL, showDesc = TRUE, q = 0.05,
-  l_w = 0.1, l_t = 4000, l_m = 4.5, l_a = 0, a_a = 1, a_b = 1,
-  a_c = 0)
+runExprsExtract(
+  fcsFile,
+  verbose = FALSE,
+  comp = FALSE,
+  transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
+  scaleTo = NULL,
+  showDesc = TRUE,
+  q = 0.05,
+  l_w = 0.1,
+  l_t = 4000,
+  l_m = 4.5,
+  l_a = 0,
+  a_a = 1,
+  a_b = 1,
+  a_c = 0
+)
 }
 \arguments{
 \item{fcsFile}{The name of the FCS file.}

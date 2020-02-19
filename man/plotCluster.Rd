@@ -4,11 +4,20 @@
 \alias{plotCluster}
 \title{Visualization of cluster data of FSPY}
 \usage{
-plotCluster(object, item.use = c("PC_1", "PC_2"), color.by = "cluster",
-  size.by = "cell.number.percent", order.by = NULL, size = 1,
-  alpha = 1, category = "categorical", show.cluser.id = FALSE,
-  show.cluser.id.size = 4, main = "2D plot of cluster in FSPY",
-  plot.theme = theme_bw())
+plotCluster(
+  object,
+  item.use = c("PC_1", "PC_2"),
+  color.by = "cluster",
+  size.by = "cell.number.percent",
+  order.by = NULL,
+  size = 1,
+  alpha = 1,
+  category = "categorical",
+  show.cluser.id = FALSE,
+  show.cluser.id.size = 4,
+  main = "2D plot of cluster in FSPY",
+  plot.theme = theme_bw()
+)
 }
 \arguments{
 \item{object}{An FSPY object}

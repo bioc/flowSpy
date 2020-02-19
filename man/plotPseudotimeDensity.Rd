@@ -4,9 +4,13 @@
 \alias{plotPseudotimeDensity}
 \title{plot Pseudotime density of FSPY}
 \usage{
-plotPseudotimeDensity(object, color.by = "stage",
-  main = "Density of pseudotime", adjust = 0.5,
-  plot.theme = theme_bw())
+plotPseudotimeDensity(
+  object,
+  color.by = "stage",
+  main = "Density of pseudotime",
+  adjust = 0.5,
+  plot.theme = theme_bw()
+)
 }
 \arguments{
 \item{object}{an FSPY object}

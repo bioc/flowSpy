@@ -4,8 +4,13 @@
 \alias{runHclust}
 \title{runHclust}
 \usage{
-runHclust(object, k = 25, hclust.method = "complete",
-  dist.method = "euclidean", verbose = FALSE)
+runHclust(
+  object,
+  k = 25,
+  hclust.method = "complete",
+  dist.method = "euclidean",
+  verbose = FALSE
+)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -25,8 +30,6 @@ or "minkowski". Or you can specify an equation as input, for example
 \item{verbose}{logical. Whether to print calculation progress.}
 }
 \value{
-An FSPY object with hclust.id in FSPY object
-
 An FSPY object with cluster
 
 if (FALSE) {

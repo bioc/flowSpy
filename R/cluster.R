@@ -20,8 +20,6 @@
 #'    \code{runPhenotype}, \code{runKmeans}, \code{runMclust} and
 #'    \code{runHclust} to run clustering respectively.
 #'
-#' @return An FSPY object with cluster.id in meta.data
-#'
 #' @export
 #' @return An FSPY object with cluster
 #'
@@ -107,6 +105,8 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 #' @param downsampling.size numeric. Percentage of sample size of downsampling.
 #'    This parameter is from 0 to 1. by default is 1.
 #' @param force.resample logical. Whether to do resample if downsampling.size < 1
+#' @param random.cluster logical. Whether to perfrom random downsampling. If FALSE, 
+#'    an uniform downsampling will be processed.
 #' @param umap.config object of class umap.config. See \code{\link[umap]{umap}}.
 #' @param verbose logic. Whether to print calculation progress.
 #' @param ... options to pass on to the dimensionality reduction functions.
@@ -144,7 +144,9 @@ runCluster <- function(object, cluster.method = c("som", "kmeans", "clara", "phe
 processingCluster <- function(object, perplexity = 5, k = 5,
                               downsampling.size = 1,
                               force.resample = TRUE,
-                              umap.config = umap.defaults, verbose = FALSE, ...) {
+                              random.cluster = FALSE, 
+                              umap.config = umap.defaults, verbose = FALSE,
+                              ...) {
 
   if (missing(object)) {
     stop(Sys.time(), " [ERROR] FSPY object is missing ")
@@ -192,6 +194,7 @@ processingCluster <- function(object, perplexity = 5, k = 5,
     object@umap.value <- object@tsne.value <- object@pca.scores <- object@pca.value <- matrix()
     object@dm <- new("DiffusionMap")
 
+    cell.sub <- NULL
     if (downsampling.size >= 1) {
       if (verbose) message(Sys.time(), " [INFO] No downsampling performed")
       cell.name <- object@meta.data$cell
@@ -199,8 +202,17 @@ processingCluster <- function(object, perplexity = 5, k = 5,
       warning(Sys.time(), " [WARNING] The value of downsampling.size must be larger than 0 ")
       cell.name <- object@meta.data$cell
     } else {
-      cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampling.size )) )
-      cell.name <- unlist(cell.name)
+      if (random.cluster) {
+        cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) sample(object@meta.data$cell[which(object@meta.data$cluster.id == x)], ceiling(length(which(object@meta.data$cluster.id == x)) * downsampling.size )) )
+        cell.name <- unlist(cell.name)
+      } else {
+        cell.name <- sapply(unique(object@meta.data$cluster.id), function(x) { 
+          cell.sub <- as.character(object@meta.data$cell[which(object@meta.data$cluster.id == x)])
+          cell.sub <- cell.sub[seq(1, length(cell.sub), by = 1/downsampling.size)]
+          } )
+        cell.name <- unlist(cell.name)
+      }
+      
     }
 
     object@cell.name <- as.character(cell.name)
@@ -237,7 +249,6 @@ processingCluster <- function(object, perplexity = 5, k = 5,
 #'
 #' @importFrom stats hclust dist
 #'
-#' @return An FSPY object with hclust.id in FSPY object
 #' @export
 #' @return An FSPY object with cluster
 #'
@@ -307,7 +318,6 @@ runHclust <- function(object, k = 25,
 #'
 #' @importFrom stats kmeans
 #' @export
-#' @return An FSPY object with cluster
 #' @examples
 #'
 #' if (FALSE) {
@@ -360,7 +370,6 @@ runKmeans <- function(object, k = 25, iter.max = 10, nstart = 1,
 #'
 #' @importFrom cluster clara
 #' @export
-#' @return An FSPY object with cluster
 #' @examples
 #' if (FALSE) {
 #' fspy <- runClara(fspy, k = 25, verbose = TRUE)
@@ -404,7 +413,6 @@ runClara <- function(object, k = 25, metric = c("euclidean", "manhattan", "jacca
 #' @export
 #'
 #' @importFrom mclust Mclust mclustBIC
-#' @return An FSPY object with cluster
 #' @examples
 #' if (FALSE) {
 #' fspy <- runMclust(fspy, verbose = TRUE)
@@ -463,7 +471,6 @@ runMclust <- function(object, scale = FALSE,
 #'
 #' @export
 #'
-#' @return An FSPY object with cluster
 #' @examples
 #' if (FALSE) {
 #' fspy <- runSOM(fspy, xdim = 10, ydim = 10, verbose = TRUE)
@@ -514,7 +521,6 @@ runSOM <- function(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
 #' @param verbose logical. Whether to print calculation progress.
 #' @param ... Parameters passing to \code{igraph} function
 #'
-#' @return an FSPY object
 #'
 #' @importFrom igraph graph.adjacency simplify distances
 #' @return An FSPY object with cluster

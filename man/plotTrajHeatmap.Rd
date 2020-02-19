@@ -4,9 +4,14 @@
 \alias{plotTrajHeatmap}
 \title{Visualization heatmap of intermediate cells of FSPY}
 \usage{
-plotTrajHeatmap(object, cutoff = 0, markers = NULL,
+plotTrajHeatmap(
+  object,
+  cutoff = 0,
+  markers = NULL,
   color = colorRampPalette(c("blue", "white", "red"))(100),
-  scale = "row", ...)
+  scale = "row",
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

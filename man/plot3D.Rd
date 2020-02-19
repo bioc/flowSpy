@@ -4,10 +4,19 @@
 \alias{plot3D}
 \title{Visualization of 3D data of FSPY}
 \usage{
-plot3D(object, item.use = c("PC1", "PC2", "PC3"), color.by = "stage",
-  order.by = NULL, size = 1, angle = 60, scale.y = 0.8,
-  category = "categorical", main = "3D plot of FSPY",
-  color.theme = NULL, ...)
+plot3D(
+  object,
+  item.use = c("PC1", "PC2", "PC3"),
+  color.by = "stage",
+  order.by = NULL,
+  size = 1,
+  angle = 60,
+  scale.y = 0.8,
+  category = "categorical",
+  main = "3D plot of FSPY",
+  color.theme = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

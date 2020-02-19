@@ -4,8 +4,13 @@
 \alias{plotMarkerDensity}
 \title{plotMarkerDensity}
 \usage{
-plotMarkerDensity(object, cutoff = -1, markers = NULL, adjust = 0.5,
-  plot.theme = theme_bw())
+plotMarkerDensity(
+  object,
+  cutoff = -1,
+  markers = NULL,
+  adjust = 0.5,
+  plot.theme = theme_bw()
+)
 }
 \arguments{
 \item{object}{An FSPY object}

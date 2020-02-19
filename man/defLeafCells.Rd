@@ -4,8 +4,7 @@
 \alias{defLeafCells}
 \title{definition of leaf cells}
 \usage{
-defLeafCells(object, leaf.cells = NULL, pseudotime.cutoff = 0,
-  verbose = FALSE)
+defLeafCells(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbose = FALSE)
 }
 \arguments{
 \item{object}{an FSPY object}

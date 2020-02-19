@@ -4,9 +4,16 @@
 \alias{plotPseudotimeTraj}
 \title{plotPseudotimeTraj}
 \usage{
-plotPseudotimeTraj(object, cutoff = -1, markers = NULL, size = 0.5,
-  alpha = 0.6, print.curve = TRUE, var.cols = FALSE,
-  plot.theme = theme_bw())
+plotPseudotimeTraj(
+  object,
+  cutoff = -1,
+  markers = NULL,
+  size = 0.5,
+  alpha = 0.6,
+  print.curve = TRUE,
+  var.cols = FALSE,
+  plot.theme = theme_bw()
+)
 }
 \arguments{
 \item{object}{An FSPY object}

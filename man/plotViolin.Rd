@@ -4,9 +4,16 @@
 \alias{plotViolin}
 \title{Visualization violin plot of FSPY}
 \usage{
-plotViolin(object, marker, color.by = "cluster.id", order.by = NULL,
-  size = 1, text.angle = 0, main = "Violin plot FSPY",
-  plot.theme = theme_bw())
+plotViolin(
+  object,
+  marker,
+  color.by = "cluster.id",
+  order.by = NULL,
+  size = 1,
+  text.angle = 0,
+  main = "Violin plot FSPY",
+  plot.theme = theme_bw()
+)
 }
 \arguments{
 \item{object}{An FSPY object}
