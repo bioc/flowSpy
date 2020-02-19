@@ -142,7 +142,7 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 ## 6 Version History
 
 Feb 15, 2020
-  - Version 1.0.2
+  - Version 1.1.2
   - Changes:
     - Add uniform downsampling in function `processingCluster`
 
