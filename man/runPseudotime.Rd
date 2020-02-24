@@ -4,8 +4,14 @@
 \alias{runPseudotime}
 \title{Calculation of Pseudotime}
 \usage{
-runPseudotime(object, mode = "undirected", dim.type = c("raw", "pca",
-  "tsne", "dc", "umap"), dim.use = 1:2, verbose = FALSE, ...)
+runPseudotime(
+  object,
+  mode = "undirected",
+  dim.type = c("raw", "pca", "tsne", "dc", "umap"),
+  dim.use = 1:2,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

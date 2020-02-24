@@ -18,8 +18,6 @@ runPhenograph(object, knn = 30, scale = FALSE, verbose = FALSE, ...)
 \item{...}{Parameters passing to \code{igraph} function}
 }
 \value{
-an FSPY object
-
 An FSPY object with cluster
 }
 \description{

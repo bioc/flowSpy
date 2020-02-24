@@ -4,8 +4,12 @@
 \alias{plotClusterHeatmap}
 \title{Visualization heatmap of cluster data of FSPY}
 \usage{
-plotClusterHeatmap(object, color = colorRampPalette(c("blue", "white",
-  "red"))(100), scale = "row", ...)
+plotClusterHeatmap(
+  object,
+  color = colorRampPalette(c("blue", "white", "red"))(100),
+  scale = "row",
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

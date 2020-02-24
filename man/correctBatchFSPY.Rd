@@ -4,8 +4,14 @@
 \alias{correctBatchFSPY}
 \title{correctBatchFSPY}
 \usage{
-correctBatchFSPY(object, batch = NULL, par.prior = TRUE,
-  mean.only = TRUE, verbose = FALSE, ...)
+correctBatchFSPY(
+  object,
+  batch = NULL,
+  par.prior = TRUE,
+  mean.only = TRUE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

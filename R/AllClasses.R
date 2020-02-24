@@ -225,8 +225,8 @@ createFSPY <- function(raw.data, markers, meta.data,
     stop(Sys.time(), " [ERROR] cell number in raw.data is not equal to that in meta.data")
   } else {
     if (verbose) message(Sys.time(), " [INFO] rownames of meta.data and raw.data will be named using column cell")
-    rownames(raw.data) = meta.data$cell
-    rownames(meta.data) = meta.data$cell
+    rownames(raw.data) = as.character(meta.data$cell)
+    rownames(meta.data) = as.character(meta.data$cell)
   }
 
   # load index of markers of FCS

@@ -4,9 +4,15 @@
 \alias{plotTree}
 \title{plot MST of FSPY}
 \usage{
-plotTree(object, cex.size = 1, color.by = "cell.number",
-  size.by = "cell.number", as.tree = FALSE, root.id = NULL,
-  show.node.name = FALSE)
+plotTree(
+  object,
+  cex.size = 1,
+  color.by = "cell.number",
+  size.by = "cell.number",
+  as.tree = FALSE,
+  root.id = NULL,
+  show.node.name = FALSE
+)
 }
 \arguments{
 \item{object}{an FSPY object}

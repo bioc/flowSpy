@@ -4,10 +4,22 @@
 \alias{runSOM}
 \title{calculation SOM in FSPY object}
 \usage{
-runSOM(object, xdim = 6, ydim = 6, rlen = 8, mst = 1,
-  alpha = c(0.05, 0.01), radius = 1, init = FALSE, distf = 2,
-  codes = NULL, importance = NULL, method = "euclidean",
-  verbose = FALSE, ...)
+runSOM(
+  object,
+  xdim = 6,
+  ydim = 6,
+  rlen = 8,
+  mst = 1,
+  alpha = c(0.05, 0.01),
+  radius = 1,
+  init = FALSE,
+  distf = 2,
+  codes = NULL,
+  importance = NULL,
+  method = "euclidean",
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -44,8 +56,6 @@ Any unambiguous substring can be given. See \code{\link[stats]{dist}}}
 }
 \value{
 an FSPY object with som.id in FSPY object
-
-An FSPY object with cluster
 }
 \description{
 Build a self-organizing map

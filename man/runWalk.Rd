@@ -4,9 +4,15 @@
 \alias{runWalk}
 \title{Walk between root cells and leaf cells}
 \usage{
-runWalk(object, mode = c("undirected", "directed", "max", "min", "upper",
-  "lower", "plus"), max.run.forward = 20, backward.walk = FALSE,
-  max.run.backward = 20, verbose = FALSE, ...)
+runWalk(
+  object,
+  mode = c("undirected", "directed", "max", "min", "upper", "lower", "plus"),
+  max.run.forward = 20,
+  backward.walk = FALSE,
+  max.run.backward = 20,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

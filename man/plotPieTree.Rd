@@ -4,8 +4,14 @@
 \alias{plotPieTree}
 \title{plot MST pie of FSPY}
 \usage{
-plotPieTree(object, cex.size = 2, size.by.cell.number = TRUE,
-  as.tree = FALSE, root.id = NULL, show.node.name = FALSE)
+plotPieTree(
+  object,
+  cex.size = 2,
+  size.by.cell.number = TRUE,
+  as.tree = FALSE,
+  root.id = NULL,
+  show.node.name = FALSE
+)
 }
 \arguments{
 \item{object}{an FSPY object}

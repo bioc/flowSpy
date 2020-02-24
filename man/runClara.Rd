@@ -4,9 +4,17 @@
 \alias{runClara}
 \title{runClara}
 \usage{
-runClara(object, k = 25, metric = c("euclidean", "manhattan",
-  "jaccard"), stand = FALSE, samples = 5, scale = TRUE, trace = 0,
-  verbose = FALSE, ...)
+runClara(
+  object,
+  k = 25,
+  metric = c("euclidean", "manhattan", "jaccard"),
+  stand = FALSE,
+  samples = 5,
+  scale = TRUE,
+  trace = 0,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -33,8 +41,6 @@ The default is N = 5,}
 }
 \value{
 an FSPY object with clara.id in meta.data
-
-An FSPY object with cluster
 }
 \description{
 Clustering a data matrix into k clusters

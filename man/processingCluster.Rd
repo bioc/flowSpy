@@ -4,9 +4,17 @@
 \alias{processingCluster}
 \title{processingCluster}
 \usage{
-processingCluster(object, perplexity = 5, k = 5,
-  downsampling.size = 1, force.resample = TRUE,
-  umap.config = umap.defaults, verbose = FALSE, ...)
+processingCluster(
+  object,
+  perplexity = 5,
+  k = 5,
+  downsampling.size = 1,
+  force.resample = TRUE,
+  random.cluster = FALSE,
+  umap.config = umap.defaults,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{an FSPY object}
@@ -21,6 +29,9 @@ for more information.}
 This parameter is from 0 to 1. by default is 1.}
 
 \item{force.resample}{logical. Whether to do resample if downsampling.size < 1}
+
+\item{random.cluster}{logical. Whether to perfrom random downsampling. If FALSE, 
+an uniform downsampling will be processed.}
 
 \item{umap.config}{object of class umap.config. See \code{\link[umap]{umap}}.}
 

@@ -4,8 +4,7 @@
 \alias{constraintMatrix}
 \title{constraintMatrix}
 \usage{
-constraintMatrix(x, cutoff = 0.99, markers = NULL,
-  method = "euclidean")
+constraintMatrix(x, cutoff = 0.99, markers = NULL, method = "euclidean")
 }
 \arguments{
 \item{x}{matrix}

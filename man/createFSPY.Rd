@@ -4,9 +4,16 @@
 \alias{createFSPY}
 \title{create an FSPY object}
 \usage{
-createFSPY(raw.data, markers, meta.data, batch = NULL,
-  batch.correct = FALSE, normalization.method = "none",
-  verbose = FALSE, ...)
+createFSPY(
+  raw.data,
+  markers,
+  meta.data,
+  batch = NULL,
+  batch.correct = FALSE,
+  normalization.method = "none",
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{raw.data}{matrix. Raw data read from FCS file after perform

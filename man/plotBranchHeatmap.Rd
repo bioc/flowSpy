@@ -4,8 +4,12 @@
 \alias{plotBranchHeatmap}
 \title{Visualization heatmap of branch data of FSPY}
 \usage{
-plotBranchHeatmap(object, color = colorRampPalette(c("blue", "white",
-  "red"))(100), scale = "row", ...)
+plotBranchHeatmap(
+  object,
+  color = colorRampPalette(c("blue", "white", "red"))(100),
+  scale = "row",
+  ...
+)
 }
 \arguments{
 \item{object}{An FSPY object}

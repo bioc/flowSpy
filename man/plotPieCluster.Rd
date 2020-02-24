@@ -4,9 +4,14 @@
 \alias{plotPieCluster}
 \title{Visualization pie plot of cluster data of FSPY}
 \usage{
-plotPieCluster(object, item.use = c("PC_1", "PC_2"), cex.size = 1,
-  size.by.cell.number = TRUE, main = "2D pie plot of FSPY",
-  plot.theme = theme_bw())
+plotPieCluster(
+  object,
+  item.use = c("PC_1", "PC_2"),
+  cex.size = 1,
+  size.by.cell.number = TRUE,
+  main = "2D pie plot of FSPY",
+  plot.theme = theme_bw()
+)
 }
 \arguments{
 \item{object}{An FSPY object}
