@@ -141,6 +141,11 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 
 ## 6 Version History
 
+Mar 17, 2020
+  - Version 1.0.3
+  - Changes:
+    - Fixed bugs in `runDiff`
+
 Feb 15, 2020
   - Version 1.0.1
   - Changes:

@@ -21,7 +21,7 @@ vignette: |
 ---
 
 ```{r echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = FALSE, eval = TRUE,
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, eval = FALSE,
                       warning = FALSE, message = TRUE)
 ```
 
@@ -54,7 +54,7 @@ The flowSpy package is developed to complete the majority of standard analysis a
 
 
 
-``` {r eval = TRUE, fig.width = 6, fig.height = 5}
+``` {r eval = FALSE, fig.width = 6, fig.height = 5}
 
 # Loading packages
 suppressMessages({
@@ -97,7 +97,7 @@ fspy <- createFSPY(raw.data = fcs.data, markers = markers,
 fspy
 ```
 
-``` {r eval = TRUE, fig.width = 6, fig.height = 5}
+``` {r eval = FALSE, fig.width = 6, fig.height = 5}
 # Cluster cells by SOM algorithm
 # Set random seed to make results reproducible
 set.seed(1)
