@@ -67,14 +67,8 @@ library(flowSpy)
 
 ```
 
-## 3 Workflow of flowSpy
 
-<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.jpg" alt="Workflow of flowSpy" /> </center>
-
-**Workflow of flowSpy**
-
-
-## 4 Quick start (Standard Workflow)
+## 3 Quick start (Standard Workflow)
 
 ``` {r}
 
@@ -135,11 +129,16 @@ fspy <- runWalk(fspy)
 
 To see the detail version, please see the vignettes [**Quick_start_of_flowSpy**](https://github.com/JhuangLab/flowSpy/tree/master/inst/doc/Quick_start_of_flowSpy.pdf)
 
-## 5 Reported bugs and solutions
+## 4 Reported bugs and solutions
 
 If there is any error in installing or librarying the `flowSpy` package, please contact us via e-mail forlynna@sjtu.edu.cn
 
-## 6 Version History
+## 5 Version History
+
+Mar 19, 2020
+  - Version 1.0.4
+  - Changes:
+    - Fixed installation errors in Linux and Windows
 
 Mar 17, 2020
   - Version 1.0.3
