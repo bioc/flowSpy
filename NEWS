@@ -1,0 +1,17 @@
+Changes in version 1.1.5 (2020-04-20)
++ Fixed installation errors in Linux and Windows
++ Fixed legend name of figure
++ Fixed errors in building vignette
+
+Changes in version 1.0.4 (2020-03-19)
++ Fixed installation errors in Linux and Windows
+
+Changes in version 1.0.3 (2020-03-17)
++ Fixed bugs in `runDiff`
+
+Changes in version 1.0.1 (2020-02-15)
++ Add uniform downsampling in function `processingCluster`
+
+Changes in version 1.0.1 (2019-10-17)
++ Fixed some warnings in the checking process of Bioc 3.10 
+
