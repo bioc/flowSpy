@@ -56,6 +56,7 @@ plotPseudotimeDensity <- function(object, color.by = "stage",
   gg <- ggplot(plot.data, aes(x=pseudotime, colour = color.by))
   gg <- gg + geom_density(adjust = adjust)
   gg <- gg + plot.theme
+  gg <- gg + labs(color = color.by)
 
   gg <- gg + labs(title = paste0(main))
 

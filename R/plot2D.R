@@ -164,12 +164,14 @@ plot2D <- function(object,
   gg <- ggplot(plot.data) + geom_point(aes(x=plot.x, y=plot.y, color = color.by), size = size, alpha = alpha)
   gg <- gg + plot.theme
   gg <- gg + labs(x = item.use[1], y = item.use[2], title = paste0(main))
+  gg <- gg + labs(color = color.by)
 
   if (show.cluser.id & (category == "categorical")) {
      pos <- aggregate(  plot.data[, 1:2], list( pos = plot.data$color.by ), mean)
 
      for ( i in 1:length(pos$pos)) {
-       gg <- gg + annotate(geom="text", x = pos$plot.x[i], y = pos$plot.y[i], label = pos$pos[i],
+       gg <- gg + annotate(geom="text", x = pos$plot.x[i], y = pos$plot.y[i], 
+                           label = pos$pos[i],
                            size = show.cluser.id.size)
      }
   }
@@ -266,6 +268,7 @@ plotViolin <- function(object,
   gg <- gg + plot.theme
   gg <- gg + stat_summary(fun.y=mean, geom="point", size = size, color="black")
   gg <- gg + labs(y = marker, x = color.by, title = paste0(main))
+  gg <- gg + labs(fill = color.by)
   gg <- gg + theme(axis.text.x = element_text(angle = text.angle, hjust = 1, vjust = 1))
 
   return(gg)
@@ -475,6 +478,7 @@ plotCluster <- function(object,
   gg <- ggplot(plot.data) + geom_point(aes(x=plot.x, y=plot.y, color = color.by, size = size*size.by), alpha = alpha)
   gg <- gg + plot.theme
   gg <- gg + labs(x = item.use[1], y = item.use[2], title = paste0(main))
+  gg <- gg + labs(color = color.by)
 
   if (show.cluser.id) {
     for ( i in 1:nrow(plot.data)) {

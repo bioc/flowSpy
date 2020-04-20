@@ -10,7 +10,6 @@
 #' @param branch.id.2 vector. Branch ids use to run differentially expressed
 #'    markers in compare with branch.id
 #' @param verbose logic. Whether to print calculation progress.
-#' @param ... options to pass on to the clustering functions.
 #'
 #' @seealso  \code{bulidTree}
 #'

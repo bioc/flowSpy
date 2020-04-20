@@ -17,6 +17,7 @@ https://github.com/JhuangLab/flowSpy-dataset
 
 And **PDF** version of the specific workflows for flow and mass cytometry data can be found at:
 
+ - [**Preprocessing**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/preprocessing.pdf) 
  - [**usecase1_2**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/usecase1_2.pdf) 
  - [**usecase3_4**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/usecase3_4.pdf)
 
@@ -47,10 +48,12 @@ To objectively inference differential trajectory based on time courses FCS data,
 ### 2.1 From Bioconductor
 
 ```
+
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("flowSpy")
+
 ```
 
 ### 2.2 From Github
@@ -67,14 +70,8 @@ library(flowSpy)
 
 ```
 
-## 3 Workflow of flowSpy
 
-<center> <img src="https://github.com/JhuangLab/flowSpy/blob/master/inst/figures/algorithm.jpg" alt="Workflow of flowSpy" /> </center>
-
-**Workflow of flowSpy**
-
-
-## 4 Quick start (Standard Workflow)
+## 3 Quick start (Standard Workflow)
 
 ``` {r}
 
@@ -133,16 +130,31 @@ fspy <- runWalk(fspy)
 
 ```
 
-To see the detail version, please see the vignettes [**Quick_start_of_flowSpy**](https://github.com/JhuangLab/flowSpy/tree/master/inst/doc/Quick_start_of_flowSpy.pdf)
-
-## 5 Reported bugs and solutions
+## 4 Reported bugs and solutions
 
 If there is any error in installing or librarying the `flowSpy` package, please contact us via e-mail forlynna@sjtu.edu.cn
 
-## 6 Version History
+## 5 Version History
+
+Apr 20, 2020
+  - Version 1.1.5
+  - Changes:
+    - Fixed installation errors in Linux and Windows
+    - Fixed legend name of figure
+    - Fixed errors in building vignette
+
+Mar 19, 2020
+  - Version 1.0.4
+  - Changes:
+    - Fixed installation errors in Linux and Windows
+
+Mar 17, 2020
+  - Version 1.0.3
+  - Changes:
+    - Fixed bugs in `runDiff`
 
 Feb 15, 2020
-  - Version 1.1.2
+  - Version 1.0.1
   - Changes:
     - Add uniform downsampling in function `processingCluster`
 

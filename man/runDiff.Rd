@@ -15,8 +15,6 @@ runDiff(object, branch.id = NULL, branch.id.2 = NULL, verbose = FALSE)
 markers in compare with branch.id}
 
 \item{verbose}{logic. Whether to print calculation progress.}
-
-\item{...}{options to pass on to the clustering functions.}
 }
 \value{
 An FSPY object with cluster.id in meta.data

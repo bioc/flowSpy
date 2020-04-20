@@ -83,6 +83,8 @@ plotTree <- function(object,
   gg <- gg + geom_segment(mapping = aes(x = edge.attr$from.x, y = edge.attr$from.y, xend = edge.attr$to.x, yend = edge.attr$to.y))
   gg <- gg + geom_point(mapping = aes(x = node.attr$pos.x, y = node.attr$pos.y, color = color.tree, size = size.tree))
   gg <- gg + scale_size(range = c(0, 6) * cex.size)
+  gg <- gg + labs(color = color.by)
+  gg <- gg + labs(size = size.by)
 
   if (show.node.name) gg <- gg + geom_text(aes(x = node.attr$pos.x, y = node.attr$pos.y, label = node.attr$cluster ), check_overlap = TRUE, size = 3 * cex.size)
   gg <- gg + theme_void()
