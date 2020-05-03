@@ -7,19 +7,16 @@ Instructions and standard workflow can be found at:
 
 https://github.com/JhuangLab/flowSpy/tree/master/vignettes
 
-And **PDF** version of the instructions and standard workflow can be found at:
+See the basic tutorial of flowSpy, please visit [Quick start of flowSpy](https://ytdai.github.io/flowSpy/Quick_start.html).
 
- - [**Quick_start_of_flowSpy**](https://github.com/JhuangLab/flowSpy/tree/master/inst/doc/Quick_start_of_flowSpy.pdf)
+See the basic tutorial of flowSpy, please visit [Tutorial of flowSpy](https://ytdai.github.io/flowSpy/basic.html).
+
+See time-course data analysis of flowSpy, please visit [Time-course workflow of flowSpy](https://ytdai.github.io/flowSpy/Time_course.html).
+
 
 Use cases could be found at: 
 
 https://github.com/JhuangLab/flowSpy-dataset
-
-And **PDF** version of the specific workflows for flow and mass cytometry data can be found at:
-
- - [**Preprocessing**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/preprocessing.pdf) 
- - [**usecase1_2**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/usecase1_2.pdf) 
- - [**usecase3_4**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/usecase3_4.pdf)
 
 
 You can view and clone the repository of flowSpy on GitHub at:
@@ -135,6 +132,18 @@ fspy <- runWalk(fspy)
 If there is any error in installing or librarying the `flowSpy` package, please contact us via e-mail forlynna@sjtu.edu.cn
 
 ## 5 Version History
+
+May 04, 2020
+  - Version 1.2.1
+  - Changes:
+    - Set linear transformation of FSC and SSC as optional in `runExprsMerge` and `runExprsExtract`
+    - Fixed bugs in vignette
+
+Apr 26, 2020
+  - Version 1.1.5
+  - Changes:
+    - Add preprocessing tutorial
+    - Fixed bugs in `runExprsExtract` and `runExprsMerge`
 
 Apr 20, 2020
   - Version 1.1.5

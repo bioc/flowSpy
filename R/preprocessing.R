@@ -144,6 +144,7 @@ runExprsMerge <- function(fcsFiles,
 #'    \code{cytofAsinh}, \code{logicle} and \code{arcsinh}, or \code{none}
 #'    to avoid transformation.
 #' @param showDesc logical. Whether to show \code{desc} name in the output matrix.
+#' @param keepRaw logical. Whether to keep raw data for FSC and SSC.
 #' @param scaleTo Scale the expression to a specified range c(a, b), default is NULL.
 #' @param q Quantile of negative values removed for auto w estimation,
 #'    default is 0.05, parameter for autoLgcl transformation.
@@ -197,6 +198,7 @@ runExprsExtract <- function(fcsFile,
                             transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
                             scaleTo = NULL,
                             showDesc = TRUE,
+                            keepRaw = TRUE,
                             q = 0.05,
                             l_w = 0.1, l_t = 4000, l_m = 4.5, l_a = 0,
                             a_a = 1, a_b = 1, a_c =0) {
@@ -281,7 +283,7 @@ runExprsExtract <- function(fcsFile,
          })
 
   ## apply linear transformation for the "FSC-x", "SSC-x" channel if exists
-  if(length(size_channels) > 0){
+  if((length(size_channels) > 0) & (keepRaw == FALSE)){
     if(any(size_channels %in% marker_id)){
       used_size_channel <- size_channels[size_channels %in% marker_id]
       used_size_channel_id <- match(used_size_channel, marker_id)

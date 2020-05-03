@@ -27,7 +27,7 @@ setMethod(
       "FSPY Information:\n",
       "Input cell number:", nrow(object@raw.data), " cells \n",
       "Enroll marker number:", ncol(object@log.data), " markers \n",
-      "Cells after downsampling:", sum(object@meta.data$dowsample), " markers \n"
+      "Cells after downsampling:", sum(object@meta.data$dowsample), " cells \n"
     )
     invisible(NULL)
   }

@@ -52,19 +52,13 @@ The flowSpy package is developed to complete the majority of standard analysis a
 
 <center> **Fig. 1. Workflow of flowSpy** </center>
 
-A **PDF** version of the instructions and standard workflow can be found at:
 
- - [**Quick_start_of_flowSpy**](https://github.com/JhuangLab/flowSpy/tree/master/inst/doc/Quick_start_of_flowSpy.pdf)
+See the basic tutorial of flowSpy, please visit [Quick start of flowSpy](https://ytdai.github.io/flowSpy/Quick_start.html).
 
-Use cases could be found at: 
+See the basic tutorial of flowSpy, please visit [Tutorial of flowSpy](https://ytdai.github.io/flowSpy/basic.html).
 
-https://github.com/JhuangLab/flowSpy-dataset
+See time-course data analysis of flowSpy, please visit [Time-course workflow of flowSpy](https://ytdai.github.io/flowSpy/Time_course.html).
 
-And **PDF** version of the specific workflows for flow and mass cytometry data can be found at:
-
- - [**Preprocessing**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/preprocessing.pdf) 
- - [**usecase1_2**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/usecase1_2.pdf) 
- - [**usecase3_4**](https://github.com/JhuangLab/flowSpy-dataset/tree/master/Rmarkdown/usecase3_4.pdf)
 
 
 ## References

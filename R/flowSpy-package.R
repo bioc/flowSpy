@@ -3,7 +3,7 @@
 #' Functions and methods to visualize and analyze flow cytometry data.
 #'
 #' \tabular{ll}{ Package: \tab flowSpy\cr Type: \tab Package\cr Version: \tab
-#' 1.1.5\cr Date: \tab 2020-04-20\cr License: \tab GPL-3.0\cr }
+#' 1.2.1\cr Date: \tab 2020-05-04\cr License: \tab GPL-3.0\cr }
 #' While high-dimensional single-cell based flow and mass cytometry data has
 #' demonstrated increased applications in microenvironment composition and
 #' stem-cell research, integrated analyzing workflow design for experimental

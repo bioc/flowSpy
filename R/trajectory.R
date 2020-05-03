@@ -93,8 +93,8 @@ runWalk <- function(object, mode = c("undirected", "directed", "max", "min", "up
   cell.info <- as.data.frame(table(names(cell.info)))
 
   object@meta.data$traj.value[match(cell.info$Var1, object@meta.data$cell)] <- cell.info$Freq / (max.run.forward + max.run.backward)
-  object@meta.data$traj.value[object@root.cells] = 0
-  object@meta.data$traj.value[object@leaf.cells] = 0
+  object@meta.data$traj.value[match(object@root.cells, object@meta.data$cell)] = 0
+  object@meta.data$traj.value[match(object@leaf.cells, object@meta.data$cell)] = 0
 
   object@walk <- list(max.run.forward = max.run.forward,
                       max.run.backward = max.run.backward)

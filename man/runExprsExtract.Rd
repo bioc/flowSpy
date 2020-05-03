@@ -11,6 +11,7 @@ runExprsExtract(
   transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "logAbs", "none"),
   scaleTo = NULL,
   showDesc = TRUE,
+  keepRaw = TRUE,
   q = 0.05,
   l_w = 0.1,
   l_t = 4000,
@@ -37,6 +38,8 @@ to avoid transformation.}
 \item{scaleTo}{Scale the expression to a specified range c(a, b), default is NULL.}
 
 \item{showDesc}{logical. Whether to show \code{desc} name in the output matrix.}
+
+\item{keepRaw}{logical. Whether to keep raw data for FSC and SSC.}
 
 \item{q}{Quantile of negative values removed for auto w estimation,
 default is 0.05, parameter for autoLgcl transformation.}

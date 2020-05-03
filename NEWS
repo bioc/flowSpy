@@ -1,3 +1,11 @@
+Changes in version 1.2.1 (2020-05-04)
++ Set linear transformation of FSC and SSC as optional in `runExprsMerge` and `runExprsExtract`
++ Fixed bugs in vignette
+
+Changes in version 1.1.6 (2020-04-26)
++ Add preprocessing tutorial
++ Fixed bugs in `runExprsExtract` and `runExprsMerge`
+
 Changes in version 1.1.5 (2020-04-20)
 + Fixed installation errors in Linux and Windows
 + Fixed legend name of figure
