@@ -48,7 +48,7 @@ runWalk <- function(object, mode = c("undirected", "directed", "max", "min", "up
 
   adj <- matrix(0, nrow(knn.index), nrow(knn.index))
   rownames(adj) <- colnames(adj) <- rownames(knn.index)
-  pseudotime <- object@meta.data$pseudotime[which(object@meta.data$dowsample == 1)]
+  pseudotime <- object@meta.data$pseudotime[which(object@meta.data$seed.pseudotime == 1)]
 
   # generating a adjacency matrix by nearest neighbors
   if (verbose) message(Sys.time(), " [INFO] Generating an adjacency matrix.")
@@ -62,19 +62,20 @@ runWalk <- function(object, mode = c("undirected", "directed", "max", "min", "up
   g <- simplify(g)
 
   if (verbose) message(Sys.time(), " [INFO] Walk forward.")
-  root.cells <- object@root.cells
+  root.cells <- object@root.cells[object@root.cells %in% rownames(knn.index)]
+  leaf.cells <- object@leaf.cells[object@leaf.cells %in% rownames(knn.index)]
   if (length(root.cells) >= max.run.forward ) {
     root.cells <- as.character(sample(root.cells, max.run.forward))
   } else {
     warning(Sys.time(), " [WARNING] max.run.forward is too large.")
   }
   # run forward
-  walk.forward <- suppressWarnings(lapply(as.character(root.cells), function(x) shortest_paths(g, from = x, to = as.character(object@leaf.cells))$vpath ))
+  walk.forward <- suppressWarnings(lapply(as.character(root.cells), function(x) shortest_paths(g, from = x, to = as.character(leaf.cells))$vpath ))
 
   # run run backward
   if (backward.walk) {
     if (verbose) message(Sys.time(), " [INFO] Walk backward.")
-    leaf.cells <- object@leaf.cells
+    leaf.cells <- object@leaf.cells[object@leaf.cells %in% rownames(knn.index)]
     if (length(leaf.cells) >= max.run.backward ) {
       leaf.cells <- as.character(sample(leaf.cells, max.run.backward))
     } else {

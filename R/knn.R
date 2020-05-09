@@ -33,7 +33,7 @@
 runKNN <- function(object,
                    given.mat = NULL,
                    knn = 30,
-                   knn.replace = TRUE,
+                   knn.replace = TRUE, 
                    verbose = FALSE, ...) {
 
   if (isTRUE(object@knn > 0) & !(knn.replace)) {
@@ -50,9 +50,9 @@ runKNN <- function(object,
   }
 
   if (is.null(given.mat)) {
-    mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
+    mat <- object@log.data[which(object@meta.data$seed.pseudotime == 1), ]
   } else {
-    if (nrow(given.mat) != nrow(object@log.data[which(object@meta.data$dowsample == 1), ])) {
+    if (nrow(given.mat) != nrow(object@log.data[which(object@meta.data$seed.pseudotime == 1), ])) {
       stop(Sys.time, " [ERROR] Invalid given.mat ")
     } else {
       mat <- given.mat

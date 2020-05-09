@@ -1,8 +1,8 @@
 Package: flowSpy
 Type: Package
 Title: A Toolkit for Flow And Mass Cytometry Data
-Version: 1.2.1
-Date: 2020-05-04
+Version: 1.2.2
+Date: 2020-05-07
 Authors@R: person("Yuting", "Dai", role = c("aut", "cre"), email = "forlynna@sjtu.edu.cn")
 Description: A trajectory inference and visualization toolkit 
     for flow and mass cytometry data. flowSpy offers complete 
@@ -10,7 +10,7 @@ Description: A trajectory inference and visualization toolkit
     can be a valuable tool for application ranging from clustering 
     and dimensionality reduction to trajectory reconstruction 
     and pseudotime estimation for flow and mass cytometry data.
-Depends: R (>= 4.0), igraph
+Depends: R (>= 3.6), igraph
 Imports: FlowSOM, Rtsne, ggplot2, destiny, gmodels,
         flowUtils, Biobase, Matrix, flowCore, sva,
         matrixStats, methods, mclust, prettydoc, 

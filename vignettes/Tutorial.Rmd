@@ -25,6 +25,15 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, eval = TRUE,
                       warning = TRUE, message = TRUE)
 ```
 
+## Link to the tutorial
+
+See the quick start tutorial of flowSpy, please visit [Quick start of flowSpy](https://ytdai.github.io/flowSpy/Quick_start.html).
+
+See the basic tutorial of flowSpy, please visit [Tutorial of flowSpy](https://ytdai.github.io/flowSpy/basic.html).
+
+See time-course data analysis of flowSpy, please visit [Time-course workflow of flowSpy](https://ytdai.github.io/flowSpy/Time_course.html).
+
+
 ## Introduction
 
 Although multidimensional single-cell-based flow and mass cytometry have been increasingly applied to microenvironmental composition and stem-cell research, integrated analysis workflows to facilitate the interpretation of experimental cytometry data remain underdeveloped. We present flowSpy, a comprehensive R package designed for the analysis and interpretation of flow and mass cytometry data. We applied flowSpy to mass cytometry and time-course flow cytometry data to demonstrate the usage and practical utility of its computational modules. flowSpy is a reliable tool for multidimensional cytometry data workflows and produces compelling results for trajectory construction and pseudotime estimation. 
@@ -33,33 +42,22 @@ Although multidimensional single-cell-based flow and mass cytometry have been in
 
 ## Overview of flowSpy workflow
 
-The flowSpy package is developed to complete the majority of standard analysis and visualization workflow for FCS data. In flowSpy workflow, an S4 object in R is built to implement the statistical and computational approach, and all computational modules are integrated into one single channel which only requires a specified input data format. Computational modules of flowSpy can be divided into four main parts (Fig. 1): preprocessing, trajectory, analysis and visualization. 
+The flowSpy package is developed to complete the majority of standard analysis and visualization workflow for FCS data. In flowSpy workflow, an S4 object in R is built to implement the statistical and computational approach, and all computational modules are integrated into one single channel which only requires a specified input data format.
 
+`flowSpy` can help you to perform four main types of analysis:
 
-- **Preprocessing**. Data import, compensation, quality control, filtration, normalization and merge cells from different samples can be implemented in the preprocessing module. After preprocessing, a matrix contains clean cytometric signaling data, a data.frame containing meta-information of the experiment and a vector contains all markers enrolled in the computational process are required to build an FPSY object. 
+- **Clustering**. `flowSpy` can help you to discover and identify subtypes of cells. 
 
+- **Dimensionality Reduction**. Several dimensionality reduction methods are provided in `flowSpy` package such as Principal Components Analysis (PCA), t-distributed Stochastic Neighbor Embedding (tSNE), Diffusion Maps and Uniform Manifold Approximation and Projection (UMAP). flowSpy provides both cell-based and cluster-based dimensionality reduction.
 
-- **Trajectory**. Cells built in the FSPY object are classfied into different clusters based on the expression level of input markers. You can choose different clustering methods by inputting different parameters. After clustering, cells are downsampled in a cluster-dependent fashion to reduce the total cell size and avoid small cluster deletion. Dimensionality reduction for both cells and clusters are also implemented in the clustering procedure. After dimensionality reduction, we use Minimus Spanning Tree (MST) to construct cell trajectory.
+- **Trajectory Inference**. `flowSpy` can help you to construct the cellular differential based on minimum spanning tree (MST) algorithm. 
 
-
-- **Analysis**. This module is design for time couse FCS data. Before running pseudotime, root cells must be defined first based on users' priori knowledge. Root cells in flowSpy workflow are the initial cells of the trajectory tree. So it can be set using one vertex node of the tree or a cluster of cells with specific antibodies combination. Intermediate state evaluation is also envolved in the pseudotime module. Leaf cells are defined by the end node of trajectory tree or the end stage of the experiment. Intermediate state cells are cells with higher betweenness in the graph built on cell-cell connection, which play an important role between the connection of root cells and leaf cells.
-
-
-- **Visualization**. The visualization module can provide clear and concise visualization of FCS data in an effective and easy-to-comprehend manner. flowSpy package offers various plotting functions to generate customizable and publication-quality plots. Two-dimensional or three-dimensional plot can fit most requirement from dimensionality reduction results. And tree-based plot can visualize cell trajectory as force-directed layout tree. Other special plots such as heatmap and violin plot are also provided in flowSpy.
+- **Pseudotime and Intermediate states definition**. The root cells need to be defined by users. The trajctroy value will be calculated based on Shortest Path from root cells and leaf cells using R `igraph` package. Subset FCS data set in `flowSpy` and find the key intermediate cell states based on trajectory value.
 
 
 <center> <img src="../inst/figures/algorithm.jpg" alt="Workflow of flowSpy" /> </center>
 
-<center> **Fig. 1. Workflow of flowSpy** </center>
-
-
-See the basic tutorial of flowSpy, please visit [Quick start of flowSpy](https://ytdai.github.io/flowSpy/Quick_start.html).
-
-See the basic tutorial of flowSpy, please visit [Tutorial of flowSpy](https://ytdai.github.io/flowSpy/basic.html).
-
-See time-course data analysis of flowSpy, please visit [Time-course workflow of flowSpy](https://ytdai.github.io/flowSpy/Time_course.html).
-
-
+<center> **Fig. 1  Workflow of flowSpy** </center>
 
 ## References
 

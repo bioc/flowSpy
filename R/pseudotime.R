@@ -148,6 +148,8 @@ defLeafCells <- function(object, leaf.cells = NULL, pseudotime.cutoff = 0, verbo
 #' @return An FSPY object
 #'
 #' @export
+#' 
+#' @importFrom stats kmeans
 #'
 #' @examples
 #'
@@ -195,11 +197,25 @@ runPseudotime <- function(object, mode = "undirected",
     dim.name <- paste0("UMAP_", dim.use)
     mat <- object@umap.value[, dim.name]
   } else {
-    if (verbose) message(Sys.time(), " [INFO] The log data will be used to calculate trajectory")
+    if (verbose) message(Sys.time(), " [INFO] The log data will be used to calculate pseudotime")
     mat <- object@log.data[which(object@meta.data$dowsample == 1), ]
   }
 
-  object <- runKNN(object, given.mat = mat, verbose = FALSE)
+  object@meta.data$seed.pseudotime <- 0
+  object@meta.data$core.pseudotime <- 0
+  if (dim(mat)[1] > 40000) {
+    kmean.mat <- kmeans(mat, centers = 40000)
+    sub.cell <- kmean.mat$cluster[match(1:40000, kmean.mat$cluster)]
+    object@meta.data$seed.pseudotime[match(names(sub.cell), object@meta.data$cell)] <- 1
+    object@meta.data$core.pseudotime[match(names(kmean.mat$cluster), object@meta.data$cell)] <- kmean.mat$cluster
+    sub.cell.name <- object@meta.data$cell[which(object@meta.data$seed.pseudotime == 1)]
+    mat <- mat[match(sub.cell.name, rownames(mat)), ]
+    object <- runKNN(object, given.mat = mat, verbose = FALSE)
+  } else {
+    object@meta.data$seed.pseudotime[match(rownames(mat), object@meta.data$cell)] <- 1
+    object@meta.data$core.pseudotime[match(rownames(mat), object@meta.data$cell)] <- 1:dim(mat)[1]
+    object <- runKNN(object, given.mat = mat, verbose = FALSE)
+  }
 
   knn.index <- object@knn.index
   adj <- matrix(0, nrow(knn.index), nrow(knn.index))
@@ -213,15 +229,19 @@ runPseudotime <- function(object, mode = "undirected",
   # remove self loops
   g <- simplify(g)
 
-
-  dist.all.path <- distances(g, v = as.character(object@root.cells))
+  root.cells <- object@root.cells[object@root.cells %in% rownames(knn.index)]
+  dist.all.path <- distances(g, v = root.cells)
   dist.all.path[which(is.infinite(dist.all.path))] <- NA
   pst <- colMeans(dist.all.path, na.rm = TRUE)
   idx <- which(!is.na(pst))
   pst[idx] <- ( pst[idx] - min(pst[idx]) )/ max( pst[idx] - min(pst[idx]) )
-
+  pst.1 <- pst
+  names(pst.1) <- object@meta.data$core.pseudotime[match(names(pst), object@meta.data$cell)]
+  pst.info <- object@meta.data$core.pseudotime[which(object@meta.data$core.pseudotime > 0)]
+  pseudotime <- pst.1[match(pst.info, names(pst.1))]
+    
   object@meta.data$pseudotime <- 0
-  object@meta.data$pseudotime[which(object@meta.data$dowsample == 1)] <- pst
+  object@meta.data$pseudotime[which(object@meta.data$dowsample == 1)] <- pseudotime
   object@meta.data$traj.value <- 0
   object@meta.data$traj.value.log <- 0
 

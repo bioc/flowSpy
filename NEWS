@@ -1,3 +1,6 @@
+Changes in version 1.2.2 (2020-05-07)
++ Add solutions for large sample size analysis
+
 Changes in version 1.2.1 (2020-05-04)
 + Set linear transformation of FSC and SSC as optional in `runExprsMerge` and `runExprsExtract`
 + Fixed bugs in vignette

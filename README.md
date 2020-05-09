@@ -133,6 +133,11 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 
 ## 5 Version History
 
+May 07, 2020
+ - Version 1.2.2
+ - Changes:
+   - Add solutions for large sample size analysis
+
 May 04, 2020
   - Version 1.2.1
   - Changes:
