@@ -1,7 +1,7 @@
 Package: flowSpy
 Type: Package
 Title: A Toolkit for Flow And Mass Cytometry Data
-Version: 1.3.0
+Version: 1.3.1
 Date: 2020-04-20
 Authors@R: person("Yuting", "Dai", role = c("aut", "cre"), email = "forlynna@sjtu.edu.cn")
 Description: A trajectory inference and visualization toolkit 
@@ -34,4 +34,4 @@ git_last_commit:
 git_last_commit_date: 
 Date/Publication: 
 LinkingTo: Rcpp
-Packaged: 
+PackageStatus: Deprecated
