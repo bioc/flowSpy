@@ -7,7 +7,7 @@ Instructions and standard workflow can be found at:
 
 https://github.com/JhuangLab/flowSpy/tree/master/vignettes
 
-See the basic tutorial of flowSpy, please visit [Quick start of flowSpy](https://ytdai.github.io/flowSpy/Quick_start.html).
+See the quick start tutorial of flowSpy, please visit [Quick start of flowSpy](https://ytdai.github.io/flowSpy/Quick_start.html).
 
 See the basic tutorial of flowSpy, please visit [Tutorial of flowSpy](https://ytdai.github.io/flowSpy/basic.html).
 
@@ -22,6 +22,25 @@ https://github.com/JhuangLab/flowSpy-dataset
 You can view and clone the repository of flowSpy on GitHub at:
 
 https://github.com/JhuangLab/flowSpy
+
+
+## Note
+
+----------------
+
+Dear flowSpy users:
+
+To improve the identification of this package and avoid awkward duplication of names in some situations, we decided to change the name of `flowSpy` to `CytoTree`. The package name of `CytoTree` more fits the functional orientation of this software. The usage and update of `flowSpy` and `CytoTree` will be consistent until the end of Bioc 3.11. And for the 3.12 devel, flowSpy will be deprecated.
+
+The package `CytoTree` has been added to Bioconductor (https://bioconductor.org/packages/CytoTree/), we recommend that users can download this package and replace `flowSpy` as soon as possible.
+
+We apologized for the inconvenience.
+
+flowSpy team
+
+2020-07-09
+
+----------------
 
 
 ## 1 Introduction
@@ -133,6 +152,11 @@ If there is any error in installing or librarying the `flowSpy` package, please 
 
 ## 5 Version History
 
+Jul 09, 2020
+ - Version 1.2.3
+ - Changes:
+   - Add note and change package name to `CytoTree`
+
 May 07, 2020
  - Version 1.2.2
  - Changes:
@@ -228,7 +252,7 @@ July 19, 2019
     - Fixed some bugs on cluster based downsampling
 
 
-## 7 Reference
+## 6 Reference
 
 [1] Sofie Van Gassen, Britt Callebaut and Yvan Saeys (2019). FlowSOM: Using
   self-organizing maps for visualization and interpretation of cytometry data.
